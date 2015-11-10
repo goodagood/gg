@@ -1,6 +1,16 @@
+
+# run
+    cd plain/myutils/
+    node pubsub.js
+    cd plain
+    node app.818.js
+
+    cd gg
+    coffee -o ./plain/aws  -c ./coffee/aws/folder-v5.coffee
+
+
 # git 
     when local branch delete files
-
 
 
     If you deleted a file from the working tree, then commit the deletion:
