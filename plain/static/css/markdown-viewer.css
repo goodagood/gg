@@ -1,0 +1,32 @@
+
+body {
+}
+
+
+div#navbar-wrapper {
+    background-color : #cdcbcc;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+
+    -webkit-box-shadow: #B3B3B3 7px 7px 7px;
+    -moz-box-shadow: #B3B3B3 7px 7px 7px;
+    box-shadow: #B3B3B3 7px 7px 7px;
+}
+
+div#navbar-wrapper ul.nav {
+    margin : 0 auto;
+}
+
+div#navbar-wrapper ul.nav li a:link {
+    color : #154431;
+}
+
+
+
+/* 
+ * Trying to improve the file list, ul#folder-list li
+ *
+ * overflow can be: visible, scroll, auto, hidden, initial, inherit 
+ * ... put it to folder.css
+ */

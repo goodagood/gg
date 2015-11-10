@@ -1,0 +1,54 @@
+{
+  "name": "my-server-for-blueimp-upload-node",
+  "version": "0.1.0",
+  "private":true,
+  "title": "jQuery File Upload Node.js server",
+  "description": "Node.js implementation, file upload handler for blueimp jQuery File Upload.",
+  "keywords": [
+    "goodagood",
+    "file",
+    "upload",
+    "cross-domain",
+    "cross-site",
+    "node"
+  ],
+  "homepage": "http://www.goodagood.com/",
+  "author": {
+    "name": "Andrew Zhang",
+    "url": "http://www.goodagood.com/"
+  },
+  "maintainers": [
+    {
+      "name": "Andrew Zhang",
+      "url": "www.goodagood.com/"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/somewhere.git"
+  },
+  "bugs": {
+    "url": "https://some.where/issues"
+  },
+  "licenses": [
+    {
+      "type": "GNU",
+      "url": "http://www.goodagood.org/licenses/some-where"
+    }
+  ],
+  "dependencies": {
+    "formidable": ">=1.0.11",
+    "node-static": ">=0.6.5",
+    "imagemagick": ">=0.1.3",
+
+    "sqlite3": ">= 2.1.0",
+    "mv":"*"
+  },
+  "main": "myserver.js",
+  "scripts": {
+    "start": "node myserver.js"
+  },
+  "readme": "ERROR: No README data found!",
+  "_id": "my-server-for-blueimp-file-upload-node@0.1.0",
+  "_from": "server-file-upload@goodagood"
+}

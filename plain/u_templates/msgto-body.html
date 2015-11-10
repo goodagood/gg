@@ -1,0 +1,32 @@
+
+<div class="container">
+
+  <div class="row-fluid" id="input-well">
+    <div class="name-selector">
+      <span id="message-to-info"> Message to : 
+      </span>
+      <% 
+        if(typeof towhom_checkbox !== 'undefined' && towhom_checkbox) print( towhom_checkbox); 
+      %>
+      <% 
+        if(typeof people_list !== 'undefined' && people_list) print( people_list); 
+      %>
+    </div>
+    <form id="msg" action="/msgto/<%=towhom%>" method="post" enctype="multipare/x-www-form-urlencoded">
+
+          <textarea name="text_input">  </textarea>
+          <!-- <input type="submit" value="Post"> 
+          <button id="test_send" type="button" class="btn btn-success btn-bg"> Send </button>
+          -->
+          <input type="hidden" id="hidden-text" value="<%=hidden_names%>">
+          <button id="msgto_send" type="button" class="btn btn-info btn-bg"> Send Message </button>
+    </form>
+  </div> <!-- row-fluid -->
+  <hr />
+
+  <div class="row-fluid">
+    <%=messageList%>
+  </div>
+</div> <!-- container -->
+<!-- vim: et ts=2 sw=2 tw=150
+-->

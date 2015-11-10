@@ -1,0 +1,95 @@
+2015-0516
+    listor anyway, folder tool list, folder/file settings.
+
+2015-0419
+    Got to be killed, time up, game over.    
+2015-0322
+---------
+    folder save_meta not really save, locker make it happen? 
+
+0731
+----
+    i18next, http://i18next.com/index.html
+    can do simple i18n, it's nice.
+
+0614
+----
+    app.327.js is current server
+    The limits of s3 storage is not going to show up before 1000 files for each
+    user.
+
+0530
+----
+
+    to review:
+        adduser, add-folder, list2, upfile,
+        change: treeview, cwd
+
+0529
+----
+
+    'cwd' will not has `username` prefix. 0529? 
+    0530, change tree of home dir structure to have an username?
+
+in app.js:
+ssl.com signed certifaction:  /var/my-certs/ssl.com.signed/
+sqlite3 db:  /var/goodagood/local.sqlite3
+
+initiate sqlite3 database:  
+
+    cd  myblueimp
+    node local-info.js
+
+
+2014 0323
+=========
+
+
+This is try to glue:
+    
+    passport for authentication
+    blueimp file uploader
+    s3 bucket for file storage
+    and more
+
+do it with javascript node.js, express.js
+
+./app.js  for passport
+
+
+2014 0325
+=========
+
+Change because Express 4.0 upgrading: Session backed by Redis need 
+express-session now.  To make things more complex, there is another package: 
+express-sessions, the name is a plural.  I am trying to use the first: 
+express-session.
+
+0326
+====
+
+./blueimp/server0307.js  for fileuploading, server.
+    node  ./server0307.js
+
+0327
+
+After fiddling quite a while, I decide to try to fix on express 3.x, and
+connect-redis 1.4.7
+
+0331
+when npm install get blocked by China Gov. set it to use another registry:
+
+  npm config set registry http://registry.npmjs.eu
+
+0415
+
+Map the local folder to s3 bucket: /public/ggfsa  ->  s3://ggfsa
+  yas3fs  [-df]  s3://ggfsa  /public/ggfsa
+
+0419
+
+bower might give wrong with handlebars.js
+
+0503
+
+Try npm install connect-ensure-login

@@ -1,0 +1,100 @@
+
+
+<script>
+    $( document ).ready(function() {
+
+        i18n.init(function(t){
+            $(".to-translate").i18n();
+        });
+
+
+        //alert('111');
+        var default_list = [];
+        $("form#default-acceptors input:checkbox").change(function(e){
+            //$.inspect(e);
+            if($(this).is(':checked')){
+                //alert('val: ' + $(this).val() + ' name: ' + $(this).attr('name'));
+                default_list.push($(this).val());
+                //alert(default_list);
+                }else{
+                remove(default_list, $(this).val());
+                //alert(default_list);
+            }
+            //if(default_list.length > 0){ 
+                //    $("button#down-btn").prop('disable', false);
+                //    }else{
+                //    $("button#down-btn").prop('disable', true);
+                //}
+        });
+
+        var people_list = [];
+        $("#people-list input:checkbox").change(function(e){
+            //$.inspect(e);
+            if($(this).is(':checked')){
+                //alert('val: ' + $(this).val() + ' name: ' + $(this).attr('name'));
+                people_list.push($(this).val());
+                //alert(people_list);
+                }else{
+                remove(people_list, $(this).val());
+                //alert(people_list);
+            }
+            //if(people_list.length > 0){ 
+                //    $("button#up-btn").prop('disable', false);
+                //    }else{
+                //    $("button#up-btn").prop('disable', true);
+                //}
+        });
+
+
+        function remove(arr, item) {
+            for(var i = arr.length; i--;) {
+                if(arr[i] === item) {
+                    arr.splice(i, 1);
+                }
+            }
+        }
+
+
+        $("button#up-btn").click(function(e){
+            e.preventDefault();
+
+            //alert(src_list.toString() + '   \n' + target_user);
+            var url = 'http://54.178.88.149:9090/add-default-people/';
+            var plist = JSON.stringify(people_list);
+            var param = {url:url, type:'POST', data:{people_list:plist,  }, dataType:'json'}
+            //alert(plist);
+            $.ajax(param).done(function(){ location.reload(true); $('input:checkbox').prop('checked', false); });
+        });
+
+        $("button#down-btn").click(function(e){
+            e.preventDefault();
+
+            var url = 'http://54.178.88.149:9090/rm-default-people/';
+            var dlist = JSON.stringify(default_list);
+            var param = {url:url, type:'POST', data:{default_list:dlist,  }, dataType:'json'}
+            //alert(dlist);
+            $.ajax(param).done(function(){ location.reload(true); $('input:checkbox').prop('checked', false); });
+        });
+
+
+        $("form#name_input").submit(function(e){
+            e.preventDefault();
+
+            //alert(src_list.toString() + '   \n' + target_user);
+            var people_name = $('input:text').val();
+            var url = 'http://54.178.88.149:9090/test/addpeople/' + people_name;
+            //alert(url);
+            $.ajax({url:url, type:'GET'}).done(function(){
+                location.reload(true);
+                $('input:checkbox').prop('checked', false); 
+            });
+            $("input:checkbox").prop('checked', false);
+
+        });
+
+        alert('222');
+        console.log('people p1 script. html');
+
+    });
+</script>
+

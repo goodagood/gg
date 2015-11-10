@@ -1,0 +1,139 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<!-- as basic skeleton for underscore.js, 2014 0605 -->
+<head>
+<meta http-equiv="content-type" content="text/html" />
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="description" content="index, goodagood testing" />
+<meta name="keywords" content="goodagood, filesystem, sharing" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Andrew">
+
+<title> 
+
+  {{#if title }}
+  <p>{{ title }}</p>
+  {{/if}}
+  pass testing, 0202
+
+</title>
+  <!--% if(typeof title !== 'undefined' && title){ print(title);}else{ print('test a style from goodagood frame c');} %-->
+
+
+<link rel="stylesheet" href="/static/css/fa/css/font-awesome.min.css">
+<link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap-glyphicons.css">
+<link rel="stylesheet" href="/static/css/begin.css">
+
+<!--% if(typeof css !== 'undefined' && css) print(css); %-->
+
+
+<style type="text/css">
+
+</style>
+
+</head>
+<body>
+
+<div id="wrapper">
+
+
+  <header>
+  <h1> <span class="logo"> <a href="http://www.goodagood.com/">goodagood</a> <span></h1>
+  </header>
+
+
+  <h1> Put a link </h1>
+  <form action="/link/put-a-link" method="post" id="add-web-link-form">
+    <div class="igroup">
+      <label for="web-link"> 
+        <span class="label-text">the link(*):</span>
+      </label>
+      <input type="text" id="web-link" name="web-link" />
+    </div>
+
+    <div class="igroup" id="description-input">
+      <label for="description" id="description-label"> 
+        <span class="label-text"> Description:</span>
+      </label>
+      <input type="text" id="description" name="description" />
+    </div>
+
+    <input type="hidden" id="cwd" name="cwd" value="{{{cwd}}}" />
+
+    <div class="igroup" id="description-input">
+      <label> </label>
+      <input type="submit" value="submit" />
+    </div>
+
+  </form>
+  <p> <i class="fa fa-arrows"></i> CWD: {{{ cwd_chain }}} </p>
+
+  <footer>
+    <p> goodagood, Andrew, &copy; <br/>
+    {{#if now }}
+    <span class="info">As hint 12 23: {{ now }}</span>
+    {{/if}}
+
+    screen width: <span id="media-query"></span>
+
+    </p>
+  </footer>
+
+
+</div> <!-- end of wrapper -->
+
+<!--
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="http://code.jquery.com/jquery.min.js"></script>
+<script src="/static/js/jquery.inspect.js"></script>
+-->
+
+
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<!--  <script src="/static/js/i18next-1.7.3.js"></script>  -->
+
+<script>
+    $( document ).ready(function() {
+      //console.log( (this == $ ? 'yes' : 'no') );
+      //$.inspect(this, 'window');
+
+      var width = $(window).width();
+      $("span#media-query").append(width.toString());
+
+
+      $("#user-password").keypress(function(e) {
+        $("form span.hint")
+        .html(String.fromCharCode(e.which))
+        .stop()
+        .fadeIn(100, function(){
+          $(this).fadeOut(2000);        
+        });
+
+      });
+
+      //alert('here');
+
+    });
+</script>
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+-->
+
+<!--[if lt IE 9]>
+<script src="/static/bower_components/html5shiv/dist/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+<![endif]-->
+
+<!--% if(typeof script != 'undefined' && script) print(script); %-->
+
+</body>
+<!-- vim: et ts=2 sw=2 tw=150
+-->
+</html>
+
+

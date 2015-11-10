@@ -1,0 +1,29 @@
+job json:  
+    { 
+        name: 'new-file-meta',
+        task_name: 'new-file-meta',
+        username: 'abc',
+        folder: 'abc',
+        meta_s3key: '.gg.new/abc/f744a3dc-6ffe-48c1-b7b1-ae667b43f354',
+        id: 'task.a.9e356766-8b30-4ac8-95f3-486b26d577d0',
+        task_id: 'task.a.9e356766-8b30-4ac8-95f3-486b26d577d0' }
+
+
+    read the NEW file meta:
+
+    null { name: 'test-write-and-get-uuid',
+        path: 'abc/test-write-and-get-uuid',
+        size: 150,
+        owner: 'abc',
+        dir: 'abc',
+        timestamp: 1418330829235,
+        uuid: 'f744a3dc-6ffe-48c1-b7b1-ae667b43f354',
+        meta_s3key: '.gg.new/abc/f744a3dc-6ffe-48c1-b7b1-ae667b43f354',
+        initial_key: '.gg.new/abc/f744a3dc-6ffe-48c1-b7b1-ae667b43f354',
+        s3key: '.gg.file/abc/f744a3dc-6ffe-48c1-b7b1-ae667b43f354',
+        storage:
+        { type: 's3',
+key: '.gg.file/abc/f744a3dc-6ffe-48c1-b7b1-ae667b43f354' } }
+
+
+

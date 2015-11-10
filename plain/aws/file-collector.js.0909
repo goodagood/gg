@@ -1,0 +1,220 @@
+var path     = require('path');
+var U        = require('underscore');
+
+var myconfig = require('../config-mj.js');
+var bucket   = require('./bucket.js');
+
+
+var redis_host = myconfig.redis_host;
+var redis_port = myconfig.redis_port;
+var redis      = require("redis");
+var client     = redis.createClient(redis_port, redis_host);
+
+var avatar   = require('../users/avatar.js');
+var s3folder = require('./folder.js');
+var s3file   = require('./file.js');
+
+// testing
+function a_list_new_meta_data(username, callback){
+    username = username || 'abc';
+    var prefix = path.join(username, myconfig.new_meta_folder);
+    bucket.list(prefix, function(err, file_list){
+        //console.log(file_list);
+        U.each(file_list, function(data){
+            var key = data.Key;
+            bucket.read_json(key, function(err, j){
+                console.log(j);
+            });
+        });
+    });
+}
+
+function list_new_meta_data(username, callback){
+    var prefix = path.join(username, myconfig.new_meta_folder);
+    bucket.list(prefix, function(err, file_list){
+        //console.log(file_list);
+        U.each(file_list, function(data){
+            var key = data.Key;
+            bucket.read_json(key, function(err, j){
+                console.log(j);
+            });
+        });
+    });
+}
+
+
+function check_new_file_meta(job_json){
+  if(job_json.name !== "new-file-meta") return;
+  var job_id = job_json.id; // This is the 'key' of task in redis
+
+  bucket.read_json(job_json.meta_s3key, function(err, meta){
+      //console.log("read the file meta:");
+      //console.log(err, meta);
+      if(err) return err;
+      collect_one_file(job_json, meta);
+  });
+}
+
+
+function collect_one_file(job, meta, callback){
+  // @job : json of task
+  // @meta: simple meta of the new file, by uploading.
+
+  var folder_path = job.folder;
+  var username    = job.username;
+  _build_file_obj(meta, function(err, file_obj){
+    if(err) return callback(err, null);
+    var file_meta = file_obj.get_meta();
+    console.log('file meta: ', file_meta);
+
+    _insert_to_file_list(folder_path, file_meta, function(err, folder_obj){
+      if (err) return callback(err, null);
+      _add_file_the_old_way(username, file_meta, folder_path, folder_obj, function(err, user){
+        if (err) return callback(err, null);
+        _delete_task_tmp_meta(job.meta_s3key, job.id, function(err){
+          if (err) return callback(err, null);
+          if (callback) return callback(err, folder_obj);
+        });
+      });
+    });
+  });
+}
+
+
+function _build_file_obj(meta_in, callback){
+  s3file.meta_to_file_obj(meta_in, function(file_obj){
+    if(!file_obj) return log28('null file_obj');
+    //console.log('build file obj, file : ', file_obj.get_meta());
+    file_obj.render_html_repr();
+    file_obj.save_meta_file(function(err, reply){
+      callback(err, file_obj);
+    });
+  });
+}
+
+function _insert_to_file_list(folder_path, file_meta, callback){
+  s3folder.retrieve_folder(folder_path, function(folder){
+    if(!folder) callback('err', null);
+    folder.add_file_to_redis_list(file_meta, function(err, reply){
+      console.log('add file to redis list');
+      callback(err, folder);
+    });
+  });
+}
+
+function _add_file_the_old_way(username, file_meta, folder_path, folder_obj, callback ){
+  avatar.make_user_obj(username, function(user){
+    user.flag_up(folder_path, function(ok, flag_down){
+      if(ok){
+        folder_obj.add_file_save_folder(file_meta, function(err, _meta){
+          flag_down(function(err, reply){
+            callback(err, user);
+          });
+        });
+      }
+    });
+  });
+}
+
+function _delete_task_tmp_meta(meta_s3key, job_id, callback){
+  bucket.delete_object(meta_s3key, function(s3err, s3reply){
+    console.log('delete meta file in .new');
+    client.del(job_id, function(redis_err, redis_reply){
+      console.log('delete redis task rec');
+      if (s3err) return callback(s3err);
+      if (redis_err) return callback(redis_err);
+      callback(null);
+    });
+  });
+}
+
+function do_all_tasks(){
+  client.keys('task.a*', function(err, reply){
+    //console.log(err, reply);
+    //fs.writeFile('/tmp/tl', reply.join('\n'));
+    if(err) return err;
+    U.each(reply, function(key){
+      console.log('  ', key);
+      test_collect_one(key);
+      //client.get(key, function(err, str){
+      //  console.log(err, JSON.parse(str));
+      //});
+    });
+
+  });
+}
+
+
+function test_collect_one(key){
+  // task records in redis is simple string by JSON.stringify
+  key = key || 'task.a.7101b570-a8ac-4e3b-a762-b53154d1c0fb';
+  client.get(key, function(err, str){
+    console.log(err, JSON.parse(str));
+    if(err) return err;
+    var job = JSON.parse(str);
+    check_new_file_meta(job);
+
+  });
+}
+
+function _collect_one_file_0907(job, meta){
+
+  function _add_file_and_more(file_obj, folder, flag_down) // inner function
+  {
+              folder.add_file_obj_save_folder(file_obj, function(err){
+                console.log('add file');
+                if(err) return flag_down();
+                bucket.delete_object(job.meta_s3key, function(){
+                  console.log('delete meta file in .new');
+                  client.del(job.id, function(){
+                    console.log('delete redis task rec');
+                    flag_down();
+                  });
+                });
+              });
+  }
+
+  s3file.meta_to_file_obj(meta, function(file_obj){
+    if(!file_obj) return log28('null file_obj');
+    file_obj.render_html_repr();
+    file_obj.save_meta_file();  // this can has callback
+    //console.log('meta to file obj, in');
+    //console.log(' after meta to obj on file get meta', file_obj.get_meta());
+    //log28(' after meta to obj on file get meta', file_obj.get_meta());
+
+    avatar.make_user_obj(job.username, function(user){
+      //console.log('user', user);
+      //if(!user) return;  // no way to know if user ok?
+      user.flag_up(job.folder, function(ok, flag_down){
+        if(ok){
+          console.log('flag up ok');
+          s3folder.retrieve_folder(job.folder, function(folder){
+            //console.log('got folder');
+            if(!folder) return flag_down();
+            // if there is a file with SAME name exists, delete it first:
+            if(folder.is_file_exists(meta.name)){
+              folder.delete_file(meta.name, function(){
+                return _add_file_and_more(file_obj, folder, flag_down);
+              });
+            }
+            else{
+              return _add_file_and_more(file_obj, folder, flag_down);
+            }
+          });
+        }
+        else{ console.log('flag -- not up --'); return ;}
+      });
+    });
+
+  });
+}
+
+
+if(require.main === module){
+  //list_new_meta_data();
+  do_all_tasks();
+  //test_collect_one();
+  setTimeout(function(){process.exit();}, 55000);
+}
+
+module.exports.check_new_file_meta = check_new_file_meta;

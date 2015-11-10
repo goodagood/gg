@@ -1,0 +1,211 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<!--[if IE]>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<![endif]-->
+<meta charset="utf-8">
+<title>0531 test, carousel-a, b. Gallery</title>
+<meta name="description" content="try to use the blueimp gallery.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/static/bgallery/css/blueimp-gallery.css">
+<link rel="stylesheet" href="/static/bgallery/css/blueimp-gallery-indicator.css">
+<link rel="stylesheet" href="/static/bgallery/css/blueimp-gallery-video.css">
+<link rel="stylesheet" href="/static/bgallery/css/demo.css">
+
+<style type="text/css">
+  .blueimp-gallery > .description {
+    position: absolute;
+    top: 30px;
+    left: 15px;
+    color: #fff;
+    display: none;
+  }
+  .blueimp-gallery-controls > .description {
+    display: block;
+  }
+</style>
+</head>
+<body>
+
+<h1>my blueimp Gallery, {{varaa}}</h1>
+<br>
+
+<!-- The Gallery as lightbox dialog, should be a child element of the document body -->
+<div id="blueimp-gallery" class="blueimp-gallery  blueimp-gallery-controls">
+    <div class="slides"></div>
+    <h3 class="title"></h3>
+    <p class="description"> </p>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+</div>
+
+<div id="links" class="links">
+
+  {{{ image_list }}}
+    <a href="/ss/muji/one/d52.jpg" title="t50" data-description="a plane"> <img src="/ss/muji/one/tn-d52.jpg" alt="T50"> </a>
+    <a href="/ss/muji/one/d22.jpg" title="t50" data-description="a d22 plane"> <img src="/ss/muji/one/tn-d22.jpg" alt="T50"> </a>
+    <a href="/ss/muji/one/d2.jpg" title="t50" data-description="a d2 plane"> <img src="/ss/muji/one/tn-d2.jpg" alt="T50"> </a>
+
+    <a href="/static/tmp/14110028590.jpg" title="1">  <img src="/static/tmp/thumbnail/14110028590.jpg" alt="1"> </a>
+    <a href="/static/tmp/14110247507.jpg" title="2">  <img src="/static/tmp/thumbnail/14110247507.jpg" alt="2"> </a>
+    <a href="/static/tmp/14110356769.jpg" title="3">  <img src="/static/tmp/thumbnail/14110356769.jpg" alt="3"> </a>
+    <a href="/static/tmp/14111407709.jpg" title="4">  <img src="/static/tmp/thumbnail/14111407709.jpg" alt="4"> </a>
+    <a href="/static/tmp/14112099547.jpg" title="5">  <img src="/static/tmp/thumbnail/14112099547.jpg" alt="5"> </a>
+    <a href="/static/tmp/14112195700.jpg" title="6">  <img src="/static/tmp/thumbnail/14112195700.jpg" alt="6"> </a>
+    <a href="/static/tmp/14112324227.jpg" title="7">  <img src="/static/tmp/thumbnail/14112324227.jpg" alt="7"> </a>
+    <a href="/static/tmp/14113080137.jpg" title="8">  <img src="/static/tmp/thumbnail/14113080137.jpg" alt="8"> </a>
+    <a href="/static/tmp/14113794059.jpg" title="9">  <img src="/static/tmp/thumbnail/14113794059.jpg" alt="9"> </a>
+    <a href="/static/tmp/14276121986.jpg" title="10"> <img src="/static/tmp/thumbnail/14276121986.jpg" alt="10"> </a>
+    <a href="/static/tmp/14294382491.jpg" title="11"> <img src="/static/tmp/thumbnail/14294382491.jpg" alt="11"> </a>
+    <a href="/static/tmp/14294634292.jpg" title="12"> <img src="/static/tmp/thumbnail/14294634292.jpg" alt="12"> </a>
+    <a href="/static/tmp/14295037482.jpg" title="13"> <img src="/static/tmp/thumbnail/14295037482.jpg" alt="13"> </a>
+    <a href="/static/tmp/14296499334.jpg" title="14"> <img src="/static/tmp/thumbnail/14296499334.jpg" alt="14"> </a>
+    <a href="/static/tmp/14297479735.jpg" title="15"> <img src="/static/tmp/thumbnail/14297479735.jpg" alt="15"> </a>
+    <a href="/static/tmp/14321914783.jpg" title="16"> <img src="/static/tmp/thumbnail/14321914783.jpg" alt="16"> </a>
+</div>
+
+<h2> my carousel gallery </h2>
+<!-- The Gallery as inline carousel, can be positioned anywhere on the page -->
+<div id="blueimp-gallery-carousel" class="blueimp-gallery blueimp-gallery-carousel">
+    <div class="slides"></div>
+    <h3 class="title"></h3>
+    <p class="description"> </p>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+</div>
+
+<h2> .. Carousel video gallery</h2>
+<!-- The Gallery as inline carousel, can be positioned anywhere on the page -->
+<div id="blueimp-video-carousel" class="blueimp-gallery blueimp-gallery-controls blueimp-gallery-carousel">
+    <div class="slides"></div>
+    <h3 class="title"></h3>
+    <p class="description"> </p>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="play-pause"></a>
+</div>
+
+<br>
+
+<script src="/static/bgallery/js/blueimp-helper.js"></script>
+<script src="/static/bgallery/js/blueimp-gallery.js"></script>
+<script src="/static/bgallery/js/blueimp-gallery-fullscreen.js"></script>
+<script src="/static/bgallery/js/blueimp-gallery-indicator.js"></script>
+<script src="/static/bgallery/js/blueimp-gallery-video.js"></script>
+<script src="/static/bgallery/js/blueimp-gallery-vimeo.js"></script>
+<script src="/static/bgallery/js/blueimp-gallery-youtube.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>
+/*jslint evil: true */
+/*global window, document*/
+// Including jQuery via the protocol relative url above works for both http and https.
+// Explicitly including jQuery via http allows running the Gallery demo as local file:
+if (!window.jQuery) {
+    document.write(
+        '<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"><\/script>'
+    );
+}
+</script>
+<script src="/static/bgallery/js/jquery.blueimp-gallery.js"></script>
+<!--
+<script src="js/demo.js"></script>
+replaced by this:
+-->
+<script>
+document.getElementById('links').onclick = function (event) {
+  console.log(event);
+    event = event || window.event;
+    var target = event.target || event.srcElement,
+        link = target.src ? target.parentNode : target,
+        options = {
+          index: link, event: event,
+          onslide: function (index, slide) {
+            var text = this.list[index].getAttribute('data-description'),
+            node = this.container.find('.description');
+            node.empty();
+            if (text) {
+              node[0].appendChild(document.createTextNode(text));
+            }
+          }
+        },
+        links = this.getElementsByTagName('a');
+    blueimp.Gallery(links, options);
+};
+</script>
+
+<script>
+// for carousel ?
+blueimp.Gallery(
+    document.getElementById('links').getElementsByTagName('a'),
+    {
+        container: '#blueimp-gallery-carousel',
+        carousel: true,
+        startSlideshow: false,
+
+        onslide: function (index, slide) {
+          var text = this.list[index].getAttribute('data-description'),
+          node = this.container.find('.description');
+          node.empty();
+          if (text) {
+            node[0].appendChild(document.createTextNode(text));
+          }
+        }
+    }
+);
+</script>
+
+<script>
+// for video
+
+// Initialize the Gallery as video carousel:
+blueimp.Gallery([
+    {
+        title: 'Sintel',
+        href: 'http://media.w3.org/2010/05/sintel/trailer.mp4',
+        type: 'video/mp4',
+        poster: 'http://media.w3.org/2010/05/sintel/poster.png'
+    },
+    {
+        title: 'Big Buck Bunny',
+        href: 'http://upload.wikimedia.org/wikipedia/commons/7/75/' +
+        'Big_Buck_Bunny_Trailer_400p.ogg',
+        type: 'video/ogg',
+        poster: 'http://upload.wikimedia.org/wikipedia/commons/thumb/7/70/' +
+        'Big.Buck.Bunny.-.Opening.Screen.png/' +
+        '800px-Big.Buck.Bunny.-.Opening.Screen.png'
+    },
+    {
+        title: 'Elephants Dream',
+        href: 'http://upload.wikimedia.org/wikipedia/commons/transcoded/8/83/' +
+        'Elephants_Dream_%28high_quality%29.ogv/' +
+        'Elephants_Dream_%28high_quality%29.ogv.360p.webm',
+        type: 'video/webm',
+        poster: 'http://upload.wikimedia.org/wikipedia/commons/thumb/9/90/' +
+        'Elephants_Dream_s1_proog.jpg/800px-Elephants_Dream_s1_proog.jpg'
+    },
+    {
+        title: 'LES TWINS - An Industry Ahead',
+        type: 'text/html',
+        youtube: 'zi4CIXpx7Bg'
+    },
+    {
+        title: 'KN1GHT - Last Moon',
+        type: 'text/html',
+        vimeo: '73686146',
+        poster: 'http://b.vimeocdn.com/ts/448/835/448835699_960.jpg'
+    }
+    ], {
+        container: '#blueimp-video-carousel',
+        carousel: true,
+        startSlideshow: false,
+});
+</script>
+</body> 
+</html>
+// vim: set et ts=2 sw=2 tw=150:

@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html" />
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="description" content="index, goodagood testing" />
+<meta name="keywords" content="goodagood, filesystem, sharing" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Andrew">
+
+<title> a list of tools </title>
+
+
+<link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+
+
+</head>
+<body>
+
+
+<div class="container">
+  <div class="row">
+    <div class="page-header">
+      <h1> goodagood file sharing system </h1>
+    </div>
+  </div>
+
+{{#if user  }}
+  <div class="row">
+    <h2>Hello, {{ user.username }}.</h2>
+    <ul class="list-group">
+      <!--
+      <li class="list-group-item"><a href="/adduser">Register new user</a></li>
+      -->
+      <li class="list-group-item"><a href="/upfile/{{username}}">upload files</a>
+        <ul>
+          <li>upload, list, create folder: need a path</li>
+        </ul>
+      </li>
+      <li class="list-group-item"><a href="/addpeople-input">Add peoples</a></li>
+      <li class="list-group-item"><a href="/ls/{{username}}">List files</a></li>
+      <li class="list-group-item"><a href="/add-folder/{{username}}">Add folder</a></li>
+      <li class="list-group-item"><a href="/logout/">logout</a></li>
+    </ul>
+  </div>
+
+</div>
+
+{{else}}
+<h2>Welcome! Please <a href="/login"> log in.</a> or <a href="/adduser"> register </a>. </h2>
+{{/if}}
+
+
+<!--
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="http://code.jquery.com/jquery.min.js"></script>
+<script src="/static/js/jquery.inspect.js"></script>
+-->
+
+
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+-->
+
+<!--[if lt IE 9]>
+<script src="/static/bower_components/html5shiv/dist/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+<![endif]-->
+
+
+<script>
+    $( document ).ready(function() {
+        //console.log( (this == $ ? 'yes' : 'no'); );
+        //$.inspect(this, 'window');
+    });
+</script>
+</body>
+<!-- vim: et ts=2 sw=2
+-->
+</html>

@@ -1,0 +1,102 @@
+
+<br class="space10px" />
+<div class="container">
+    <div class="row">
+    <!-- for file list -->
+        <div id="file-list-top"> 
+
+            <section id="demonstration" role="main" class="span12">
+            <p id="cwd"> <span>Current folder =&gt;</span><strong>
+                <% if(typeof cwd_chain !== 'undefined' && cwd_chain) print(cwd_chain); %>
+            </strong>
+            </p>
+
+            <div id="file_list" class="tree">
+                <%= user_folder_ul %>
+            </div>
+
+            </section>
+
+        </div>
+    </div>
+
+    <!-- redoing the tools, sending functions. 0220, 2015 -->
+    <div id="tools-0220" class="clr"> 
+
+        <div id="file-sending" class="translate-this">
+
+            <a id="old-send-file"  class="btn btn-default"  href="">
+            <span class="glyphicon glyphicon-send"> </span>
+            <span data-i18n="nav.send_file">Send</span></a>
+            
+            <div class="popover top"> 
+                <form id="current_people_form">
+                    <label class="title"> Send file to: </label><br />
+                    <% if(typeof current_people !== 'undefined' && current_people) print(current_people); %>
+                    <input type="submit" value="Send" id="send_file">
+                </form>
+            </div>
+
+        </div>
+
+        <div>
+            <a  class="btn btn-default" href="/upfile/<%=cwd%>">
+            <span class="glyphicon glyphicon-cloud-upload"> </span>
+            <span data-i18n="nav.upload">Upload</span></a>
+
+            <a  class="btn btn-default"  href="/add-folder/<%=cwd%>"> 
+            <span class="glyphicon glyphicon-plus"> </span>
+            <span data-i18n="nav.add_folder">Add-folder</span></a>
+
+            <a  class="btn btn-default" href="/msgto/">
+            <span class="glyphicon glyphicon-comment"> </span>
+            <span data-i18n="nav.message">Message</span></a>
+
+            <a  class="btn btn-default"  href="/tools/<%=cwd%>"> 
+            <span class="glyphicon glyphicon-cog"> </span>
+            <span data-i18n="nav.tools">Tools</span></a>
+            <!--
+            <button type="button" class="btn btn-default">Right</button>
+            -->
+        </div>
+    </div>
+
+
+</div>
+
+<!-- <div class="row-fluid translate-this"> -->
+<br class="space10px" />
+
+<nav id="primary_nav">
+
+    <ul class="nav navbar-nav">
+
+        <li>
+            <a href="/people">
+            <i class="fa fa-user"> </i>
+            <span data-i18n="nav.people">People</span></a>
+        </li>
+
+        <li class="active">
+            <a href="/ls/">
+            <i class="fa fa-folder-o"> </i>
+            <span data-i18n="nav.file">Files</span></a>
+        </li>
+        <li>
+            <a href="/msgto/">
+            <i class="fa fa-comment-o"> </i>
+            <span data-i18n="nav.message">Message</span>
+            </a>
+        </li>
+        <li class="top"> 
+            <a href="#header">
+            <i class="fa fa-arrow-up"></i>
+            Go Top </a>
+        </li>
+
+    </ul>
+
+
+</nav>
+
+

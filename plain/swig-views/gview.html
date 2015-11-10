@@ -1,0 +1,28 @@
+
+{% extends 'frame-a.html' %}
+
+
+{% block header %}
+<div id="header" class="goodagood-header">
+    <p> &nbsp; 
+    <span class="goodagood-head">
+        <strong>goodagood</strong>
+    </span> &nbsp; 
+    <span class="username">
+        {{ username }}
+    </span>
+    </p>
+</div>
+{% endblock %}
+
+
+{% block body   %} 
+<p id="cwd">cwd:&nbsp; <strong>{{ cwd_chain|safe }}</strong> {{ file_name }}</p>
+
+<div class="row-fluid">
+    <div>
+        <pre>{{ text }}
+            </pre>
+    </div>
+</div>
+{% endblock %}

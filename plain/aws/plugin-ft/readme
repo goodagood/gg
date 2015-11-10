@@ -1,0 +1,29 @@
+
+For file type plugin
+2015 0717
+
+the interface:
+==============
+
+
+exports attributes:
+-------------------
+
+file_name_extension  # regexp
+extension_type       # string
+type                 # string, mine type by uploading
+
+exports functions:
+------------------
+
+get_file_obj  # get an object, which has functionality for the file type,
+              # meta is input, most will not be changed.
+
+new_file_obj?
+set_file_obj  # set up a file obj with the input: file meta data,
+              # more meta data will be calculated and filled in.
+
+can_be_used   # check the meta to tell if this plugin can try a run
+
+
+

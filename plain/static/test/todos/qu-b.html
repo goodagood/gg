@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='utf8'>
+<title>Backbone Test Suite</title>
+<link rel="stylesheet" href="../../test/vendor/qunit.css" type="text/css" media="screen">
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">
+<div id='testElement'>
+<h1>Test</h1>
+</div>
+</div>
+<script src="../../test/vendor/json2.js"></script>
+<script src="../../test/vendor/jquery.js"></script>
+<script src="../../test/vendor/qunit.js"></script>
+<script src="../../test/vendor/underscore.js"></script>
+<script src="../../test/backbone.js"></script>
+<script >
+function f1(){
+    return this;
+}
+function f2(){
+    "use strict"; // see strict mode
+    return this;
+}
+
+var o = {prop: 37};
+
+function independent() {
+    return this.prop;
+}
+
+o.f = independent;
+
+
+QUnit.test('this should be window?', function(assert){
+    assert.ok(f1() === window, 'pass this === window');
+    assert.ok(f2() === undefined, 'pass this === undefined when use strict');
+    assert.ok(o.f() === 37, 'function defined outside');
+});
+
+QUnit.test( "throws", function( assert ) {
+    function CustomError( message ) {
+        this.message = message;
+    }
+
+    CustomError.prototype.toString = function() {
+        return this.message;
+    };
+
+    assert.throws(
+        function() {
+            throw "error"
+        },
+        "throws with just a message, not using the 'expected' argument"
+    );
+    assert.throws(
+        function() {
+            throw new CustomError("some error description");
+        },
+        /description/,
+        "raised error message contains 'description'"
+    );
+    assert.throws(
+        function() {
+            throw new CustomError();
+        },
+        CustomError,
+        "raised error is an instance of CustomError"
+    );
+    //assert.throws(
+    //    function() {
+    //        throw new CustomError("some error description");
+    //    },
+    //    new CustomError("some error description"),
+    //    "raised error instance matches the CustomError instance"
+    //);
+    assert.throws(
+        function() {
+            throw new CustomError("some error description");
+        },
+        function( err ) {
+            return err.toString() === "some error description";
+        },
+        "raised error instance satisfies the callback function"
+    );
+});
+
+
+
+</script>
+</body>
+</html>

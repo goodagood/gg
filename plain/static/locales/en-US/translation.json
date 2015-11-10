@@ -1,0 +1,14 @@
+{
+    "app": {
+        "name": "goodagood"
+    },
+    "nav": {
+        "people": "People.",
+        "home": "Home.",
+        "upload": "Upload.",
+        "message": "Message",
+        "add_folder": "Add-folder",
+        "page1": "Page One",
+        "page2": "Page Two"
+    }
+}

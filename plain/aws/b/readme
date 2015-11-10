@@ -1,0 +1,14 @@
+
+This dir exists because:
+Stupid coffeescript like to wrap all in function:
+-- And it not work, because path changing, 
+
+    function(){
+    }.call(this)
+
+
+Use coffee -b option to get ride of the wrapping to load in node.js REPL.
+
+    coffee -b -o this/must/by/folder  -c /the/src/file/path/must/follow/here
+
+

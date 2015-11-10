@@ -1,0 +1,109 @@
+
+<script src="/static/js/jquery.inspect.js"></script>
+<script>
+  $( document ).ready(function() {
+
+    //var towhom = '<% 
+    //        if(typeof towhom !== 'undefined' && towhom) print( towhom); 
+    //      %>';
+    //var src_list = [];
+    //if (towhom && towhom !== '') src_list.push(towhom);
+
+
+    $("#input-file").change(function(e){
+      //$.inspect(e);
+      //$.inspect(this.files);
+      var file_names = [];
+      var filelist = this.files;
+      var file_number = filelist.length;
+      for(var i = 0; i < file_number; i++){
+        //$.inspect(filelist[i]);
+        var f = filelist[i];
+        file_names.push(f.name);
+      }
+      var fnstr = file_names.join("<br />");
+      console.log(fnstr);
+      //alert(fnstr);
+      //alert(file_names);
+      $("#selected_file_names").html(fnstr);
+
+      $("#submit").css('color', '#199928').css('font-weight', 'bold'); // green color.
+
+    });
+    //alert('ok');
+
+
+    //$("ul input:checkbox").prop('checked', false);
+
+    ////console.log( 'ready' );
+    //$("input:checkbox").change(function(e){
+    //  //$.inspect(e);
+    //  if($(this).is(':checked')){
+    //    //alert('val: ' + $(this).val() + ' name: ' + $(this).attr('name'));
+    //    src_list.push($(this).val());
+    //    //alert(src_list);
+    //    }else{
+    //    remove(src_list, $(this).val());
+    //    //alert(src_list);
+    //  }
+    //});
+
+    //////d replaced by #msgto_send
+    ////$("button#test_send").click(function(event){
+    ////  event.preventDefault();
+    ////  var no_empty = src_list.filter(function(e){return !!e;});
+    ////  no_empty.forEach(function(name){
+    ////    var url = 'http://54.178.88.149:9090/sendmsg/';
+    ////    var text = $('textarea').val();
+    ////    var param = {url:url, type:'POST', data:{to:name, text_input:text, }, dataType:'json'};
+    ////    alert(text);
+    ////    //alert(param);
+    ////    $.inspect(param.data);
+    ////    //$.ajax(param).done( function(err){ location.reload(true);});
+    ////    $.ajax(param);
+    ////    //$("input:checkbox").prop('checked', false);
+    ////  });
+    ////});
+
+    //// test to improve the old #test_send
+    //$("button#msgto_send").click(function(event){
+    //  event.preventDefault();
+    //  var no_empty = src_list.filter(function(e){return !!e;});
+    //  var name_list_stringified = JSON.stringify(no_empty);
+    //  //no_empty.forEach(function(name){
+    //    var url = 'http://54.178.88.149:9090/msgto/';
+    //    var text = $('textarea').val();
+    //    var param = {url:url, type:'POST', data:{to:name_list_stringified, text_input:text, }, dataType:'json'};
+    //    //alert(text);
+    //    //alert(param);
+    //    //$.inspect(param);
+    //    $.ajax(param)
+    //    .done(function(data){
+    //      //alert(data);
+    //      window.location.replace("/msgto/");
+    //      //location.reload(true);
+    //    })
+    //    .fail(function(data){
+    //      alert('failed?');// alert(data);
+    //      $.inspect(data);
+    //    });
+    //  //});
+    //});
+
+    ////$.inspect(this);
+
+    //function remove(arr, item) {
+    //  for(var i = arr.length; i--;) {
+    //    if(arr[i] === item) {
+    //      arr.splice(i, 1);
+    //    }
+    //  }
+    //}
+
+    ////alert('towhom');
+    ////alert(towhom);
+
+  });
+</script>
+<!-- vim: et ts=2 sw=2 tw=150
+-->

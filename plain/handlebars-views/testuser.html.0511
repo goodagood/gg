@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+
+<title> test handlebars 0224 </title>
+<!--
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+-->
+<script src="http://code.jquery.com/jquery.min.js"></script>
+<!--
+<script src="./jquery.inspect.js"></script>
+-->
+<script>
+    $( document ).ready(function() {
+        console.log( (this == $ ? 'yes' : 'no'); );
+        //$.inspect(this, 'window');
+    });
+</script>
+</head>
+<body>
+
+<h1> test handlebars 0224 </h1>
+{{#if user  }}
+	<h2>Hello, {{ user.username }}.</h2>
+{{else}}
+	<h2>Welcome! Please log in.</h2>
+{{/if}}
+
+
+</body>
+<!-- vim: et ts=2 sw=2
+-->
+</html>

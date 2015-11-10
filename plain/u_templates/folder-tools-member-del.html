@@ -1,0 +1,32 @@
+<!-- underscore.js template -->
+<div class="container">
+  <h2>Hello, <%= username %>.</h2>
+  <div class="row-fluid">
+
+    <p id="cwd">team:&nbsp; <strong><a href="/ls/<%
+        if(typeof cwd !== 'undefined' && cwd) print(cwd);
+        %>">
+        <% 
+        if(typeof cwd !== 'undefined' && cwd) print(cwd);
+        %></a></strong></p>
+
+    <!--
+    -->
+
+    <div class="margin10px">
+      <ul>
+      <% 
+        if(typeof member_list !== 'undefined' && member_list) print( member_list); 
+      %>
+      </ul>
+    </div>
+
+    <p> <span id="delete-members" class="btn btn-default">
+      Delete members of the folder</span></a></p>
+
+
+  </div> <!-- row-fluid -->
+</div> <!-- container -->
+<script> var cwd = '<% if(typeof cwd !== 'undefined' && cwd) print(cwd); %>'; </script>
+<!-- vim: et ts=2 sw=2 tw=150
+-->

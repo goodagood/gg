@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<!-- as basic skeleton for underscore.js, 2014 0605 -->
+<head>
+<meta http-equiv="content-type" content="text/html" />
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="description" content="index, goodagood testing" />
+<meta name="keywords" content="goodagood, filesystem, sharing" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Andrew">
+
+<title> file list version 3 </title>
+
+
+<link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="/static/css/first.css">
+
+<!-- for video -->
+<link href="//vjs.zencdn.net/4.6/video-js.css" rel="stylesheet">
+<script src="//vjs.zencdn.net/4.6/video.js"></script>
+
+</head>
+<body>
+
+  <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">goodagood navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">Home</a>
+      </div>
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="/upfile/{{cwd}}">Upload</a></li>
+          <li><a href="/ls/{{cwd}}">List-file</a></li>
+          <li><a href="/add-folder/{{cwd}}">Add-folder</a></li>
+          <li><a href="/testsend/">send</a></li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
+
+  <div class="container">
+
+    <br />
+    <hr />
+
+    <div class="row-fluid">
+      
+      
+      <div>
+        <pre>{{ text }}
+        </pre>
+      </div>
+
+      <!--
+      poster="http://video-js.zencoder.com/oceans-clip.png"
+      <source src="http://video-js.zencoder.com/oceans-clip.webm" type='video/webm' />
+      <source src="http://video-js.zencoder.com/oceans-clip.ogv" type='video/ogg' />
+
+
+      <video id="example_video_1" class="video-js vjs-default-skin"
+      controls preload="auto" width="640" height="264"
+      poster="{{ poster_href }}"
+      data-setup='{"example_option":true}'>
+      <source src="{{ video_src }}" type='video/mp4' />
+      <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a
+        href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+      </video>
+      -->
+
+
+    </div>
+  </div>
+
+
+<!--
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="http://code.jquery.com/jquery.min.js"></script>
+-->
+
+
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/static/js/jquery.inspect.js"></script>
+
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+-->
+
+<!--[if lt IE 9]>
+<script src="/static/bower_components/html5shiv/dist/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+<![endif]-->
+
+<script>
+    $( document ).ready(function() {
+      var src_list = [];
+      //console.log( 'ready' );
+      $("input:checkbox").change(function(e){
+        //$.inspect(e);
+        if($(this).is(':checked')){
+          //alert('val: ' + $(this).val() + ' name: ' + $(this).attr('name'));
+          src_list.push($(this).val());
+          //alert(src_list);
+        }
+      });
+      $("form#form-test-sending").submit(function(e){
+        var target_user = $("#target-select").val();
+
+        //alert(src_list.toString() + '   \n' + target_user);
+        src_list.forEach(function(src){
+          var query = 'src=' + encodeURIComponent(src) + '&targetuser=' +  encodeURIComponent(target_user);
+          var url = 'http://54.178.88.149:9090/testsend?' + query;
+          //var url = 'http://54.178.88.149/testsend/';
+          alert(url);
+          var result = $.ajax({url:url, type:'GET'});
+          $.inspect(result);
+        });
+      });
+
+      //$.inspect(this);
+
+      function remove(arr, item) {
+        for(var i = arr.length; i--;) {
+          if(arr[i] === item) {
+            arr.splice(i, 1);
+          }
+        }
+      }
+
+    });
+</script>
+</body>
+<!-- vim: et ts=2 sw=2 tw=150
+-->
+</html>

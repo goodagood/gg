@@ -1,0 +1,367 @@
+
+
+/*begin our styles*/
+ 
+body {
+    font: 16px/1.4em 'PT Sans', sans-serif;
+    color: #333333;
+    /*background-color: #b8cb80;*/
+}
+
+body *{margin-left: 0.5em;}/* stop edging, 0516 */
+ 
+p,
+ul {
+    margin: 0 0 1.5em;
+}
+ 
+#file_list ul{
+    width: 90%;
+}
+
+ul {
+    /*- list-style: disc; -*/
+    padding: 0 0 0 15px;
+    list-style: none;
+}
+ 
+a {
+    color: #1D745A;
+}
+ 
+h1 {
+ 
+}
+ 
+h2 {
+    font-family: 'PT Serif', serif;
+    font-size: 32px;
+    line-height: 1.4em;
+    margin: 0 0 .4em;
+    font-weight: bold;
+}
+ 
+/*layout*/
+ 
+ 
+article {
+    border-bottom: 1px solid #d8d8d8;
+    padding: 10px 20px 0 20px;
+    margin: 10px 0;
+}
+
+.container {
+    background-color: #b8cb80;
+}
+
+.clr { clear:both; }
+ 
+/*header*/
+ 
+header {
+    background-color: #789341;/*#333333;*/
+    position: relative;
+    font-weight: bold;
+    padding: 0.5em 0.5em;
+    margin-bottom: 0.5em;
+}
+header h1 { padding-bottom: 0.5em; }
+ 
+        /*shorter clearfix http://nicolasgallagher.com/micro-clearfix-hack/*/
+        header:before,
+        header:after {
+            content:"";
+            display:table;
+        }
+         
+        header:after {
+            clear:both;
+        }
+         
+        /* For IE 6/7 (trigger hasLayout) */
+        header {
+            zoom:1;
+        }
+ 
+.clrfix:before,
+.clrfix:after {
+    content:"";
+    display:table;
+}
+ 
+.clrfix:after {
+    clear:both;
+}
+ 
+/* For IE 6/7 (trigger hasLayout) */
+.clrfix {
+    zoom:1;
+}
+
+h1.logo span{ margin-left:0.2em; padding:0; }
+
+h1.logo span.username,
+h1.logo a {
+    color: #c8c8c8;
+    text-decoration: none;
+    font-weight: bold;
+    /*- text-transform: uppercase; -*/
+    font-size: 1.2em;
+    /*- line-height: 1.5em; -*/
+    float: left;
+    /*- letter-spacing: 0.2em; -*/
+    display: inline-block;
+}
+
+header h1.logo a  {
+    font-size: 1em;
+    color : #d8d8d8; }
+ 
+h1.logo span img {
+    display: inline-block;
+    vertical-align: top;
+    margin:0;
+    position:relative;
+    bottom: 8px;
+}
+
+
+a.to_nav {
+    float: right;
+    color: #333;
+    background: #b8cb80;
+    text-decoration: none;
+    padding-right: 0.5em;
+    font-size: 1em;
+    font-weight: bold;
+    /*-  line-height: 22px; -*/
+    /*-  height: 22px; -*/
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+}
+ 
+a.to_nav:hover,
+a.to_nav:focus {
+    color: #1c1c1c;
+    background: #b8cb80;
+}
+
+
+
+/*navigation*/ 
+ 
+#primary_nav ul {
+    list-style: none;
+    background: #789341;
+    padding: 5px 0;
+}
+ 
+#primary_nav li a {
+    display: block;
+    padding: 0 20px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    letter-spacing: 0.1em;
+    line-height: 2em;
+    height: 2em;
+    border-bottom: 1px solid #383838;
+}
+ 
+#primary_nav li:last-child a {
+    border-bottom: none;
+}
+ 
+#primary_nav li a:hover,
+#primary_nav li a:focus {
+    color: #1c1c1c;
+    background: #b8cb80;
+}
+ 
+/*footer*/
+ 
+footer {
+    color: #fff;
+    font-family: 'PT Serif', serif;
+    font-style: italic;
+    text-align: center;
+    font-size: 14px;
+    background-color: #789341;
+}
+
+
+
+@media only screen and (min-width: 768px) {
+
+    header {
+        padding: 1em 1em;
+    }
+ 
+    a.to_nav {
+        display: none;
+    }
+     
+    .wrapper {
+        position: relative;
+        /*- width: 768px; -*/
+        width: 960px;
+        margin: auto;
+    }
+     
+    #primary_nav {
+        position: absolute;
+        top: 5px;
+        right: 10px;
+        background: none;
+    }
+     
+    #primary_nav li {
+        display: inline;
+    }
+     
+    #primary_nav li a {
+        float: left;
+        border: none;
+        padding: 0 10px;
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+        border-radius: 2px;
+    }
+
+    #primary_nav li.top {
+        display: none;
+    }
+
+}
+
+
+
+
+
+/* for checkbox, using font awesome 0128 */
+
+label.file-selector  input[type=checkbox] { display:none; } /* to hide the checkbox itself */
+
+label.file-selector  input[type=checkbox] + span.filename:before {
+    font-family: FontAwesome;
+    display: inline-block;
+}
+
+label.file-selector  input[type=checkbox] + span.filename:before { content: "\f096"; }
+label.file-selector  input[type=checkbox] + span.filename:before { letter-spacing: 10px; }
+/* space between checkbox and label */
+
+label.file-selector  input[type=checkbox]:checked + span.filename:before { content: "\f046"; }
+label.file-selector  input[type=checkbox]:checked + span.filename:before { letter-spacing: 5px; }
+/* allow space for check mark */
+
+
+/* for cwd */
+p#cwd {
+    padding-left: 1em;
+    font-size: 1.2em;
+    color: #4e4e4e;
+    background-color: #c2c9ad;
+    /*border-bottom: 1px solid  #383838;*/
+}
+
+p#cwd span {
+    font-size: 0.8em;
+    margin:0;
+    padding:0;
+}
+p#cwd span.folder-seperator { 
+    font-size: 1.2em;
+}
+
+p#cwd a {
+    text-decoration:none;
+}
+
+
+div#file_list ul {
+    margin-bottom:1em;
+    padding-bottom:1em;
+}
+
+div#file_list ul li{
+    color: #000;
+    padding: 0 0.5em;
+}
+
+div#file_list a{
+    color: #000;
+}
+
+/* for tools buttons */
+div#tools2 {
+    font-family: 'Times New Roman', 'Swiss', 'PT Serif', serif;
+    font-style: italic;
+
+    margin: 1em 1em;
+    padding: 1em 0.5em;
+    /*background-color: #c9f2de; -*/
+}
+
+div#tools2 div#tools_buttons{
+    margin: 1.5 auto;
+    text-align: center;
+}
+div#tools2 div#tools_buttons a{
+    display:inline-block;
+}
+
+.btn {
+    display: inline-block;
+    width:7em;
+    margin:1em 0.1em;
+    height:1.5em;
+    line-height: 1.5em;
+    overflow:visible;
+    vertical-align: top;
+    /* margin: 0.2em 0.5em; */
+    padding-left: 0.2em;
+    color: #3d3849;
+    font-size: 1.1em;
+    /*font-weight: bold;*/
+    text-decoration: none;
+    text-shadow: 0 1px rgba(black, .2);
+    background: #c9d89e; /*#8c96a4;*/
+    border: 1px solid;
+    border-color: #c0caa3 #c1caa3 #c2caa3;
+}
+
+div#tools2 div#tools_buttons .btn{
+    text-align: left;
+
+    /* Safari 3-4, iOS 1-3.2, Android 1.6- */
+    -webkit-border-radius: 6px; 
+
+    /* Firefox 1-3.6 */
+    -moz-border-radius: 6px; 
+
+    /* Opera 10.5, IE 9, Safari 5, Chrome, Firefox 4, iOS 4, Android 2.1+ */
+    border-radius: 6px; 
+}
+
+
+/* for ggnote */
+li.ggnote div.note-content {
+    margin: 0.5em;
+    padding: 0.5em;
+    background-color: #d2dfe7;
+}
+
+
+/* for ? */
+form#name_input label {
+    display: inline-block;
+    width: 6em;
+    overflow: visible; /* the default */
+}
+

@@ -1,0 +1,13 @@
+
+    <a href="<%= ls_root_href %>" class="root-dir listor-href">
+        <%=username%> <i class="fa fa-home"></i>
+    </a>
+    <span class="icon root-or-user-icon" data-icon-href="<%= cwd %>">
+        <img src="<%= root_or_user_icon %>"
+            class="icon root-or-user"
+            data-id="<%= cwd %>"
+            alt=""
+        >
+    </span>
+    <span class="folder-sperator">/</span>
+

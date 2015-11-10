@@ -1,0 +1,18 @@
+
+body {
+    margin-left: 5%;
+    padding-left: 5%;
+}
+
+form input{
+    display: block;
+    width: 85%;
+    margin: 0.5em;
+}
+
+form textarea {
+    display: block;
+    width: 84%;
+    margin: 0.5em;
+}
+

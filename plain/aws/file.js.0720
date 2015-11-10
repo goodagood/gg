@@ -1,0 +1,362 @@
+var u      = require('underscore');
+var path   = require('path');
+
+var bucket = require('./bucket.js');
+var ft     = require('../myutils/filetype.js');
+var myutil = require('../myutils/myutil.js');
+
+var myconfig = require("../config-mj.js");
+var render   = require("./render-b.js");
+var image    = require("./image.js");
+var s3folder = require("./folder.js");
+
+var log14  = require('../myutils/mylogb.js').double_log('/tmp/log14');
+
+// 'new_s3_file_obj' is going to replace this 'make_s3file', 0720.
+function make_s3file(pass_file_obj){
+  //
+  // deprecated approach:
+  // @isNew : if not, the meta file will be read in and serve as meta.
+  //
+  // @pass_file_obj, a callback is needed because meta need to be read from s3,
+  // it takes time, pass_file_obj(S3file_obj_with_closure).
+  //
+  // @opt :
+  //    {
+  //      name : file name
+  //      path : full path such: user-name/path/to/file-name.ext
+  //
+  //      s3key: key for the file in s3 storage
+  //      flag_to_read_in_meta : true/false //?
+  //
+  //      size : 
+  //      lastModifiedDate : 
+  //    }
+  //
+  // Who use file object:
+  //   folder : read in meta
+  //            add new file meta
+  //            update fiel meat
+  //   upload : create new meta
+  //
+  
+  var meta = {};
+
+  /* Start function and object defines. */
+
+  function _set_meta(_meta){
+    meta = _meta;
+    _init();
+  }
+
+  function _init(){
+    //u.defaults(meta, opt);  // what opt should contains, see above.
+    meta.what    = myconfig.IamFile;
+
+    //suppose name is supported by opt
+    meta.filetype = ft.check_file_type_by_name(meta.name);
+
+    //meta.storage = { type : 's3', key : meta.s3key }; //
+
+    meta.html = {}; // put html renderring here, <li> <p> <div> etc.
+
+    _make_s3_stream_href();
+    _make_delete_href();
+  }
+
+  function _make_s3_stream_href(){
+    if(!meta.storage.key) return;
+    meta.s3_stream_href = path.join(myconfig.s3_stream_prefix, meta.storage.key);
+  }
+
+  function _make_delete_href(){
+    if(!meta.path) return;
+    meta.delete_href = path.join('/del/', meta.path);
+  }
+
+  function _image_file_things(callback){
+        meta['thumbnail-s3key'] = image.make_thumb_key_from_file_key(meta.storage.key);
+        var thumb_file = path.join('/tmp', myutil.get_uuid() );
+        meta.local_file.thumb_file = thumb_file;
+        var infile     = meta.local_file.path;
+        image.make_thumbnail(80, 80, infile, 100, thumb_file, function(err, out_file){
+          // out_file is thumb_file
+          bucket.put_one_file(out_file, meta['thumbnail-s3key']);
+          meta.html['li'] = render.render_image_as_li(meta);
+          if(callback) callback();
+          log14('after render', meta);
+        });
+        // do thumbnail, build and upload
+        // do html renderring
+        //render_image_as_li(file_info);
+
+        //put_to_s3
+
+        bucket.put_one_file(meta.local_file.path, meta.storage.key, function(err,data){
+          //bucket.put_one_file(meta.local_file.path, meta.storage.key, function(err,data){ });
+        });
+  }
+
+  function _check_a_few_file_types(callback){
+    meta.html['li'] = render.make_simple_li(meta);
+    switch (meta.filetype){
+      case 'image':
+        _image_file_things(callback);
+        break;
+      //case 'folder':
+      //  //file_info['file-selector'] = '';
+      //  render_folder_file_as_li(file_info);
+      //  //prepare_folder_list(file_info['file-s3key']);
+      //  break;
+      //case 'goodagood file link':
+      //  ;
+      case 'goodagood msg file':
+        meta.html['li'] = render.render_msg_as_li_note(meta);  // this contains s3 API callback, it's asyn
+        //  meta.html['li'] = render.render_image_as_li(meta);
+        log14(meta);
+        break;
+      default:
+        meta.html['li'] = render.make_simple_li(meta);
+    }
+  }
+
+  function _delete_s3_storage(){
+    bucket.delete_object(meta.storage.key, function(){});
+  }
+
+  //d
+  // This will not be used, because file meta put in folder,
+  // for most file, no seperate meta file.
+  function _read_meta_from_s3_obj(callback){
+    //
+    // read in meta, and pass it to callback. 
+    // need the prepared meta.meta_file_path before using.
+    //
+    // This will not replace the current meta, data past only.
+    //
+    // error state will be set in cases.
+    //
+    if(!meta.meta_file_path) {
+      //console.log('no meta.meta_file_path'); //testing
+      meta.error = true;
+      if(callback) return callback(Error('no meta file found'), null);
+      return;
+    }
+    bucket.read_json(meta.meta_file_path, function(err, _meta_){
+      if(err) {
+        meta.error = err;
+        if(callback) return callback(err, null);
+      }else{
+        if(callback) callback(null, _meta_);
+      }
+    });
+  }
+
+
+  //d
+  function _read_replace_meta(callback){
+    _read_meta_from_s3_obj(function(err, _meta_){
+      if(err) return callback(null); // return (meta.error = err);
+      meta = _meta_;
+      if(callback) callback(meta);
+    });
+  }
+
+  //d
+  function _backup_meta(back_name, callback){
+    _read_meta_from_s3_obj(function(err, _meta_){
+      if(!err){
+        meta[back_name] = _meta_;
+        if(callback) return callback(null, meta);
+      }else{
+        if(callback) return callback(err, null);
+      }
+    });
+  }
+
+  //d
+  function  _calculate_s3_meta_file_path(){
+    //
+    // deprecated, 0629
+    //
+    if( !meta.path) {
+      //meta.error = true;
+      return;
+    }
+
+    meta.meta_file_path = path.join(myconfig.meta_file_prefix, meta.path);
+    return meta.meta_file_path;
+  }
+
+
+  ////d 
+  //// not going to be used because it will be saved by folder object.
+  //function _save_meta(callback){
+  //  // Not used often now.
+  //  // For most case, file meta will be in folder meta.
+  //  bucket.write_json(meta.meta_file_path, meta, function(){
+  //    if(callback) callback(meta);
+  //  });
+  //}
+
+
+  function _render_html_repr(){
+    var li = render.render_file_as_li_in_webpage(meta);
+    if(typeof meta.html === 'undefined') meta.html = {};
+    meta.html['li'] = li;
+  }
+
+
+  function _meta_smells(){
+    //
+    // Tell if meta data might be wrong.
+    //
+    if( u.isEmpty(meta) )                return true;
+    if(typeof meta.name === 'undefined') return true;
+    if(! meta.name)                      return true;
+    if(typeof meta.path === 'undefined') return true;
+    if(! meta.path)                      return true;
+    //if(typeof meta.meta_file_path === 'undefined') return true;
+    //if(! meta.path)                      return true;
+
+    return false;
+  }
+
+
+  var S3file_obj_with_closure = {
+    // 
+    // This will be the object returned.  It get closure of the function.
+    //
+
+    isError : function(){
+      return meta.error;
+    },
+
+    set_meta : _set_meta,
+
+    //calculate_s3_meta_file_path : _calculate_s3_meta_file_path,
+    //read_meta_from_s3_obj : _read_meta_from_s3_obj,
+
+    //read_replace_meta : _read_replace_meta,
+
+    backup_meta : _backup_meta,
+
+    extend_meta : function(newOpt, callback){
+      // extend the meta.
+      u.extend(meta, newOpt);
+      if(callback) callback(meta);
+    },
+
+    // this not works to expose meta directly, 
+    // not a reference, expression instead.
+    //meta : meta, 
+
+    get_meta : function(){ return meta; },
+
+    //save_meta : _save_meta,
+
+    render_html_repr : _render_html_repr,
+
+    delete_s3_storage: _delete_s3_storage,
+
+    check_a_few_file_types : _check_a_few_file_types,
+
+  }; // end of the object S3file_obj_with_closure.
+
+  function _return_call(){
+    //
+    // in case we need check meta data is good enough before we pass the 
+    // object and return.
+    //
+    if(! _meta_smells()) return pass_file_obj(S3file_obj_with_closure); //meta?
+    return pass_file_obj(null);
+  }
+
+  /* return of this function: */
+
+  // When there is no opt past in, return the object immediately, empty meta.
+  //if(typeof opt === 'undefined') return pass_file_obj(S3file_obj_with_closure);
+
+  // In case meta data is past in as opt, it need prepare `iam_meta == true`:
+  //if(typeof opt.iam_meta !== 'undefined' && opt.iam_meta){
+  //  delete opt.iam_meta;
+  //  meta = opt;
+  //  //return pass_file_obj(S3file_obj_with_closure);
+  //  return _return_call();
+  //}
+
+  //if(opt.flag_to_read_in_meta){ 
+  //  //
+  //  // this is deprecated 0709
+  //  //
+  //  //_read_replace_meta(function(){
+  //  //  return _return_call();
+  //  //});
+  //}
+  //else { 
+  //  _init();
+  //  return _return_call();
+  //}
+
+  // some time we need empty file object
+  return pass_file_obj(S3file_obj_with_closure);
+  //return _return_call();
+
+}
+
+function file_obj_from_meta(_meta, callback){
+  //
+  // make a new s3 file, this means no old data need to read in.
+  //
+  make_s3file(function(file_obj){
+    file_obj.set_meta(_meta);
+    callback(file_obj);
+  });
+}
+
+
+
+
+//d 0709
+//function new_s3_file(opt, callback){
+//  //
+//  // make a new s3 file, this means no old data need to read in.
+//  //
+//
+//  opt.flag_to_read_in_meta = false;
+//  make_s3file(opt, callback);
+//}
+
+
+//function build_ggmsg_file_obj(){
+//  //
+//  // ggmsg file, .ggmsg, 
+//  //
+//  var msg_meta = { 
+//    timestamp : Date.now();
+//  };
+//}
+
+
+function test_s3_file_basic(){
+  var s3key = 'muji/goodagood/.in/1402887794363-02-dirty-coop.JPG';
+  //make_s3file(s3key, false, function(file_obj){
+  //  console.log(file_obj.get_meta().html);
+
+  //  //file_obj.render_html_repr();
+  //  //file_obj.save_meta(function(saved){
+  //  //  console.log(saved);
+  //  //});
+  //});
+
+}
+
+
+if (require.main === module){
+  test_s3_file_basic();
+}
+
+module.exports.make_s3file  = make_s3file;
+module.exports.file_obj_from_meta  = file_obj_from_meta;
+
+// vim: set et ts=2 sw=2 fdm=indent:

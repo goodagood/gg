@@ -1,0 +1,14 @@
+#!/usr/bin/expect
+
+# easy tool by 'expect' to jump to points.
+
+spawn node
+expect ">"
+send "var p = console.log;\r"
+expect ">"
+
+#send ".load  ./u-plain-file.js\r"
+send ".load  ./u-full-path.js\r"
+
+expect "ok start interact:"
+interact

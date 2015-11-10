@@ -1,0 +1,9 @@
+{
+  "name": "for-aws-s3",
+  "version": "0.0.1",
+  "start_date": "2014-03-19",
+  "dependencies": {
+    "aws-sdk": "*"
+
+  }
+}

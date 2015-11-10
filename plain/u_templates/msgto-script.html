@@ -1,0 +1,69 @@
+
+<script src="/static/bower_components/underscore/underscore-min.js"></script>
+<script src="/static/js/jquery.inspect.js"></script>
+<!--
+<script src="/static/backbone/backbone-min.js"></script>
+-->
+<script>
+  $( document ).ready(function() {
+
+    // set by server
+    var towhom = '<% if(typeof towhom !== 'undefined' && towhom) print( towhom); %>';
+
+    var receivers = [];
+    if (towhom && towhom !== '') receivers.push(towhom);
+
+    $("ul input:checkbox").prop('checked', false);
+
+    $("input:checkbox").change(function(e){
+      //$.inspect(e);
+      var name = $(this).val();
+      if(_.isEmpty(name)){
+        //alert('empty name');
+        return false;
+      }
+
+      if($(this).is(':checked')){
+        receivers = _.union(receivers, [name,]);
+      }else{
+        receivers = _.without(receivers, name);
+      }
+      //alert(receivers);
+    });
+
+
+    // 0303
+    $("#tamsg2").textinput();
+
+    $("button#msgto_send").click(function(event){
+      event.preventDefault();
+      var no_empty = receivers.filter(function(e){return !!e;});
+      var name_list_stringified = JSON.stringify(no_empty);
+      //no_empty.forEach(function(name){
+        var url = 'http://54.178.88.149:9090/msgto/';
+        var text = $('textarea').val();
+        var param = {url:url, type:'POST', data:{to:name_list_stringified, text_input:text, }, dataType:'json'};
+        //alert(text);
+        //alert(param);
+        //$.inspect(param);
+        $.ajax(param)
+        .done(function(data){
+          //alert(data);
+          window.location.replace("/msgto/");
+          //location.reload(true);
+        })
+        .fail(function(data){
+          alert('failed?');// alert(data);
+          $.inspect(data);
+        });
+      //});
+    });
+
+    //$.inspect(this);
+
+    //console.log( 'ready, + underscore: ', _ );
+
+  });
+</script>
+<!-- vim: et ts=2 sw=2 tw=150
+-->

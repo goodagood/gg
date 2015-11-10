@@ -1,0 +1,96 @@
+
+.margin10px {margin:10px;}
+.max768 {max-width: 768px;}
+.max640 {max-width: 640px;}
+
+li {padding: 2px;}
+li > ul > li {padding-left : 2em;}
+.message {background-color : silver;}
+.well {background-color : gray;}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 999px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+input[readonly] {
+    background-color: white !important;
+    cursor: text !important;
+}
+
+.goodagood-header {
+    /*color:#2efe2e;
+    color:#003300;
+    background-color: #99cc00 ;
+    background-color: #080808 ; */
+    color:#003366;
+    background-color: #83acff ;
+}
+.gg-center{
+    /*margin-right:50%;*/
+    text-align:center;
+}
+
+/*.gg-center ul{
+    display : inline-block;
+}*/
+
+.goodagood-footer {
+    text-align:center;
+    color:#333;
+    /*#background-color: #080808 ;*/
+}
+
+.space10px {
+    margin-top:10px;
+}
+
+/*
+.show-right-border {
+    border-right-style : groove;
+}
+ */
+
+div#right-file {
+    border-left-style : groove;
+}
+
+#current_people {
+    background-color:#ccffff;
+}
+
+li.file ul.file-info { display:none; }
+li.file:hover ul.file-info { display:inline; padding-top:10px; }
+
+/* for checkbox, using font awesome 0128 */
+
+label.file-selector  input[type=checkbox] { display:none; } /* to hide the checkbox itself */
+
+label.file-selector  input[type=checkbox] + span.filename:before {
+    font-family: FontAwesome;
+    display: inline-block;
+}
+
+label.file-selector  input[type=checkbox] + span.filename:before { content: "\f096"; }
+label.file-selector  input[type=checkbox] + span.filename:before { letter-spacing: 10px; }
+/* space between checkbox and label */
+
+label.file-selector  input[type=checkbox]:checked + span.filename:before { content: "\f046"; }
+label.file-selector  input[type=checkbox]:checked + span.filename:before { letter-spacing: 5px; }
+/* allow space for check mark */
+
+

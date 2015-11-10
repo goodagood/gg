@@ -1,0 +1,368 @@
+# This transferred to coffee script
+# After a few transferring, CoffeeScript shows it's weakness
+#   - node.js will not show coffe line number in debugging
+#   - it bring error sometime, if missing parentheses
+
+u    = require("underscore")
+path = require("path")
+fs   = require("fs")
+async= require("async")
+Promise = require "bluebird"
+
+bucket = require("./bucket.js")
+ft = require("../myutils/filetype.js")
+myutil = require("../myutils/myutil.js")
+myconfig =  require("../config/config.js")
+image = require("./image.js") # this is for image editing, as making thumbnail
+
+#s3folder = require("./folder.js")
+file_module = require("./simple-file-v3.js")
+
+my_image  = require "./image-file.js"
+
+s3_stream_prefix = myconfig.s3_stream_prefix
+
+p = console.log
+
+promise_to_make_image_file_object = Promise.promisify(my_image.new_image_file_obj)
+
+new_image_file_obj = promise_to_make_image_file_object
+
+
+
+# tocheck
+new_uploaded_img_file_obj = (_meta, callback) ->
+    #
+    # make a new s3 file object, this means no old data need to read in.
+    #
+    promise_to_make_image_file_object _meta
+    .then (obj) ->
+        obj.calculate_meta_defaults()
+        #obj.upgrade_to_s3storage_collection()
+
+        obj.make_default_thumb_to_s3(  (err, s3thumb_key) ->
+            obj.render_html_repr()
+
+            #callback(err, obj)
+            obj.save_meta_file(  (err, reply) ->
+              callback(err, obj)
+            )
+        )
+
+image_from_meta = Promise.promisify(new_uploaded_img_file_obj)
+
+
+# --- to refact from old js #
+
+
+
+
+
+new_image_file_obj = (file_meta, pass_file_obj) ->
+
+    #
+    # For image file object.
+    #
+    # When a file is image, it get data like thumbnails, width, height, etc.
+    # The image file object take care it's own data and operations.  A file
+    # object should be able to switch to image file object.
+    #
+    # 0720
+    #
+    meta = file_meta
+
+    file_module.simple_s3_file_obj(meta, (err, fobj)->
+
+        #
+        # It going to be wrapped here, in a callback where we have parent obj
+        # and data. The meta is set in the below, to make use of closure.
+        #
+
+        #
+        # Data:
+        # meta['thumbnail-s3key'] : default thumbnail s3key
+        # 
+        # For more thumbnails, not used yet:
+        # meta.thumbnails = [ {width:..., 
+        #                      height:..., 
+        #                      quality:...,
+        #                      s3key:...,
+        #                      local_file_path:...},
+        #
+        #                      // the next thumbnail image if there is,
+        #
+        #                      ... ]
+        #
+
+        # Now, we have file object and it's meta data.  Here it get modified
+        # for image files:
+
+        #var imeta= {}; // for image file specific things?
+
+        render = require("./render-b.js") #?
+        render_html_repr = ->
+            #meta.html["li"] = render.render_image_as_li(meta)
+            meta.html["li"] = render_image_as_li(meta)
+
+
+        render_image_as_li = ->
+      
+            s3key = meta["storage"]["key"]
+            h = {}
+            h["file-selector"] = "<input type=\"checkbox\" name=\"filepath[]\" value=\"" + meta.path + "\" />"
+            href_download = meta["s3_stream_href"]
+            h["basename"] = meta.name
+            h["download_anchor"] = "<a href=\"" + href_download + "\" >" + h["basename"] + "</a>"
+            img_src = ""
+            if typeof meta["thumbnail-s3key"] isnt "undefined"
+                thumb_key = meta["thumbnail-s3key"]
+                img_src = path.join(s3_stream_prefix, thumb_key)
+            h["thumb-img"] = "<img src=\"" + img_src + "\" alt=\"" + h["basename"] + "\"  />"
+            h["image-indicator"] = "<span class=\"glyphicon glyphicon-picture\"></span>"
+            delete_link = [
+                " <a href=\"",
+                meta["delete_href"],
+                "\"> <span class=\"glyphicon glyphicon-remove\"> </span></a>"
+            ].join("")
+      
+            # he is html element, representing the image in web page:
+            # <li> file-selector, image-glyphicon, name, file informations ...
+            #   <ul> 
+            #     <li> thumbnail
+            #     <li> date
+            #     <li> ...
+            #   </ul>
+            # </li>
+            he = "<li>" # html element
+            he += h["file-selector"]  + '<br />\n'
+            #he += h['image-indicator'];
+            he += h["download_anchor"]
+            he += "<ul class=\"list-unstyled\">"
+            he += "<li>" + h["thumb-img"] + "</li>\n"
+            he += "<li>" + delete_link + "</li>\n"
+            he += "<li>" + meta["lastModifiedDate"] + "</li>\n"  if meta["lastModifiedDate"]
+            he += "<li>" + meta["create-date"] + "</li>\n"  if meta["create-date"]
+            he += "</ul>"
+            he += "</li>\n"
+
+            h["li-element"] = he
+            h["li"] = he
+      
+            meta["li-element"] = he # already used
+            meta["html"] = h
+
+
+        # Still get meta.local_file ?
+        #d
+        prepare_default_thumbnail = (callback) ->
+            meta["thumbnail-s3key"] = image.make_thumb_key_from_file_key(meta.storage.key)
+            thumb_file = path.join("/tmp", myutil.get_uuid())
+            meta.local_file_thumb_file = thumb_file
+            infile = meta.local_file.path
+      
+            # its width=80 height=80 quality=100
+            image.make_thumbnail 80, 80, infile, 100, thumb_file, (err, out_file) ->
+      
+                # out_file is thumb_file
+                callback()  if callback
+
+
+        make_thumb_defaults = ->
+            meta.thumb = {}  if typeof meta.thumb is "undefined"
+            meta.thumb.defaults = {}  if typeof meta.thumb.defaults is "undefined"
+            meta.thumb.defaults.width = 100
+            meta.thumb.defaults.height = 100
+            meta.thumb.defaults.quality = 100
+            meta.thumb.defaults.s3key = image.make_thumb_key_from_file_key(meta.storage.key)
+            meta["thumbnail-s3key"] = meta.thumb.defaults.s3key
+            return meta.thumb
+      
+
+        # How to arrange thumbnail better then this?
+        make_default_thumb_to_s3 = (callback) ->
+            make_thumb_defaults()
+
+            # make an unique local file name:
+            uniq = myutil.get_uuid() #?
+            local_thumb_file_name = path.join("/tmp", uniq)
+
+            bucket.get_object meta.storage.key, (err, s3reply) ->
+                return callback(err, null)  if err
+                image_buf = s3reply.Body
+
+                image.make_thumbnail_from_buf(image_buf, meta.name,
+                    meta.thumb.defaults.width, meta.thumb.defaults.height,
+                    meta.thumb.defaults.quality, local_thumb_file_name, (err) ->
+
+                        bucket.put_one_file(local_thumb_file_name,
+                            meta["thumbnail-s3key"], (err, s3reply) ->
+
+                                fs.unlink local_thumb_file_name unless err
+                                delete meta.local_thumb_file_name
+                                callback err, meta["thumbnail-s3key"]
+                        )
+                )
+
+
+
+
+        # not to use, file content no need to upload to s3 here.
+        put_to_s3 = (callback) ->
+
+            # @callback will get: (err, aws-reply-of-'putObject')
+            callback = (->)  unless callback # make a callback anyway.
+            callback_after = u.after(2, callback) # it actually run after they all finished.
+            bucket.put_one_file(meta.local_file_thumb_file, meta["thumbnail-s3key"], callback_after)
+            bucket.put_one_file(meta.local_file.path, meta.storage.key, callback_after)
+
+
+
+        bucket2 = require('./bucket-v2.js')
+
+        # not test.
+        delete_s3_storage_2 = ()->
+            # return a promise, try to delete all s3 storage of a file.
+
+            all_promise = []
+            # delete the default thumbnail file:
+            all_promise.push bucket2.v1_promised.delete_object_promised(meta["thumbnail-s3key"])
+
+            # delete other thumbnails:
+            if meta.thumbnails?
+                if meta.thumbnails.length > 0
+                
+                    meta.thumbnails.forEach( (thumb) ->
+                        all_promise.push bucket2.v1_promised.delete_object_promised thumb.s3key
+                    )
+      
+            # delete the image file:
+            all_promise.push bucket2.v1_promised.delete_object_promised(meta.storage.key, (->))
+
+            return Promise.all(all_promise)
+
+
+        delete_s3_storage =(callback) ->
+            # Same as "delete_s3_storage_2", use callback/async
+            funs = []
+
+            # delete the default thumbnail file:
+            fun = (callback)->
+                bucket.delete_object(meta["thumbnail-s3key"], callback)
+            funs.push(fun)
+      
+            # delete other thumbnails:
+            if meta.thumbnails
+                meta.thumbnails.forEach( (thumb) ->
+                    fun = (callback)->
+                        bucket.delete_object(thumb.s3key, callback)
+                    funs.push(fun)
+                )
+      
+            # delete the image file:
+            fun = (callback)->
+                bucket.delete_object(meta.storage.key, callback)
+            funs.push(fun)
+
+            if meta.meta_file_key?
+                fun = (callback)->
+                    bucket.delete_object(meta.meta_file_key, callback)
+                funs.push(fun)
+
+            async.series(funs, callback)
+
+
+        delete_s3_storage_old = ->
+            # the careless way to delete s3 storage, just try to pass out 
+            # without callback/promise.
+
+            # delete the default thumbnail file:
+            bucket.delete_object meta["thumbnail-s3key"]
+      
+            # delete other thumbnails:
+            if meta.thumbnails
+                meta.thumbnails.forEach( (thumb) ->
+                    bucket.delete_object thumb.s3key
+                )
+      
+            # delete the image file:
+            bucket.delete_object(meta.storage.key, (->))
+
+      
+        _clone_content_to_user = (user_name, callback) ->
+      
+            # Can we use the parent method, 
+            # when the method will be over-rided after a while?
+            # Can we do it this way:
+            # fobj._clone_content_to_user(....)
+            #
+            tgt_meta = {}
+            fid = myutil.get_uuid()
+            new_name = fid + path.extname(meta.name)
+            tgt_s3key = path.join(user_name, ".files", new_name)
+            tgt_storage = {
+                type: "s3"
+                key: tgt_s3key
+            }
+      
+            tgt_meta.storage = tgt_storage
+            bucket.copy_file(meta.storage.key, tgt_s3key)  #This has no callback
+      
+            # For thumbnail, only default thumbnail
+            tgt_meta["thumbnail-s3key"] = image.make_thumb_key_from_file_key(tgt_meta.storage.key)
+            bucket.copy_file(meta["thumbnail-s3key"], tgt_meta["thumbnail-s3key"]) #This has no callback
+            return callback(tgt_meta)
+      
+        #
+        fobj.set_meta(meta)
+      
+        # Object with new functionalities
+        new_functions = {
+            version: 'image-file-v2'
+            prepare_default_thumbnail: prepare_default_thumbnail #d
+            put_to_s3: put_to_s3
+            delete_s3_storage: delete_s3_storage
+            render_html_repr: render_html_repr
+            clone_content_to_user: _clone_content_to_user
+            make_default_thumb_to_s3: make_default_thumb_to_s3
+
+            # exists only in tests
+            make_thumb_defaults: make_thumb_defaults
+            delete_s3_storage_2: delete_s3_storage_2
+        }
+
+        u.extend(fobj, new_functions)
+        pass_file_obj(null, fobj) # This callback pass out the image file object.
+
+    ) # end of "simple s3 file obj" callback
+
+
+module.exports.new_image_file_obj = new_image_file_obj
+module.exports.new_uploaded_img_file_obj = new_uploaded_img_file_obj
+
+
+
+
+# --- end to refact#
+
+
+
+
+module.exports.image_from_meta  = image_from_meta
+
+
+# Checkings
+
+if require.main == module
+    #image_file_obj = 
+    _meta = {}
+    new_image_file_obj _meta
+    .then (obj) ->
+        p obj
+    .then (what) ->
+        p what
+        #stop()
+    .catch (err) ->
+        p 'err ', err
+     
+
+    stop()

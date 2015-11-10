@@ -1,0 +1,149 @@
+<!DOCTYPE HTML>
+<html>
+<!-- 
+refers to: 
+
+  http://javascriptissexy.com/handlebars-js-tutorial-learn-everything-about-handlebars-js-javascript-templating/
+
+  http://blog.teamtreehouse.com/handlebars-js-part-2-partials-and-helpers
+
+  handlebarsjs.com
+-->
+<head>
+  <meta charset="utf-8">
+  <title>helper, block helper, options.fn in Handlebars.js</title>
+  <!-- Load handlerbars.js  -->
+  <!-- Download handlerbars.js and put it in the same folder. -->
+  <script src="/bower_components/handlebars.js/lib/handlebars.js"></script>
+  <!-- Load Jquery from CDN  for easy DOM manipulations 
+    <script src="http://code.jquery.com/jquery-latest.min.js"    
+    type="text/javascript"></script>
+  -->
+  <!-- Here jquery.min.js already put in local folder. -->
+  <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+
+  <!-- Handlebars template for a blog post, inside {{variable}} are variables
+    we can afect with JS objects formatDate is a custom helper defined by us
+  -->
+  <script id="simple-template" type="text/x-handlebars-template">
+    <h1>{{title}} published at {{formatDate date}}</h1>
+    {{prettyAuthor author}}
+    <p>
+      {{entry}}
+    </p>
+  </script>
+
+  <script id="block-template" type="x-handlebars-template">
+    {{#userScore this}}
+      <div>{{firstName}} {{lastName}}, Your Total Score is {{score}} </div>
+    {{/userScore}}
+  </script>
+  
+  <script type="text/javascript">
+    // This registers a new helper method on the Handlebars template
+    Handlebars.registerHelper("formatDate", function(date){
+      // This guard is needed to support Blog Posts without date
+      // the takeway point is that custom helpers parameters must be present on
+      // the context used to render the templates
+      // or JS error will be launched
+      if (typeof(date) == "undefined") {
+        return "Unknown";
+      }
+      // These methods need to return a String
+      return date.getDay() + "/" + date.getMonth() + "/" + date.getFullYear();
+    });
+    
+    // New helper method for Handlebars tempaltes that outputs HTML
+    // By default handlebars escapes special chars like < or > to have your helper outputing
+    // strings unescaped wrap the return values with Handlebars.SafeString
+    Handlebars.registerHelper("prettyAuthor", function(author){
+      author = author || "John Doe"
+      return new Handlebars.SafeString("<h2>Written by " + author + " :-) </h2>");
+    });
+
+    // Start to do block helper things
+    var contextObj_4block = [
+        {firstName: "Kapil", lastName:"Manish", score:[22, 34, 45, 67]}, 
+        {firstName: "Bruce", lastName:"Kasparov", score:[10, 34, 67, 90]}];
+
+    Handlebars.registerHelper ("userScore", function (dataObject, options) {
+      var templateWithInterpolatedData = "";
+
+      for (var i = dataObject.length - 1; i >= 0; i--) {
+        //Sum user scores from the score array and replace the array with the total
+        dataObject[i].score = dataObject[i].score.reduce(function (
+          prev, cur, index, array) {
+              return prev + cur;
+        });
+
+        // Each object in the data object array is interpolated with the
+        // options.fn method, which processes all the HTML from the template and
+        // insert the values from the object in their respective positions.
+
+        // Just so you understand the purpose of the options.fn method: it does
+        // exactly what the regular handlebars template function does when we pass
+        // the data object to the function, to  retrieve the values from the
+        // object and insert them into the HTML from the template.
+
+        // Without the options.fn object in this example, the raw objects
+        // (instead of the interpolated values) would have been returned
+
+        templateWithInterpolatedData += options.fn (dataObject[i]);
+        //
+        //$.inspect(options, 'window');
+        //$.inspect(options.fn, 'window');
+        $.inspect(options.fn(dataObject[i]));
+
+      }
+
+      // We return the full string of HTML with all the values from the data
+      // object inserted into place.
+
+      return templateWithInterpolatedData;
+    });
+
+  
+    //wait for page to load
+    $(document).ready(function(){
+      // Extract the text from the template .html() is the jquery helper method for that
+      var simple_template_text = $('#simple-template').html();
+      // Compile that into an handlebars template
+      var simple_template = Handlebars.compile(simple_template_text);
+      // Define some data to populate the template, the object keys must match the template variables
+      var data = {title: "First Post", entry: "Life is change, change is stability."};
+      // Render the template to html
+      var html = simple_template(data);
+      // Use the main div placeholder to output the html
+      $('#main').append(html);
+      // We can easily reuse the templates with new data 
+      var new_post = {author: "Alice Warlow",
+                      title: "Second Post", 
+                      entry: "It is the power of the mind to be unconquerable.", 
+                      date: new Date(Date.now())};
+      // Render the second post to html
+      var new_post_html = simple_template(new_post);
+      // Append the second post
+      $('#main').append(new_post_html);
+
+      // handlerbars.js block helper
+      var block_template_text = $('#block-template').html();
+      var block_template = Handlebars.compile(block_template_text);
+      var block_html = block_template(contextObj_4block);
+      $('#block-helper-template-here').append(block_html);
+    });
+  </script>
+</head>
+  
+<body>
+<!-- Insertion point for handlebars template -->
+<h1> Contents get by helper function: </h1>
+<div id="main" style="margin-left:100px"> </div>
+<hr />
+<h1> Contents get by <i>block</i> helper: </h1>
+<div id="block-helper-template-here" style="margin-left:100px"> </div>
+<h1> Inspect inside: </h1>
+<div id="inspect-inside" style="margin-left:50px"> </div>
+
+</body> 
+<!-- vim: set et ts=2 sw=2: -->
+</html>

@@ -1,0 +1,39 @@
+<!-- underscore.js template -->
+<div class="container">
+  <h2>Hello, <%= username %>.</h2>
+  <div class="row-fluid">
+    <section id="demonstration" role="main" class="span12">
+
+    <p id="cwd">team:&nbsp; <strong><a href="/ls/<%
+        if(typeof cwd !== 'undefined' && cwd) print(cwd);
+        %>">
+        <% 
+        if(typeof cwd !== 'undefined' && cwd) print(cwd);
+        %></a></strong></p>
+
+    <!--
+    -->
+
+    <div class="margin10px">
+      <% 
+        if(typeof people_list !== 'undefined' && people_list) print( people_list); 
+      %>
+    </div>
+
+    <p> <a id="add-members" href="/add-members/<% 
+        if(typeof cwd !== 'undefined' && cwd) print(cwd);
+      %>"> <span class="btn btn-default">Add member to the team</span></a>, so,  member can work the folder. </p>
+
+    <p> Current members: </p>
+    <div class="margin10px">
+      <% 
+        if(typeof member_list !== 'undefined' && member_list) print( member_list); 
+      %>
+    </div>
+
+    </section>
+  </div> <!-- row-fluid -->
+</div> <!-- container -->
+<script> var cwd = '<% if(typeof cwd !== 'undefined' && cwd) print(cwd); %>'; </script>
+<!-- vim: et ts=2 sw=2 tw=150
+-->

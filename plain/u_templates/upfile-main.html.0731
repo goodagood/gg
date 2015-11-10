@@ -1,0 +1,34 @@
+
+<div class="container">
+  <h2>Hello, <%= username %>.</h2>
+  <div class="row-fluid">
+    <section id="demonstration" role="main" class="span12">
+    <h2 id="fupload-h2">Upload to <%= cwd %> </h2>
+
+    <div>
+
+      <p> <%= message %></p>
+
+      <!-- This COST me a lot time:  enctype="multipart/form-data"  
+      enctype="multipart/x-www-form-urlencoded" >
+      enctype="multipart/form-data" >
+      --> 
+      <form name="upload_file" action="/upfile/<%=cwd%>" method="post" 
+        enctype="multipart/form-data" >
+        <!-- <input type="text" name="title"><br> 
+        <label>Choose file:</label>
+        -->
+        <span class="btn btn-primary btn-file">
+          Choose file... <input type="file" name="files[]" multiple="multiple">
+        </span> <br />
+        <span class="btn btn-success">
+          <input type="submit" value="Upload" style="color:black">
+        </span>
+      </form>
+    </div>
+
+    </section>
+  </div> <!-- row-fluid -->
+</div> <!-- container -->
+<!-- vim: et ts=2 sw=2 tw=150
+-->

@@ -1,0 +1,48 @@
+<!-- underscore.js template -->
+<div class="container">
+  <h2>Hello, <%= username %>.</h2>
+  <div class="row-fluid">
+    <section id="demonstration" role="main" class="span12">
+
+    <p id="cwd">cwd:&nbsp; <strong><%= cwd_chain %></strong></p>
+
+    <!--
+    <p> <a href="/toteamfolder/<% 
+        if(typeof cwd !== 'undefined' && cwd) print(cwd);
+      %>"> <span class="btn btn-default">Convert to</span></a>  team folder</p>
+
+    <p> <a href="/open2viewer/<% 
+        if(typeof cwd !== 'undefined' && cwd) print(cwd);
+      %>"> <span class="btn btn-default">Open folder to</span></a>  viewers</p>
+    -->
+    <p> <% if(typeof open_folder !== 'undefined' && open_folder) print(open_folder); %> </p>
+    <p> <% if(typeof to_team !== 'undefined' && to_team) print(to_team); %> </p>
+    <p> <% if(typeof value_folder !== 'undefined' && value_folder) print(value_folder); %> </p>
+
+    <div class="margin10px">
+      <% 
+        if(typeof people_list !== 'undefined' && people_list) print( people_list); 
+      %>
+    </div>
+    <p> <a id="add-members-link" href="/add-members/<% 
+        if(typeof cwd !== 'undefined' && cwd) print(cwd);
+      %>"> <span class="btn btn-default">Add members to the folder</span></a>, so, members can work on the folder. </p>
+
+    <p> <a href="/delete-members/<% 
+        if(typeof cwd !== 'undefined' && cwd) print(cwd);
+      %>"> <span class="btn btn-warning">Delete members of the folder</span></a>. </p>
+
+    <p> <a href="/add-viewer/<% 
+        if(typeof cwd !== 'undefined' && cwd) print(cwd);
+      %>"> <span class="btn btn-default">Add viewers to the folder</span></a>, so,  viewers can read the folder. </p>
+
+    <p> <a href="/delete-viewer/<% 
+        if(typeof cwd !== 'undefined' && cwd) print(cwd);
+      %>"> <span class="btn btn-warning">Delete viewers of the folder</span></a>. </p>
+
+    </section>
+  </div> <!-- row-fluid -->
+</div> <!-- container -->
+<script> var cwd = '<% if(typeof cwd !== 'undefined' && cwd) print(cwd); %>'; </script>
+<!-- vim: et ts=2 sw=2 tw=150
+-->

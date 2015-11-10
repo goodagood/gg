@@ -1,0 +1,48 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+
+<title> test handlebars 0224 </title>
+<!--
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+-->
+<script src="http://code.jquery.com/jquery.min.js"></script>
+<script src="/static/js/jquery.inspect.js"></script>
+<script>
+    $( document ).ready(function() {
+        console.log( "console log appeared" );
+        //console.log( (this == $ ? 'yes' : 'no') );
+        //$.inspect(this, 'window');
+    });
+</script>
+</head>
+<body>
+
+<h1> testa 0224,, 0427 </h1>
+
+{{#if message }}
+<p>{{ message }}</p>
+{{/if}}
+
+<p>As hint: {{ tmpa }}<br /> 
+<p> 
+{{#if tmpa}}
+{{tmpa}}, this is testing if. and v..a : {{ valuea }}
+<br />
+{{da.a}}, is da.a 
+{{/if}}
+</p>
+<p>value a: {{ valuea }}<br /> 
+<p> test the req.headers['Referer']  <a href="/login"> login </a> </p>
+
+</p>
+
+
+</body>
+<!-- vim: et ts=2 sw=2
+-->
+</html>

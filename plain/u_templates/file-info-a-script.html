@@ -1,0 +1,137 @@
+
+<script>
+  $( document ).ready(function() {
+
+    //i18n.init(function(t){
+    //  $(".translate-this").i18n();
+    //});
+
+    //alert('ok?');
+
+
+    //function makeList( jsonObject, listElement){
+    //  for(var i in jsonObject){
+    //    //iterate through the array or object
+    //    //insert the next child into the list as a <li>
+    //    var newLI = document.createElement('li');
+    //    if  (jsonObject[i] instanceof Array){
+    //      newLI.innerHTML=i+": ARRAY";
+    //      newLI.className="arrayOrObject"; //add a class tag so we can style differently
+    //    }
+    //    else if (  jsonObject[i] instanceof Object){
+    //      newLI.innerHTML=i+": OBJECT";
+    //      newLI.className="arrayOrObject"; //add a class tag so we can style differently
+    //    }
+    //    else{
+    //      newLI.innerHTML=i+': '+jsonObject[i];
+    //    }
+
+    //    listElement.appendChild(newLI);   
+    //    //insert a <ul> for nested nodes 
+    //    if  (jsonObject[i] instanceof Array || jsonObject[i] instanceof Object){
+    //      var newUL = document.createElement('ul');
+    //      //newUL.innerHTML=i;
+    //      listElement.appendChild(newUL);
+    //      makeList(jsonObject[i],newUL);
+    //    }
+    //  }
+    //}
+    //
+    var jtest = {
+      a : 1,
+      b : 2, c : [1,2,3]
+    }
+
+    //var ul = $("<ul> <li> abc </li></ul>");
+    //ul.append( $("<li> abc </li>");
+    //$("#json-to-list").append(ul);
+
+    function json2ul(jdata){
+      var ul = "<ul> \n";
+      $.each(jdata, function(key, val){
+        var li = '<li class="key"> <span>' + key.toString() + "</span> : ";
+
+        if ($.isArray(val)){
+          li += json2ul(val);
+
+          }else if($.isPlainObject(val)){ 
+          li += json2ul(val);
+
+          }else{
+          li += '<span class="value">' + val.toString() + '</span>';
+        }
+        li += "</li>\n"
+
+        ul += li + "\n";
+      });
+
+      ul += "</ul>\n";
+      return ul;
+    }
+
+    //var one = json2ul(jtest);
+    //alert(one);
+
+    //$("#json-to-list").append(one);
+
+
+    //////
+
+    ////$.getJSON('file.json', function()
+    ////{
+    ////  //first call of function
+    ////  $(some_html_element).html( _json.getElements(this) );
+    ////};
+
+    //_json = new function() {
+    //  this.getElements = function (_element)
+    //  {
+    //    var _sreturn = '<ul><li>';
+    //      $.each(_element, function(val, level) 
+    //      {
+    //        _sreturn += val;
+
+    //        //every call again, the detph is not care
+    //        _sreturn += ((var childstring = _json.getElements(this)).length > 0) 
+    //        ? 
+    //        childstring : '<li>' + level + '</li>';
+    //      });
+    //      return _sreturn + '</ul></li>';
+    //  }
+    //};
+
+    //alert('what?');
+    //alert(_json.getElements(jtest));
+
+
+
+    //////
+
+    ////var listEl =document.getElementById('JSONunorderedList');
+    ////makeList(jsonObj,listEl);
+    ////makeList(jtest, $("div#json-to-list"));
+
+    ////$("div#json-to-list").append("<p>fuck</p>");
+
+
+
+
+
+
+
+
+
+
+    //function remove(arr, item) {
+    //  for(var i = arr.length; i--;) {
+    //    if(arr[i] === item) {
+    //      arr.splice(i, 1);
+    //    }
+    //  }
+    //}
+
+    //alert('end of the script');
+  });
+</script>
+<!-- vim: et ts=2 sw=2 tw=150
+-->

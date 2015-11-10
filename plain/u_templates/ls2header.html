@@ -1,0 +1,14 @@
+
+<header>
+    <div id="header" class="goodagood-header">
+        <h1 class="logo">
+            <span class="username">
+                <% if(typeof username != 'undefined' && username){print(username);}%>
+            </span>
+            <span class="goodagood-logo">
+                <% if(typeof username == 'undefined'  || !username){print('<a href="http://www.goodagood.com/">goodagood</a>');}%>
+            </span>
+        </h1>
+        <a class="to_nav" href="#primary_nav"> <i class="fa fa-list"></i> Menu </a>
+    </div>
+</header>

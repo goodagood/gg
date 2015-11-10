@@ -1,0 +1,40 @@
+<!-- underscore.js template -->
+<div class="container">
+  <h2>Hello, <%= username %>.</h2>
+  <div class="row-fluid">
+    <section id="demonstration" role="main" class="span12">
+
+    <p id="cwd">team:&nbsp; <strong><a href="/ls/<%
+        if(typeof cwd !== 'undefined' && cwd) print(cwd);
+        %>">
+        <% 
+        if(typeof cwd !== 'undefined' && cwd) print(cwd);
+        %></a></strong></p>
+
+    <!--
+    -->
+    <%= start_to_have_viewers_btn %>
+
+    <div class="margin10px">
+      <% 
+        if(typeof people_list !== 'undefined' && people_list) print( people_list); 
+      %>
+    </div>
+
+    <p> <a id="add-viewers" href="/addviewer/<% 
+        if(typeof cwd !== 'undefined' && cwd) print(cwd);
+      %>"> <span class="btn btn-default">Add viewers to the folder</span></a>, so,  viewers can read the folder. </p>
+
+    <p> Current viewers: </p>
+    <div class="margin10px">
+      <% 
+        if(typeof current_viewers !== 'undefined' && current_viewers) print( current_viewers); 
+      %>
+    </div>
+
+    </section>
+  </div> <!-- row-fluid -->
+</div> <!-- container -->
+<script> var cwd = '<% if(typeof cwd !== 'undefined' && cwd) print(cwd); %>'; </script>
+<!-- vim: et ts=2 sw=2 tw=150
+-->

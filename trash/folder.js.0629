@@ -1,0 +1,160 @@
+var u      = require('underscore');
+var path   = require('path');
+
+var bucket = require('./bucket.js');
+var myconfig = require("../config-mj.js");
+
+
+function make_s3folder(folder_path, defaults){
+  //
+  // An factory to make folder object. 0626
+  // @defaults is default options for the folder, it will be copied to meta
+  // if there is not those options.
+  
+  var self = this;
+  var meta = {};
+  if(defaults) u.defaults(meta, defaults);  // make defaults
+
+  meta.error   = false;
+  meta.abspath = folder_path;
+  meta.name    = path.basename(folder_path);
+  // There is meta.metaFilePath, calculated in the below.
+
+  meta.files = [];
+  // use { file-name : file-meta, ... } for files instead, 0627
+  meta.nms   = {};
+
+  //meta.names   = [];
+  meta.what    = myconfig.IamFolder;
+
+  function _calculateS3MetaFilePath(){
+    meta.metaFilePath = path.join(myconfig.meta_file_prefix, meta.abspath);
+    return meta.metaFilePath;
+  }
+  _calculateS3MetaFilePath();  // and calculate it.
+
+
+  function _addFile(filemeta){
+    meta.nm[filemeta.name] = filemeta;
+  }
+
+
+  var folderObject = {
+    //
+    // Define an object and return the object, as in factory pattern.
+    // If an function is needed by this object, define it in the above and
+    // refer it as needed.
+    //
+
+    calculateS3MetaFilePath : _calculateS3MetaFilePath,
+
+    readInMeta : function(callback){
+      bucket.read_json(meta.metaFilePath, function(err, _meta_){
+        if(err) {meta.error = err; return;}
+        meta = _meta_;
+        if(callback) callback(meta);
+      });
+    },
+
+
+    updateFileList : function(callback){
+      bucket.list(meta.abspath, function(err, contents){
+        if(err) { throw new Error(err); }
+
+        // prepare the callback, the trouble is it must wait until all files
+        // updated.
+        function _fun_to_call(){
+          process.nextTick(function(){
+            callback(meta['files']);
+          });
+        }
+        // make a function which will be called ONLY after all done in forEach.
+        var call_after_read_all = false;
+        if(typeof callback !== 'undefined' && callback){
+          var call_after_read_all = u.after(u.size(contents), _fun_to_call);
+        }
+
+        // get each meta, push meta of each file to array 'files'.
+        contents.forEach(function(one){
+          bucket.read_file_meta(one.Key, function(err, _meta_){
+            if(err) throw new Error(err);
+            meta.files.push(_meta_);
+            if(call_after_read_all) call_after_read_all();
+          });
+        });
+
+      });
+    },
+
+    sortFilesByDate : function(){
+      if(u.isEmpty(meta.files)) self.updateFileList();
+
+      // sort the file by negative epoc seconds
+      var sorted = u.sortBy(meta.files, function(e){
+        // change the date string from aws to epoc mili-seconds
+        var date = new Date(e['LastModified']);
+        var epoc = date.getTime();
+        return 1 - epoc;
+      });
+
+      meta.files = sorted;
+    },
+
+    getMeta : function(){
+      return meta;
+    },
+
+    saveMeta : function(callback){
+      bucket.write_json(meta.metaFilePath, meta, function(err, reply){
+        if(err) return callback(err, null);
+        if(callback) return callback(null, meta);
+      });
+    },
+  };
+
+  return folderObject;
+
+}
+
+function build_folder_meta(folderPath){
+}
+
+
+function test_s3_folder(){
+  var folder_path = 'abc/one';
+  var folder_path = 'muji';
+  var folder_path = 'abc';
+  var s3f = make_s3folder(folder_path, {'i am default a' : 'a', 'haha' : 'the sound of laugh',});
+  console.log(s3f);
+  console.log(' --- --- --- ');
+  console.log(s3f.getMeta());
+  console.log(' --- --- --- ');
+  s3f.readInMeta( console.log);
+
+  //s3f.updateFileList(function(){
+  //  s3f.sortFilesByDate();
+  //  console.log('s3f.saveMeta()');
+  //  //s3f.saveMeta();
+  //});
+}
+
+function test_read_in_meta(){
+  var folder_path = 'abc/one';
+  var s3f = new make_s3folder(folder_path);
+  s3f.readInMeta(function(){
+    meta = s3f.getMeta();
+    meta.files.forEach(function(e){
+      console.log(e);
+      console.log('\n ------ ------ \n');
+    });
+    //console.log(s3f.getMeta());
+  });
+}
+
+if (require.main === module){
+  test_s3_folder();
+  //test_read_in_meta();
+}
+
+module.exports.make_s3folder = make_s3folder;
+// vim: set et ts=2 sw=2 fdm=indent:

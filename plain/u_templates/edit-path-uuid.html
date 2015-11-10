@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<!-- as basic skeleton for underscore.js, 2014 0605 -->
+<head>
+<meta http-equiv="content-type" content="text/html" />
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="description" content="index, goodagood testing" />
+<meta name="keywords" content="goodagood, filesystem, sharing" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Andrew">
+
+<title> 
+  <% if(typeof title !== 'undefined' && title){ print(title);}else{ print('goodagood frame a');} %>
+</title>
+
+
+<link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+
+<link rel="stylesheet" href="/static/bower_components/highlight.js.origin/src/styles/default.css">
+<link rel="stylesheet" href="/static/css/markdown-viewer.css">
+
+<% if(typeof css !== 'undefined' && css) print(css); %>
+
+<style type="text/css">
+  body {  background-color: #becae3; }
+  <% if(typeof in_file_css !== 'undefined' && in_file_css) print(in_file_css); %>
+</style>
+
+</head>
+<body>
+
+
+  <div id="navbar-wrapper">
+    <ul class="nav nav-pills">
+      <li role="presentation" class="active"><a href="/">Home</a></li>
+      <li role="presentation"><a href="#">?Edit</a></li>
+      <li role="presentation"><a href="#">?Save</a></li>
+      <li role="presentation"><a href="#">?Send</a></li>
+    </ul>
+  </div>
+
+  <div class="container">
+    <br /> <hr />
+
+    <!-- toolbar with suitable buttons and dialogues -->
+    <div id="toolbar">
+      <a data-wysihtml5-command="bold">bold</a>
+      <a data-wysihtml5-command="italic">italic</a>
+      <a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1">H1</a>
+      <a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="p">P</a>
+    </div>
+
+    <!-- element to edit -->
+    <div id="editor" data-placeholder="Go on, start editing...">
+      <p>  edit: paragraph 1 </p>
+      <% if(typeof text !== 'undefined' && text){ print(text);}else{ print('? should be markdown');} %>
+    </div>
+
+  </div>
+
+
+
+
+
+<!--
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="http://code.jquery.com/jquery.min.js"></script>
+<script src="/static/js/jquery.inspect.js"></script>
+<script src="/static/js/i18next-1.7.3.js"></script>
+-->
+
+
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+
+<!-- wysihtml core javascript with default toolbar functions --> 
+<script src="/static/bower_components/wysihtml/dist/wysihtml5x-toolbar.min.js"></script>
+
+<!-- rules defining tags, attributes and classes that are allowed -->
+<script src="/static/bower_components/wysihtml/parser_rules/advanced_and_extended.js"></script>
+
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+-->
+
+<!--[if lt IE 9]>
+<script src="/static/bower_components/html5shiv/dist/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+<![endif]-->
+
+<% if(typeof script != 'undefined' && script) print(script); %>
+<script type="text/javascript">
+  var editor = new wysihtml5.Editor('editor', {
+  toolbar: 'toolbar',
+  parserRules:  wysihtml5ParserRules
+  });
+
+</script>
+
+
+</body>
+<!-- vim: et ts=2 sw=2 tw=150
+-->
+</html>

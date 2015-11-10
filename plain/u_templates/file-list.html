@@ -1,0 +1,68 @@
+
+<br class="space10px" />
+<div class="container">
+    <div class="row">
+        <!-- for buttons, float to left for wider screen, to top for extra small screen -->
+        <div class="col-sm-3 col-md-2"> 
+
+            <div id="tools_buttons" class="translate-this show-right-border">
+                <!-- <div class="btn-group btn-group-sm btn-group-justified"> -->
+                <!-- <div class="btn-group btn-group-sm btn-group-justified"> -->
+                <div>
+
+                        <a  class="btn btn-default" href="/upfile/<%=cwd%>">
+                        <span class="glyphicon glyphicon-cloud-upload"> </span>
+                        <span data-i18n="nav.upload">Upload</span></a>
+
+                        <a  class="btn btn-default"  href="/add-folder/<%=cwd%>"> 
+                        <span class="glyphicon glyphicon-plus"> </span>
+                        <span data-i18n="nav.add_folder">Add-folder</span></a>
+
+                        <a  class="btn btn-default" href="/msgto/">
+                        <span class="glyphicon glyphicon-comment"> </span>
+                        <span data-i18n="nav.message">Message</span></a>
+
+                        <a id="send_file"  class="btn btn-default"  href="">
+                        <span class="glyphicon glyphicon-send"> </span>
+                        <span data-i18n="nav.send_file">Send</span></a>
+
+                        <a  class="btn btn-default"  href="/tools/<%=cwd%>"> 
+                        <span class="glyphicon glyphicon-cog"> </span>
+                        <span data-i18n="nav.tools">Tools</span></a>
+                    <!--
+                    <button type="button" class="btn btn-default">Right</button>
+                    -->
+                </div>
+            </div>
+
+
+        </div>
+        <!-- for file list -->
+        <div id="right-file" class="col-sm-9 col-md-10"> 
+
+            <div>
+                <section id="demonstration" role="main" class="span12">
+                <p id="cwd">Current folder : <strong>
+                    <% if(typeof cwd_chain !== 'undefined' && cwd_chain) print(cwd_chain); %>
+                </strong>
+                </p>
+                <div id="current_people"> 
+                    <span> Send file to: </span>
+                    <form id="current_people_form">
+                        <% if(typeof current_people !== 'undefined' && current_people) print(current_people); %>
+                    </form>
+                </div>
+                <div id="file_list" class="tree">
+                    <%= user_folder_ul %>
+                </div>
+                </section>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<!-- <div class="row-fluid translate-this"> -->
+<br class="space10px" />
+

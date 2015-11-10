@@ -1,0 +1,105 @@
+0623
+    slave-want-read, i-want-read
+    client side proxy to give web page overcoming the filter.
+
+0622
+    walk through and add up file/folder size,
+    folder size not added.
+
+0530
+    note file, web-link -->  folder tool list
+0409
+    adding folder for new root folder, can not get lock.
+
+0403
+    unique file, file meta listing/setting need more works,
+    but change to login
+0322
+    STILL, styling, uploading,
+    value of files.
+0208
+    uploading, style
+0206
+    -? it's better to make file s3 key has extension, it's bare uuid now:
+           meta.storage.key: .gg.file/abc/f78ee6d6-806d-4eb0-8f50-1e799978ff81
+       extension will make it more readable in streaming url.
+
+0204
+    json file need a check, those using json got a lot duplication, 
+    such as: folder-opt.js, members, peoples.
+
+    uploading can only pick up one file a time.  
+    login failed on my mobile a few times.
+    audio/video/editor
+    testing more...
+
+0123
+    file/msg sending; front end/backbone; makefile, testing.
+    delete folder recursivly; testing
+0119
+    doing: file lock
+    try follow circle, from register to sharing.
+0114
+    send files, file deliver
+1226
+    render file, css for file-info, uploading, file types.
+    re-build homes, backbone, more testing, python, ruby, locking
+
+1015
+    build a file directly, not uploading, text file, json file, ...
+    check file meta
+
+0915
+  file collector --> do home folder clearing.
+
+0906
+  save file meta as seperate file, in user-name/.metas/
+  .meta could be used somewhere, change it back if possible.
+
+0814
+    redo message sending, used to be 'goodagood-message-json-meta', 
+    left it there, and do it 'goodagood-message-json', as a new file type.
+
+    file -> message -> team.
+
+0626
+    folder and file object, file.js, folder.js, 
+        corresponding render: render-b.js
+    circle from user register and initialize home folder.
+
+    -- adduser -> reserved username
+    add file, add folder, message folder
+
+0620
+    folder : redo the folder things, and file things.
+0618
+    online rich text editor, inline editor.
+    inline editor can do with web page inplace. it's looks amazing.
+    some candidates:
+        aloha-editor.org, stackedit.io http://nicedit.com/
+        old one? : http://premiumsoftware.net/CLEditor
+0611
+    list file with selector
+    send file to others
+2014 0526
+    fupload with path, get/post, hidden input
+    upload: the link of upload with has path.
+
+2014 0524
+    adduser : make default folders
+    The abspath of home folder should be "username"
+
+2014 0510
+    create folders by user
+    default folders/setting for each user
+    put auth info to a txt file?
+    multiple files upload / folder upload
+    video/picture showing
+    knox, transfer files to s3 instead of yas3fs?
+
+0514
+    file hash in Redis DB
+       
+
+
+

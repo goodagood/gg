@@ -1,0 +1,428 @@
+//var myuser = require('./myuser.js');
+//var myfile = require('./myfile.js');
+
+var formidable = require('formidable'),
+    util = require('util');
+
+var u = require('underscore');
+
+//var passport = require('passport');
+var bucket = require('./aws/bucket.js');
+//var meta = require('./aws/meta.js');
+
+var myutil = require('./myutils/myutil.js');
+
+// logger
+//var mylog = require('./mylog.js');
+var fs = require('fs');
+
+var myconfig = require('./config-mj.js');
+var upload_dir = myconfig.formidable_upload_dir;
+
+var path = require('path');
+var mv = require('mv');
+
+var cel = require('connect-ensure-login');
+
+var user_path = require('./myutils/upath.js');
+var mytemplate = require('./myutils/template.js');
+
+var s3folder     = require('./aws/folder.js');
+//var meta     = require('./aws/meta.js');
+
+var myparse = require('./aws/parse.js');
+//var winston = require('./myutils/wlog.js').winston;
+
+var log28    = require('./myutils/mylogb.js').double_log('/tmp/log28');
+
+
+function myupload(app){
+
+  //// not going to use after 0529
+  //app.get(/\/fupload\/(.+)/, 
+  //  cel.ensureLoggedIn('/login'),
+  //  function(req, res){
+  //    //console.log("update upload ...");
+  //    //console.log(req.user);
+
+  //    var path = req.params[0];
+  //    res.render('fupload', 
+  //      { 
+  //        user: req.user, 
+  //        path: path,
+  //        message: req.flash('error') 
+  //      });
+  //});
+
+
+  //// not going to use after 0529
+  //app.post(/\/fupload\/(.+)/, function(req, res){
+  //  // <!-- This COST me a lot time:  enctype="multipart/form-data"  --> 
+  //  // In the html file it should be enctype="multipart/x-www-form-encoded"
+
+  //  cwd = req.params[0];
+  //  console.log("\n cwd FROM params \n");
+  //  console.log(cwd);
+
+  //  if ( typeof cwd === 'undefined' || cwd === ''  ){ 
+  //    console.log("\n cwd RESET \n");
+  //    console.log(req.body);
+  //    console.log(cwd);
+  //    cwd = req.user.username; 
+  //    console.log(cwd);
+  //  }
+
+  //  console.log('post upload, /fupload ...' + cwd);
+
+  //  parse_and_s3stream(req, cwd);
+
+  //  //res.redirect('/login');
+  //  res.redirect('/list/' + cwd);
+  //});
+
+
+  // to replace 'upload', 'fupload', 2014 0530
+  app.get(/\/upfile\/(.*)/, 
+    cel.ensureLoggedIn('/login'),
+    function(req, res, next){
+      //console.log("update upload ...");
+      //console.log(req.user);
+
+      var username = ''; 
+      if (typeof req.user !== 'undefined') username = req.user.username;
+
+      var cwd = req.params[0];
+
+      var cwd_chain = myutil.path_chain(cwd, '/ls/');  // '/ls/' is start of the href
+
+      var context  = { username : username, cwd : cwd, cwd_chain : cwd_chain, message : '', };
+      var contexts = {body:context, };
+      var html_elements = { body:'upfile-main.html', script:'upfile-script.html'};
+
+      mytemplate.assemble_html(html_elements, contexts, function(html){
+        res.send(html);
+      });
+
+  });
+
+
+  app.post(/\/upfile\/(.*)/, 
+    cel.ensureLoggedIn('/login'),
+      function(req, res){
+    // <!-- This COST me a lot time:  enctype="multipart/form-data"  --> 
+
+    var username = req.user.username; 
+    if (typeof username === 'undefined' || !username) username = 'anonymous';
+
+    // cwd will not have 'username' prefix, NO, it can have?
+    var cwd = req.params[0];
+    if ( typeof cwd === 'undefined' || cwd === ''  ){ 
+      //console.log("\n cwd RESET \n"); console.log(req.body); console.log(cwd);
+      cwd = username;
+    }
+
+    //file_process(req, username, cwd);  // 'file-precess' doing nothing 0731
+    parse_form(req, function(err, fields, files){
+      if(err) log28('upload err', err); 
+      //log28('upload fields', fields); 
+      // Currently, formidable (~1.0.15) puts files in form-name, and
+      // it can be single file or an array
+      //log28('upload files first', files); 
+
+      //myparse.handin(req, username, cwd, files);
+      // try to change to:
+
+      //log28('start of new approach', files); 
+      if (u.isArray(files)){
+        u.each(files, function(file){
+          //log28('processonefile', [the_folder, file, username, cwd]);
+          myparse.accept_file(username, file, cwd, function(){
+          });
+        });
+      }else{
+        //files is one file, what's the fuck.
+        myparse.accept_file(username, files, cwd, function(){});
+      }
+
+
+    });
+
+    res.redirect('/upfile/' + cwd);  // to self
+    //res.redirect('/ls/' + cwd);
+  });
+
+
+  // lsb, bup is tring to use blueimp file uploader.
+  app.get(/\/lsb\/(.*)/, 
+    cel.ensureLoggedIn('/login'),
+    function(req, res, next){
+      var cwd = req.params[0];
+      res.render('bb/index.html', {cwd:cwd});
+    });
+
+
+  app.get(/\/bup\/(.*)/, 
+    cel.ensureLoggedIn('/login'),
+    function(req, res){
+      //
+      // return json {files: [....]}
+      //
+
+      // <!-- This COST me a lot time:  enctype="multipart/form-data"  --> 
+
+      var username = req.user.username; 
+      if (typeof username === 'undefined' || !username) username = 'anonymous';
+
+      var cwd = req.params[0];
+      if ( typeof cwd === 'undefined' || cwd === ''  ){ 
+        //console.log("\n cwd RESET \n"); console.log(req.body); console.log(cwd);
+        cwd = username;
+      }
+
+      s3folder.retrieve_folder(cwd, function(folder){
+        if( !folder ) return res.json({});
+
+        var files = folder.get_meta().files;
+
+        var blueimp_file_list = [];
+
+        var filenames = u.keys(files);
+        filenames.forEach(function(filename){
+          var info = {
+            name : files[filename].name,
+            size : files[filename].size,
+            //type : '',
+            url  : '',
+            deleteType : 'DELETE',
+            deleteUrl  : '',
+            //thumbnailUrl : '' 
+          };
+          blueimp_file_list.push(info);
+        });
+
+        //var cwd_chain = path_chain(cwd, '/list-msg/');  // '/list2/' is start of the href
+        res.json({files: blueimp_file_list});
+
+      });
+
+  });
+
+
+  app.post(/\/bup\/(.*)/, 
+    cel.ensureLoggedIn('/login'),
+    function(req, res){
+    // <!-- This COST me a lot time:  enctype="multipart/form-data"  --> 
+
+    var username = req.user.username; 
+    if (typeof username === 'undefined' || !username) username = 'anonymous';
+
+    // cwd will not have 'username' prefix, NO, it can have?
+    var cwd = req.params[0];
+    if ( typeof cwd === 'undefined' || cwd === ''  ){ 
+      //console.log("\n cwd RESET \n"); console.log(req.body); console.log(cwd);
+      cwd = username;
+    }
+
+    //parse_and_s3stream(req, cwd);
+    //parse_form(req, function(err, fields, files){ });
+    file_process(req, username, cwd);
+
+    res.redirect('/bup/' + cwd);
+    //res.redirect('/ls/' + cwd);
+    //res.redirect('/list3/' + cwd);
+  });
+
+  app.get(/\/del\/(.*)/,
+    cel.ensureLoggedIn('/login'),
+    function(req, res){
+
+      var username = req.user.username; 
+      if (typeof username === 'undefined' || !username) username = 'anonymous';
+
+      // file_path will have 'username' prefix
+      var file_path = req.params[0];
+      if ( typeof file_path === 'undefined' || file_path === '' || file_path === username  ){ 
+        // what's up to delete the home folder?
+        //file_path = username;
+        return res.redirect('/ls/' + path.dirname(file_path));
+      }
+
+      s3folder.delete_file(file_path, function(){
+        res.redirect('/ls/' + path.dirname(file_path));
+      });
+
+    });
+
+}
+
+//function parse_upload(req){
+//  // parse a file upload
+//  var form = new formidable.IncomingForm();
+//
+//  form.on('fileBegin', function (name, file) {
+//    //mylog.info("on fileBegin : " + name );
+//    //mylog.info("name : " + util.inspect(name));
+//    //mylog.info("file : " + util.inspect(file));
+//  }).on('field', function (name, value) {
+//    //mylog.info("on field"); // test
+//    //mylog.info("name : " + util.inspect(name));
+//    //mylog.info("value : " + util.inspect(value));
+//    //if (name === 'redirect') {
+//    //    redirect = value;
+//    //}
+//  }).on('file', function (name, file) {
+//    //mylog.info("on file"); // test
+//    //mylog.info("name : " + util.inspect(name));
+//    //mylog.info(" -- file : " + util.inspect(file));
+//  }).on('aborted', function () {
+//    //mylog.info("on aborted");
+//  }).on('error', function (e) {
+//    mylog.info("on error");
+//    mylog.info(e);
+//  }).on('progress', function (bytesReceived, bytesExpected) {
+//    //mylog.info("on progress");
+//    //mylog.info( " [ " + bytesReceived + "/" + bytesExpected + " ]");
+//  }).on('end', function(){
+//    //console.log(" event: end ");
+//  });
+//
+//  form.parse(req, function(err, fields, files) {
+//    //mylog.info("\nform parse begin, show the form: \n");
+//    //mylog.info( Date() );
+//    //mylog.warn(util.inspect(form));
+//
+//    //console.log(files);
+//    for (var f in files){
+//      //console.log(files[f].name);
+//      //console.log(files[f].path);
+//      //
+//
+//      user_path.check_path_move_home(req.user.username, files[f]);
+//      //console.log("myuser add file key,  -- parse file");
+//     
+//      //myuser.add_file_key(req.user.username, files[f]);
+//
+//      //console.log(" files[f]: ");  // use the square parenthe..
+//      //console.log(files[f]);
+//    }
+//  });
+//}
+
+
+function parse_and_s3stream(req, cwd){
+  // parse a file upload
+  var form = new formidable.IncomingForm();
+
+  form.on('fileBegin', function (name, file) {
+    //console.log("on fileBegin : " + name );
+    //console.log("name : " + util.inspect(name));
+    //console.log("file : " + util.inspect(file));
+  }).on('field', function (name, value) {
+    //console.log("on field"); // test
+    //console.log("name : " + util.inspect(name));
+    //console.log("value : " + util.inspect(value));
+    //if (name === 'redirect') {
+    //    redirect = value;
+    //}
+  }).on('file', function (name, file) {
+    //console.log("on file"); // test
+    //console.log("name : " + util.inspect(name));
+    //console.log(" -- file : " + util.inspect(file));
+  }).on('aborted', function () {
+    //console.log("on aborted");
+  }).on('error', function (e) {
+    //console.log("on error");
+    //console.log(e);
+  }).on('progress', function (bytesReceived, bytesExpected) {
+    //console.log("on progress");
+    //console.log( " [ " + bytesReceived + "/" + bytesExpected + " ]");
+  }).on('end', function(){
+    //console.log("--  event: end ");
+  });
+
+  //console.log('\n -- here 2\n');
+  //console.log(cwd);
+  form.parse(req, function(err, fields, files) {
+    //console.log("\n -- form parse begin, show the form: \n");
+    //console.log("\nform parse begin, show the form: \n");
+    //console.log( Date() );
+    //mylog.warn(util.inspect(form));
+
+    //console.log(files);
+    for (var f in files){
+      //console.log(files[f].name);
+      //console.log(files[f].path);
+      //
+
+      //console.log("\n -- ready to put file: file[f], show the file: \n");
+      //console.log(files[f]);
+      bucket.put_file(files[f], cwd);
+      // file_type_hook(file_obj);
+      bucket.process_image_by_ext(files[f], function(err, out_file_info){
+        console.log('image process callback, out_file_info\n');
+        console.log(out_file_info);  // wrong!!
+        var thumb_folder = path.join(cwd, '/.thumbnails/');
+        console.log('thumb_folder: ', thumb_folder);
+        bucket.folder_exists( thumb_folder, function(exists){
+          if (exists){ 
+            bucket.put_file(out_file_info, thumb_folder);
+          }else{
+            console.log('folder not exists');
+            bucket.make_thumbnail_folder(thumb_folder, function(err){
+              console.log(out_file_info, thumb_folder);
+              bucket.put_file(out_file_info, thumb_folder);
+            });
+          }
+        });
+
+      });
+
+      //console.log(" files[f]: ");  // use the square parenthe..
+      //console.log(files[f]);
+    }
+  });
+}
+
+
+function parse_form(req, callback){
+  // parse a file upload
+  var form = new formidable.IncomingForm();
+  form.multiples = true;
+
+  //console.log('\n -- here 2\n');
+  //console.log(cwd);
+  form.parse(req, function(err, fields, files_things) {
+    //log28('parsed ..', files);
+
+    var files = files_things.ofiles;
+    callback(err, fields, files);
+  });
+}
+
+
+function file_process(req, username, cwd){
+  parse_form(req, function(err, fields, files){
+    myparse.handin(req, username, cwd, files);
+  });
+}
+
+
+function _calculate_current_dir(req){
+  // calculate current directory:
+  var current_dir = '';
+  if(req.user.username){
+    current_dir = req.user.username;
+  }
+  var fid = req.params.folderid;
+  if(typeof fid !== 'undefined' && fid){
+    current_dir = path.join(current_dir, req.params.folderid);
+  }
+  //console.log('current_dir');
+  //console.log(current_dir);
+  return current_dir;
+}
+
+
+exports.myupload = myupload;
+
+// vim: set et ts=2 sw=2 fdm=indent:

@@ -1,0 +1,226 @@
+var u      = require('underscore');
+var path   = require('path');
+
+var bucket = require('./bucket.js');
+var ft = require('../myutils/filetype.js');
+
+var myconfig = require("../config-mj.js");
+var render   = require("./render-b.js");
+
+
+//function make_s3file(s3key, isNew, call_when_ready){
+function make_s3file(opt, call_when_ready){
+  //
+  // deprecated approach:
+  // @isNew : if not, the meta file will be read in and serve as meta.
+  // @call_when_ready, a callback is needed because meta need to be read from s3,
+  // it takes time, call_when_ready(Object_with_closure).
+  //
+  // @opt :
+  //    {
+  //      name : file name
+  //      path : full path such: user-name/path/to/file-name.ext
+  //
+  //      s3key: key for the file in s3 storage
+  //      flag_to_read_in_meta : true/false //?
+  //
+  //      size : 
+  //      lastModifiedDate : 
+  //    }
+  //
+  // Who use file object:
+  //   folder : read in meta
+  //            add new file meta
+  //            update fiel meat
+  //   upload : create new meta
+  //
+  
+  var meta = {};
+
+  /* Start function and object defines. */
+
+  function _init(){
+    u.defaults(meta, opt);
+    delete meta.flag_to_read_in_meta;
+    meta.error   = false;
+    meta.what    = myconfig.IamFile;
+
+    //suppose name is supported by opt
+    meta.filetype = ft.check_file_type_by_name(meta.name);
+
+    meta.storage = { type : 's3', key : meta.s3key }; //
+
+    meta.renders = {};
+  }
+
+  // And call it.
+  _init();
+
+  // This will not be used, because file meta put in folder,
+  // for most file, no seperate meta file.
+  function _read_meta(callback){
+    //
+    // read in meta, and pass it to callback. 
+    // need the prepared meta.meta_file_path before using.
+    //
+    // This will not replace the current meta, data past only.
+    //
+    // error state will be set in cases.
+    //
+    if(!meta.meta_file_path) {
+      //console.log('no meta.meta_file_path'); //testing
+      meta.error = true;
+      if(callback) return callback(Error('no meta file found'), null);
+      return;
+    }
+    bucket.read_json(meta.meta_file_path, function(err, _meta_){
+      if(err) {
+        meta.error = err;
+        if(callback) return callback(err, null);
+      }else{
+        if(callback) callback(null, _meta_);
+      }
+    });
+  }
+
+
+  //d
+  function _read_replace_meta(callback){
+    _read_meta(function(err, _meta_){
+      if(err) return callback(null); // return (meta.error = err);
+      meta = _meta_;
+      if(callback) callback(meta);
+    });
+  }
+
+  //d
+  function _backup_meta(back_name, callback){
+    _read_meta(function(err, _meta_){
+      if(!err){
+        meta[back_name] = _meta_;
+        if(callback) return callback(null, meta);
+      }else{
+        if(callback) return callback(err, null);
+      }
+    });
+  }
+
+  //d
+  function  _calculate_s3_meta_file_path(){
+    //
+    // deprecated, 0629
+    //
+    if( !meta.path) {
+      //meta.error = true;
+      return;
+    }
+
+    meta.meta_file_path = path.join(myconfig.meta_file_prefix, meta.path);
+    return meta.meta_file_path;
+  }
+
+
+  function _render_html_repr(){
+    var li = render.render_file_as_li_in_webpage(meta);
+    if(typeof meta.html === 'undefined') meta.html = {};
+    meta.html['li'] = li;
+  }
+
+
+  function _save_meta(callback){
+    // Not used often now.
+    // For most case, file meta will be in folder meta.
+    bucket.write_json(meta.meta_file_path, meta, function(){
+      if(callback) callback(meta);
+    });
+  }
+
+  function _meta_smells(){
+    //
+    // Tell if meta data might be wrong.
+    //
+    if( u.isEmpty(meta) )                return true;
+    if(typeof meta.name === 'undefined') return true;
+    if(! meta.name)                      return true;
+    if(typeof meta.path === 'undefined') return true;
+    if(! meta.path)                      return true;
+    if(typeof meta.meta_file_path === 'undefined') return true;
+    if(! meta.path)                      return true;
+
+    return false;
+  }
+
+  function _return_call(){
+    if(! _meta_smells()) return call_when_ready(meta); //meta?
+    return call_when_ready(null);
+  }
+
+
+  var Object_with_closure = {
+    // 
+    // This will be the object returned.  It get closure of the function.
+    //
+
+    isError : function(){
+      return meta.error;
+    },
+
+    calculate_s3_meta_file_path : _calculate_s3_meta_file_path,
+    read_meta : _read_meta,
+
+    read_replace_meta : _read_replace_meta,
+
+    backup_meta : _backup_meta,
+
+    //fun-def
+    extend_meta : function(newOpt, callback){
+      // extend the meta.
+      u.extend(meta, newOpt);
+      if(callback) callback(meta);
+    },
+
+    // this not works to expose meta directly, 
+    // not a reference, expression instead.
+    //meta : meta, 
+
+    get_meta : function(){ return meta; },
+
+    save_meta : _save_meta,
+
+    render_html_repr : _render_html_repr,
+
+  }; // end of the object Object_with_closure.
+
+  if(opt.flag_to_read_in_meta){ 
+    _read_replace_meta(function(){
+      return _return_call();
+    });
+  }
+  else { 
+    _init();
+    return _return_call();
+  }
+
+}
+
+
+
+function test_s3_file_basic(){
+  var s3key = 'muji/goodagood/.in/1402887794363-02-dirty-coop.JPG';
+  //make_s3file(s3key, false, function(file_obj){
+  //  console.log(file_obj.get_meta().html);
+
+  //  //file_obj.render_html_repr();
+  //  //file_obj.save_meta(function(saved){
+  //  //  console.log(saved);
+  //  //});
+  //});
+
+}
+
+
+if (require.main === module){
+  test_s3_file_basic();
+}
+
+// vim: set et ts=2 sw=2 fdm=indent:

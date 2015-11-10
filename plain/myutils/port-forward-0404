@@ -1,0 +1,7 @@
+
+# forward (http) 80 to 9090, where node.js listenning.  
+# The 2nd is for request from localhost
+
+sudo iptables -t nat -I PREROUTING -p tcp  --dport 80 -j REDIRECT --to-ports 9090
+
+sudo iptables -t nat -I OUTPUT -p tcp -o lo  --dport 80 -j REDIRECT  --to-ports 9090

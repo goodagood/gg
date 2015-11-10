@@ -1,0 +1,76 @@
+
+  <!-- Templates -->
+  <!-- For muji listing client -->
+  
+  <!-- omit 'li' tag?
+      <span class="thumb">
+          <img src="/ss/.gg.file/abc/imgvid/0cef0507-ea52-4cd9-95a8-d7a037d1e341.thumbnail" 
+          alt="gc-550-4.jpg"  />
+      </span>
+      <div class="selector"><label class="file-selector">
+          <input type="checkbox" name="filepath[]" value="abc/imgvid/0cef0507-ea52-4cd9-95a8-d7a037d1e341" />
+          <span class="filename">gc-550-4.jpg</span>
+          <span class="filename">gc-550-4.jpg</span>
+      </div>
+      <div class="download">
+          <a href="/ss/.gg.file/abc/imgvid/0cef0507-ea52-4cd9-95a8-d7a037d1e341">
+              <i class="fa fa-cloud-download"></i> Download</a>
+      </div>
+      <div class="what">
+          <span class="delete">
+              <a href="/del/abc/imgvid/0cef0507-ea52-4cd9-95a8-d7a037d1e341">
+                  <span class="glyphicon glyphicon-remove"></span>Delete
+              </a>
+          </span>
+          <span class="value"> 0
+              <i class="fa fa-cog"></i>
+          </span>
+      </div>
+  -->
+  <script type="text/template" id="file-template">
+      <span class="thumb">
+          <img src="/ss/<% thumb_key %>" width="<% thumb_width %>" height="<% thumb_height %>"
+          alt="<% name %>"  />
+      </span>
+      <div class="selector"><label class="file-selector">
+          <input type="checkbox" name="filepath[]" value="<% path_uuid %>" />
+
+          <span class="filename"><% name %></span>
+      </div>
+      <div class="download">
+          <a href="/ss/<% file_key %>">
+              <i class="fa fa-cloud-download"></i> Download</a>
+      </div>
+      <div class="what">
+          <span class="delete">
+              <a href="/del/<% path_uuid %>">
+                  <span class="glyphicon glyphicon-remove"></span>Delete
+              </a>
+          </span>
+          <span class="value"><% value %> 
+              <i class="fa fa-cog"></i>
+          </span>
+      </div>
+  </script>
+
+
+
+  <script type="text/template" id="item-template-old">
+    <div class="view">
+      <input class="toggle" type="checkbox" <%= done ? 'checked="checked"' : '' %> />
+      <label><%- title %></label>
+      <a class="destroy">
+        <span class="glyphicon glyphicon-remove-circle"></span>
+      </a>
+    </div>
+    <input class="edit" type="text" value="<%- title %>" />
+  </script>
+
+  <script type="text/template" id="stats-template">
+    <% if (done) { %>
+      <a id="clear-completed">Clear <%= done %> completed <%= done == 1 ? 'item' : 'items' %></a>
+    <% } %>
+    <div class="todo-count"><b><%= remaining %></b> <%= remaining == 1 ? 'item' : 'items' %> left</div>
+  </script>
+
+

@@ -1,0 +1,83 @@
+
+
+<div class="well row-fluid">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3> Default acceptors: </h3>
+        </div>
+        <div class="panel-body">
+            <p>
+            <form id="default-acceptors">
+                <% if(typeof current_people !== 'undefined' && current_people) print(current_people);  %>
+            </form>
+            </p>
+        </div>
+
+    </div>
+
+    <div class="well">
+        <div class="btn-group col-md-offset-1">
+            <button id="up-btn" type="button" class="btn btn-success">
+                <span class="glyphicon glyphicon-chevron-up"> </span>
+                Up
+            </button>
+            <button id="down-btn" type="button" class="btn btn-warning">
+                <span class="glyphicon glyphicon-chevron-down"> </span>
+                Down
+            </button>
+        </div>
+    </div>
+
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3> People: </h3>
+        </div>
+        <div class="panel-body">
+
+            <div class="margin10px" id="people-list">
+                <form>
+                    <%= people_list %>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3> Add people </h3>
+        </div>
+        <div class="panel-body">
+            <div>
+                <form id="name_input" action="/msgto/<% 
+                    if(typeof towhom !== 'undefined' && towhom) print(towhom); 
+                    %>" method="post" enctype="multipare/x-www-form-urlencoded" class="form-inline" role="form">
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon"> Enter:  
+                                <span class="glyphicon glyphicon-user"> </span>
+                            </span>
+                            <input type="text" name="peoplename"  class="form-control" placeholder="username">
+                            <span class="input-group-addon"> 
+                                <button id="add-people-button" class="btn btn-success"> Add 
+                                    <span class="glyphicon glyphicon-user"> </span> 
+                                </button>
+                            </span>
+
+                        </div>
+                    </div>
+
+                    <!--
+                    <div class="form-group">
+                        <input type="submit" value="Add User">
+                    </div>
+                    -->
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+

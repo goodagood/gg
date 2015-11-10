@@ -1,0 +1,413 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<!-- Server as template for when doing file renderring as web page,
+     2015 0918 -->
+
+<head>
+<meta http-equiv="content-type" content="text/html" />
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="description" content="index, goodagood testing" />
+<meta name="keywords" content="goodagood, filesystem, sharing" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Andrew">
+
+<title> 
+  <% if(typeof title !== 'undefined' && title){ print(title);}else{ print('goodagood frame a');} %>
+  {{ title }}
+</title>
+
+<!--
+<link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="/static/css/css212.css">
+-->
+
+<link rel="stylesheet" href="/static/css/fa/css/font-awesome.min.css">
+<link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap-glyphicons.css">
+
+<link rel="stylesheet" href="/static/css/reset.css">
+<link rel="stylesheet" href="/static/css/mfirst.css">
+
+
+<!-- % if(typeof css !== 'undefined' && css) print(css); % -->
+{{{css}}}
+
+<style type="text/css">
+  {{{in_file_css}}}
+</style>
+
+</head>
+<body>
+
+  <!-- % if(typeof header !== 'undefined' && header) print(header); % -->
+  <header>
+      <div id="header" class="goodagood-header">
+          <h1 class="logo">
+              <span class="username">
+                  <!-- % if(typeof username != 'undefined' && username){print(username);}% -->
+                  {{ username }}
+              </span>
+              <span class="goodagood-logo">
+                  {{ username }}
+                  <!-- % if(typeof username == 'undefined'  || !username){print('<a href="http://www.goodagood.com/">goodagood</a>');}% -->
+              </span>
+          </h1>
+          <a class="to_nav" href="#primary_nav"> <i class="fa fa-list"></i> Menu </a>
+      </div>
+  </header>
+
+  <!-- % if(typeof navbar !== 'undefined' && navbar) print(navbar); % -->
+  <div class="navbar navbar-default" role="navigation">
+  </div>
+
+  <!-- body  -->
+  <br class="space10px" />
+  <div class="container">
+    <div class="row">
+      <!-- for file list -->
+      <div id="file-list-top"> 
+
+        <section id="file-info" role="main" class="span12">
+          <p id="cwd"> <span>Current folder =&gt;</span><strong>
+              {{{ cwd_chain }}}
+            <!-- % if(typeof cwd_chain !== 'undefined' && cwd_chain) print(cwd_chain); % -->
+          </strong>
+          </p>
+
+          <div id="file_list" class="tree">
+            <form>
+              <label for="file-unique-checkbox"> Unique file 
+                <input type="checkbox"
+                id="file-unique-checkbox" name="file-unique-checkbox"
+                accessKey="u" {{{unique_is_checked}}}
+                >
+              </label>
+              <input type="submit" value="Set" id="submit-to-set">
+            </form>
+
+            {{{ info_list }}}
+          </div>
+          <p> - </p>
+          <div id="json-to-list"> </div>
+
+        </section>
+
+      </div>
+    </div>
+
+    <!-- for buttons, float to left for wider screen, to top for extra small screen -->
+    <div id="tools2" class="clr"> 
+
+      <div id="tools_buttons" class="translate-this clr show-right-border">
+        <a id="send_file"  class="btn btn-default"  href="">
+          <span class="glyphicon glyphicon-send"> </span>
+          <span data-i18n="nav.send_file">Send</span></a>
+
+        <a  class="btn btn-default" href="/upfile/{{{cwd}}}">
+          <span class="glyphicon glyphicon-cloud-upload"> </span>
+          <span data-i18n="nav.upload">Upload</span></a>
+
+        <a  class="btn btn-default"  href="/add-folder/{{{cwd}}}"> 
+          <span class="glyphicon glyphicon-plus"> </span>
+          <span data-i18n="nav.add_folder">Add-folder</span></a>
+
+        <a  class="btn btn-default" href="/msgto/">
+          <span class="glyphicon glyphicon-comment"> </span>
+          <span data-i18n="nav.message">Message</span></a>
+
+        <a  class="btn btn-default"  href="/tools/{{{cwd}}}"> 
+          <span class="glyphicon glyphicon-cog"> </span>
+          <span data-i18n="nav.tools">Tools</span></a>
+      </div>
+    </div>
+
+  </div>
+
+  <br class="space10px" />
+  <nav id="primary_nav">
+    <ul class="nav navbar-nav">
+
+      <li>
+      <a href="/people">
+        <i class="fa fa-user"> </i>
+        <span data-i18n="nav.people">People</span></a>
+      </li>
+
+      <li class="active">
+      <a href="/ls/">
+        <i class="fa fa-folder-o"> </i>
+        <span data-i18n="nav.file">Files</span></a>
+      </li>
+      <li>
+      <a href="/msgto/">
+        <i class="fa fa-comment-o"> </i>
+        <span data-i18n="nav.message">Message</span>
+      </a>
+      </li>
+      <li class="top"> 
+      <a href="#header">
+        <i class="fa fa-arrow-up"></i>
+        Go Top </a>
+      </li>
+    </ul>
+  </nav>
+  <!-- body end -->
+
+
+
+  <!-- 327 -->
+  {{{footer}}}
+  <!-- % if(typeof footer !== 'undefined' && footer) print(footer); % -->
+  <div class="container">
+  </div>
+
+
+
+<!--
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="http://code.jquery.com/jquery.min.js"></script>
+<script src="/static/js/jquery.inspect.js"></script>
+
+min version:
+<script src="/static/bower_components/jquery/jquery.min.js"></script>
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/static/bower_components/underscore/underscore-min.js"></script>
+<script src="/static/backbone/backbone-min.js"></script>
+
+-->
+<script src="/static/js/i18next-1.7.3.js"></script>
+
+
+<script src="/static/bower_components/jquery/jquery.js"></script>
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+
+<script src="/static/bower_components/underscore/underscore.js"></script>
+<!-- put underscore.js before backbone!! -->
+<script src="/static/backbone/backbone.js"></script>
+
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+-->
+
+<!--[if lt IE 9]>
+<script src="/static/bower_components/html5shiv/dist/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+<![endif]-->
+
+<script src="/static/js/fi-pu.js"></script>
+
+<!-- start in file script -->
+<!-- % if(typeof script !== 'undefined' && script) print(script); % -->
+
+<script>
+  var puuid = "{{{puuid}}}";
+  $( document ).ready(function() {
+
+    //i18n.init(function(t){
+    //  $(".translate-this").i18n();
+    //});
+    
+    var folder_path = "{{{cwd}}}";
+    //window.gg_data_holder = {{{serielized_file_list_data}}};
+    //var folder_path = "<% if(typeof cwd !== 'undefined' && cwd) print(cwd); %>";
+
+    //$("#file_list li ").click(function(e){
+    //  //console.log(this.toString());
+
+    //  var file_id = $(this).find("input:checkbox").attr('value');
+    //  console.log(file_id);
+
+    //  var url = 'http://54.178.88.149:9090/test/add-file-value/';
+    //  var ajax_data = {file_id:file_id, type: 'click', };
+    //  var param = {url:url, type:'POST', data: ajax_data, dataType:'json'};
+
+    //  $.ajax(param)
+    //  .done(function(a,b, c){
+    //    //$("div#file_list input:checkbox").attr("checked", false);
+    //    console.log('ajax done: ', a,b,c);
+    //    })
+    //  .fail(function(a,b,c){
+    //    console.log('ajax fail: ', a,b,c);
+    //  });
+
+    //});
+
+
+    // VVVVVVVVVVVVVVVVVVVVVVV
+    // implement sending later
+    //var people_list = [];
+    //$("div#current_people  input:checkbox").change(function(e){
+    //  //$.inspect(e);
+
+    //  var name = $(this).val();
+    //  if(_.isEmpty(name)){ return false; }
+
+    //  if($(this).is(':checked')){
+    //    people_list = _.union(people_list, [name,]);
+    //  }else{
+    //    people_list = _.without(people_list, name);
+    //  }
+    //  //alert(people_list);
+    //});
+
+    //$("div#tools_buttons a#send_file").hide();
+    //$("div#current_people").hide();
+
+    //function init_people_list(){
+    //  people_list = [];
+    //  $("div#current_people input:checkbox").each(function(){
+    //    people_list.push($(this).val());
+    //  });
+    //}
+
+    //var src_list = [];
+    //$("div#file_list input:checkbox").change(function(e){
+    //  //$.inspect(e);
+
+    //  var name = $(this).val();
+    //  if(_.isEmpty(name)){
+    //    //alert('empty name');
+    //    return false;
+    //  }
+
+    //  if($(this).is(':checked')){
+    //    src_list = _.union(src_list, [name,]);
+    //  }else{
+    //    src_list = _.without(src_list, name);
+    //  }
+    //  //alert(src_list);
+
+    //  if(src_list.length == 1){ 
+    //    $("div#current_people").show(500);
+    //    $("div#current_people input:checkbox").attr("checked", "checked");
+    //    init_people_list();
+    //    $("div#tools_buttons a#send_file").show(500); //show the send menu.
+    //    $("div#tools_buttons a#send_file").addClass('btn-primary'); //show the send menu.
+    //  }
+    //  if(src_list.length == 0){ 
+    //    people_list = [];  // variable defined outside
+    //    $("div#current_people").hide(500);
+    //    $("div#tools_buttons a#send_file" ).hide(1000); //hide the send menu.
+    //  }
+    //});
+
+    //$("a#send_file").click(function(event){
+    //  //alert(e);
+    //  //alert(src_list);
+    //  //alert(people_list);
+    //  //alert('some thing');
+    //  event.preventDefault();
+    //  if(src_list.length <= 0 || people_list <= 0){
+    //    return false;
+    //  }
+    //  var file_list_str   = JSON.stringify(src_list);
+    //  var people_list_str = JSON.stringify(people_list);
+    //  //alert(file_list_str, people_list_str);
+
+    //  var url = 'http://54.178.88.149:9090/send-file/';
+    //  var ajax_data = {file_list_str:file_list_str, people_list_str : people_list_str, };
+    //  var param = {url:url, type:'POST', data: ajax_data, dataType:'json'};
+
+    //  $.ajax(param).done(function(){
+    //    $("div#file_list input:checkbox").attr("checked", false);
+    //  });
+    //});
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    // end of implement sending later
+
+
+    //$.inspect(this);
+
+    //alert('end of the script'); // Means browser parsed here.
+  });
+</script>
+
+
+
+<!--% if(typeof template !== 'undefined' && template) print(template); %-->
+<!-- For muji listing client -->
+
+<!-- omit 'li' tag?
+    <span class="thumb">
+        <img src="/ss/.gg.file/abc/imgvid/0cef0507-ea52-4cd9-95a8-d7a037d1e341.thumbnail" 
+        alt="gc-550-4.jpg"  />
+    </span>
+    <div class="selector"><label class="file-selector">
+        <input type="checkbox" name="filepath[]" value="abc/imgvid/0cef0507-ea52-4cd9-95a8-d7a037d1e341" />
+        <span class="filename">gc-550-4.jpg</span>
+        <span class="filename">gc-550-4.jpg</span>
+    </div>
+    <div class="download">
+        <a href="/ss/.gg.file/abc/imgvid/0cef0507-ea52-4cd9-95a8-d7a037d1e341">
+            <i class="fa fa-cloud-download"></i> Download</a>
+    </div>
+    <div class="what">
+        <span class="delete">
+            <a href="/del/abc/imgvid/0cef0507-ea52-4cd9-95a8-d7a037d1e341">
+                <span class="glyphicon glyphicon-remove"></span>Delete
+            </a>
+        </span>
+        <span class="value"> 0
+            <i class="fa fa-cog"></i>
+        </span>
+    </div>
+-->
+<script type="text/template" id="file-template">
+    <span class="thumb">
+      <!-- <a href="image viewer"> ... </a> -->
+      <img src="/ss/<%= thumb_key %>" width="<%= thumb_width %>" height="<%= thumb_height %>"
+      alt="<%= name %>"  />
+    </span>
+    <div class="selector"><label class="file-selector">
+      <input type="checkbox" name="filepath[]" value="<%= path_uuid %>" />
+      <span class="filename"><%= name %></span>
+    </div>
+    <div class="download">
+      <a href="/ss/<%= file_key %>"> <i class="fa fa-cloud-download"></i> Download</a>
+    </div>
+    <div class="del">
+      <span class="delete">
+          <a href="/del/<%= path_uuid %>">
+              <span class="glyphicon glyphicon-remove"></span>Delete
+          </a>
+      </span>
+    </div>
+    <div class="value">
+      <span class="value"><%= value %> 
+          <i class="fa fa-cog"></i>
+      </span>
+    </div>
+</script>
+
+
+
+<script type="text/template" id="item-template-old">
+  <div class="view">
+    <input class="toggle" type="checkbox" <%= done ? 'checked="checked"' : '' %> />
+    <label><%- title %></label>
+    <a class="destroy">
+      <span class="glyphicon glyphicon-remove-circle"></span>
+    </a>
+  </div>
+  <input class="edit" type="text" value="<%- title %>" />
+</script>
+
+<script type="text/template" id="stats-template">
+  <% if (done) { %>
+    <a id="clear-completed">Clear <%= done %> completed <%= done == 1 ? 'item' : 'items' %></a>
+  <% } %>
+  <div class="todo-count"><b><%= remaining %></b> <%= remaining == 1 ? 'item' : 'items' %> left</div>
+</script>
+<!-- end of template -->
+
+
+
+</body>
+<!-- vim: et ts=2 sw=2 tw=150
+-->
+</html>

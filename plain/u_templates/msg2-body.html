@@ -1,0 +1,41 @@
+
+<div class="container">
+
+  <div class="row-fluid" id="input-well">
+    <form action="/msgto/<%=towhom%>" method="post" enctype="multipare/x-www-form-urlencoded"
+      id="edit">
+
+      <fieldset data-role="controlgroup" data-type="horizontal" id="name-list" >
+        <!--
+        <label id="message-to-label">Message to:<input > </label>
+        <button id="message-to-info" onclick="function(e){e.preventDefault();return false;}">Message to: </button>
+        -->
+        <legend id="message-to-info">Message to: </legend>
+        <% 
+          if(typeof towhom_checkbox !== 'undefined' && towhom_checkbox) print( towhom_checkbox); 
+        %>
+        <% 
+          if(typeof people_list !== 'undefined' && people_list) print( people_list); 
+        %>
+      </fieldset>
+
+      <fieldset id="enter-msg-f" >
+          <legend>Edit message:</legend>
+          <textarea name="tamsg2"  id="tamsg2" data-autogrow="true"></textarea>
+      </fieldset>
+
+      <!--
+        <legend id="message-to-info">Message to: </legend>
+        <label id="message-to-label">Message to:<input > </label>
+      <button id="msgto_send" class="btn ui-btn"> Send Message </button>
+      -->
+      <input type="submit" value="Send" id="msgto_send" class="btn ui-btn">
+    </form>
+  </div> <!-- row-fluid -->
+
+  <div class="row-fluid">
+    <%=messageList%>
+  </div>
+</div> <!-- container -->
+<!-- vim: et ts=2 sw=2 tw=150
+-->

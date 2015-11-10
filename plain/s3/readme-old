@@ -1,0 +1,48 @@
+
+In many cases, to keep simple need to access s3 object directly.
+To write file (s3 object) with prefix: direct-objs/
+The full s3key should be meaningful and readable, as:
+    direct-objs/path/to/obj-name
+
+Thus we can use it for purposes:
+    system configuration,
+    json file need not to go through user file system
+    
+More examples of usage:
+
+    - people file for user, before user register, we build empty root folders,
+      the empty file can be: root_id/people.json
+    - default folder(file) css:
+      root_id/folder(file).css
+    - default folder settings:
+      root_id/folder.json
+    - logging:
+      root_id/log/date/time/...
+
+
+This will keep using '../aws/bucket.js'
+    put_object(s3key, object, callback) // object: can be Buffer/string/stream
+    delete_object(s3key, callback){
+    s3_object_exists(s3key, callback){
+
+
+
+
+More temperary solution: 
+    link: 
+        file link: json object: {
+                                    s3key: string,
+                                    linked_type: descriptive name, string
+
+                                    title: of target, string
+                                    ui: default to html element, string
+                                    timestamp: milli-seconds, string
+
+                                    more...
+                                }
+       meta data of file link: try to avoid more complexities.
+
+
+
+
+

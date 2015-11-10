@@ -1,0 +1,184 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<!--[if IE]>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<![endif]-->
+<meta charset="utf-8">
+<title>0531 test, carousel-a, b. Gallery</title>
+<meta name="description" content="try to use the blueimp gallery.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/static/bgallery/css/blueimp-gallery.css">
+<link rel="stylesheet" href="/static/bgallery/css/blueimp-gallery-indicator.css">
+<link rel="stylesheet" href="/static/bgallery/css/blueimp-gallery-video.css">
+<link rel="stylesheet" href="/static/bgallery/css/demo.css">
+
+<style type="text/css">
+  .blueimp-gallery > .description {
+    position: absolute;
+    top: 30px;
+    left: 15px;
+    color: #fff;
+    display: none;
+  }
+  .blueimp-gallery-controls > .description {
+    display: block;
+  }
+</style>
+</head>
+<body>
+
+<h1>{{{cwd_chain}}}</h1>
+<br>
+
+<!-- The Gallery as lightbox dialog, should be a child element of the document body -->
+<div id="blueimp-gallery" class="blueimp-gallery  blueimp-gallery-controls">
+    <div class="slides"></div>
+    <h3 class="title"></h3>
+    <p class="description"> </p>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+</div>
+
+<div id="links" class="links">
+
+  {{{ image_list }}}
+
+</div>
+
+
+<br>
+
+<script src="/static/bgallery/js/blueimp-helper.js"></script>
+<script src="/static/bgallery/js/blueimp-gallery.js"></script>
+<script src="/static/bgallery/js/blueimp-gallery-fullscreen.js"></script>
+<script src="/static/bgallery/js/blueimp-gallery-indicator.js"></script>
+<script src="/static/bgallery/js/blueimp-gallery-video.js"></script>
+<script src="/static/bgallery/js/blueimp-gallery-vimeo.js"></script>
+<script src="/static/bgallery/js/blueimp-gallery-youtube.js"></script>
+
+<!--
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+-->
+<script src="/static/bower_components/jquery/jquery.min.js"></script>
+<script src="/static/bgallery/js/jquery.blueimp-gallery.js"></script>
+
+<!--
+<script src="js/demo.js"></script>
+replaced by this:
+-->
+<script>
+  $(document).ready(function(){
+
+    function on_slide(i, s){
+      //idx, slide;
+      //console.log('i s \n', i, "\ns\n", s);
+      var pu = get_pu(i);
+      add_value(pu);
+    }
+
+    var img_list = $("img.folder-image");
+    function get_pu(i){
+      var ele = img_list[i]
+      var pu  = $(ele).attr('data-pu');
+      console.log('in get pu: ', pu);
+      return pu;
+    }
+    // for console testing
+    window.get_pu = get_pu;
+
+
+    // add value things copied from ls-img
+    function add_value(path_uuid){
+      console.log('to add vaue: ');
+      var json_data = {
+        path_uuid: path_uuid,
+      };
+      var options = {
+        success: function(json){
+          console.log('ajax, ok?2', json);
+          if(json.err) return false;
+        },
+        error: function(e,a,b){
+          console.log('ajax, fail, ', e,a,b);
+          return false;
+        },
+      }
+      add_value_ajax(json_data, options);
+    }
+
+    function add_value_ajax(json_data, options){
+        // add value to file, update server side file meta or make a file
+        // to add value later.
+        //
+        // json_data: {
+        //              'path_uuid':    file path uuid,
+        //              'value':        '1', to be default
+        //              'more-attribute':  string,
+        //              // all string for attributes and it's value.
+        //              ......
+        // }
+
+        // @options: jquery ajax options:
+        //   {
+        //    sucess: function
+        //    error: function
+        //    url: 
+        //   }
+
+        options = options || {};
+        var url     = options.url     || '/test/add-file-value';
+        var success = options.success || function(){console.log('success, ' + a + b + c);};
+        var error   = options.error   || function(){console.log('error, '   + a + b + c);};
+
+
+        var param = {
+            url:      url,
+            type:     'POST',
+            data:     json_data,
+            dataType: 'json', // what we can get back
+
+            success:  success,
+            error:    error
+        };
+        $.ajax(param);
+    }
+
+    // make the blueimp things
+    document.getElementById('links').onclick = function (event) {
+      //console.log(event);
+      event = event || window.event;
+      var target = event.target || event.srcElement,
+      link = target.src ? target.parentNode : target,
+      options = {
+        index: link, event: event,
+        onslide: function (index, slide) {
+          var text = this.list[index].getAttribute('data-description'),
+              node = this.container.find('.description');
+          node.empty();
+          if (text) {
+            node[0].appendChild(document.createTextNode(text));
+          }
+          console.log('text');
+          on_slide(index, slide);
+        },
+        //onslide: on_slide,
+      },
+      links = this.getElementsByTagName('a');
+
+      blueimp.Gallery(links, options);
+
+
+
+    };
+    console.log('here');
+  });
+</script>
+
+
+</body> 
+</html>
+<!-- vim: set et ts=2 sw=2 tw=150:-->

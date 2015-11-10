@@ -1,0 +1,127 @@
+
+<script src="/static/bower_components/underscore/underscore-min.js"></script>
+<!-- put underscore.js before backbone!! 
+<script src="/static/backbone/backbone-min.js"></script>
+-->
+
+<script>
+  $( document ).ready(function() {
+
+    //i18n.init(function(t){
+    //  $(".translate-this").i18n();
+    //});
+    
+    var folder_path = "<% if(typeof cwd !== 'undefined' && cwd) print(cwd); %>";
+
+    $("#file_list li").click(function(e){
+      //console.log(this.toString());
+
+      var file_id = $(this).find("input:checkbox").attr('value');
+      console.log(file_id);
+
+      var url = 'http://54.178.88.149:9090/test/add-file-value/';
+      var ajax_data = {file_id:file_id, type: 'click', };
+      var param = {url:url, type:'POST', data: ajax_data, dataType:'json'};
+
+      $.ajax(param)
+      .done(function(a,b, c){
+        //$("div#file_list input:checkbox").attr("checked", false);
+        console.log('ajax done: ', a,b,c);
+        })
+      .fail(function(a,b,c){
+        console.log('ajax fail: ', a,b,c);
+      });
+
+    });
+
+
+    // VVVVVVVVVVVVVVVVVVVVVVV
+    // implement sending later
+    //var people_list = [];
+    //$("div#current_people  input:checkbox").change(function(e){
+    //  //$.inspect(e);
+
+    //  var name = $(this).val();
+    //  if(_.isEmpty(name)){ return false; }
+
+    //  if($(this).is(':checked')){
+    //    people_list = _.union(people_list, [name,]);
+    //  }else{
+    //    people_list = _.without(people_list, name);
+    //  }
+    //  //alert(people_list);
+    //});
+
+    //$("div#tools_buttons a#send_file").hide();
+    //$("div#current_people").hide();
+
+    //function init_people_list(){
+    //  people_list = [];
+    //  $("div#current_people input:checkbox").each(function(){
+    //    people_list.push($(this).val());
+    //  });
+    //}
+
+    //var src_list = [];
+    //$("div#file_list input:checkbox").change(function(e){
+    //  //$.inspect(e);
+
+    //  var name = $(this).val();
+    //  if(_.isEmpty(name)){
+    //    //alert('empty name');
+    //    return false;
+    //  }
+
+    //  if($(this).is(':checked')){
+    //    src_list = _.union(src_list, [name,]);
+    //  }else{
+    //    src_list = _.without(src_list, name);
+    //  }
+    //  //alert(src_list);
+
+    //  if(src_list.length == 1){ 
+    //    $("div#current_people").show(500);
+    //    $("div#current_people input:checkbox").attr("checked", "checked");
+    //    init_people_list();
+    //    $("div#tools_buttons a#send_file").show(500); //show the send menu.
+    //    $("div#tools_buttons a#send_file").addClass('btn-primary'); //show the send menu.
+    //  }
+    //  if(src_list.length == 0){ 
+    //    people_list = [];  // variable defined outside
+    //    $("div#current_people").hide(500);
+    //    $("div#tools_buttons a#send_file" ).hide(1000); //hide the send menu.
+    //  }
+    //});
+
+    //$("a#send_file").click(function(event){
+    //  //alert(e);
+    //  //alert(src_list);
+    //  //alert(people_list);
+    //  //alert('some thing');
+    //  event.preventDefault();
+    //  if(src_list.length <= 0 || people_list <= 0){
+    //    return false;
+    //  }
+    //  var file_list_str   = JSON.stringify(src_list);
+    //  var people_list_str = JSON.stringify(people_list);
+    //  //alert(file_list_str, people_list_str);
+
+    //  var url = 'http://54.178.88.149:9090/send-file/';
+    //  var ajax_data = {file_list_str:file_list_str, people_list_str : people_list_str, };
+    //  var param = {url:url, type:'POST', data: ajax_data, dataType:'json'};
+
+    //  $.ajax(param).done(function(){
+    //    $("div#file_list input:checkbox").attr("checked", false);
+    //  });
+    //});
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    // end of implement sending later
+
+
+    //$.inspect(this);
+
+    //alert('end of the script'); // Means browser parsed here.
+  });
+</script>
+<!-- vim: et ts=2 sw=2 tw=150
+-->

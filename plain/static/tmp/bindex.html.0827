@@ -1,0 +1,905 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<!-- as basic sample for folder listing, when user set the folder listor to:
+     user-index
+     2015 0826
+-->
+
+<head>
+<meta http-equiv="content-type" content="text/html" />
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="description" content="index, goodagood testing" />
+<meta name="keywords" content="goodagood, filesystem, sharing" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Andrew">
+
+<title> 
+    {{{title}}}  
+</title>
+
+<!--
+-->
+
+<link rel="stylesheet" href="/static/css/fa/css/font-awesome.min.css">
+<link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap-glyphicons.css">
+
+<link rel="stylesheet" href="/static/css/normalize.css">
+<link rel="stylesheet" href="/static/css/ls-anyway.css">
+
+
+<style type="text/css">
+li.file span.filename {
+  display: block;
+}
+li.file span.filesize {
+  padding-left: 2em;
+}
+</style>
+
+</head>
+<body>
+
+  <div class="container">
+    <header id="header">
+            <h1 class="logo">
+                <span class="goodogood">goodogood</span>
+            </h1>
+            <a class="to_nav" href="#primary_nav"> <i class="fa fa-list"></i> Menu </a>
+    </header>
+
+
+    <!-- body  -->
+    <div class="row">
+
+        <!-- for file list -->
+        <section id="file-list-section" role="main" class="span12">
+        <div id="cwd"> <span class="prompt">CWD=&gt;</span>
+            <div class="cwd">
+            
+                <a href="/ls/abc" class="root-dir listor-href">
+                    abc <i class="fa fa-home"></i>
+                </a>
+                <span class="folder-sperator">/</span>
+
+
+                <a href="/ls/abc/test" class="ls-folder listor-href">
+                    test
+                </a>
+                <span class="folder-sperator">/</span>
+
+
+            </div>
+        </div>
+
+        <div id="file_list" class="tree">
+
+            <ul class="file-list">
+                <li class="folder"><span class="glyphicon
+                    glyphicon-folder-close"> </span>&nbsp;&nbsp;<a href="/ls/abc/test/tindex" >tindex</a>
+                </li>
+
+                <li class="file video-file">
+                    <input type="checkbox" name="path_uuid[]" value="abc/test/3b0ec354-b2dc-4a85-b98a-e527155c4544" />
+
+                    <span class="label label-success"></span>
+                    <span class="glyphicon glyphicon-facetime-video"></span>
+                    small3.mp4
+
+                    <a class="fileinfo-link" href="/fileinfo-pathuuid/abc/test/3b0ec354-b2dc-4a85-b98a-e527155c4544">
+                        small3.mp4
+                    </a>
+
+                    <a href="/del/abc/test/3b0ec354-b2dc-4a85-b98a-e527155c4544"> <span class="glyphicon glyphicon-trash"> </span>delete</a>
+                    <ul class="list-unstyled">
+                        <li>
+                        <a href="/viewvid/abc/test/3b0ec354-b2dc-4a85-b98a-e527155c4544">
+                            <span class="glyphicon glyphicon-play"></span>play</a>
+                        </li>
+
+
+                        <li>  </li>
+                    </ul>
+                </li>
+
+                <li class="file video-file">
+                <input type="checkbox" name="path_uuid[]" value="abc/test/f52bc8c5-0b21-4e26-97ce-825ab628d059" />
+
+                <span class="label label-success"></span>
+                <span class="glyphicon glyphicon-facetime-video"></span>
+                small2.mp4
+
+                <a class="fileinfo-link" href="/fileinfo-pathuuid/abc/test/f52bc8c5-0b21-4e26-97ce-825ab628d059">
+                    small2.mp4
+                </a>
+
+                <a href="/del/abc/test/f52bc8c5-0b21-4e26-97ce-825ab628d059"> <span class="glyphicon glyphicon-trash"> </span>delete</a>
+                <ul class="list-unstyled">
+                    <li>
+                    <a href="/viewvid/abc/test/f52bc8c5-0b21-4e26-97ce-825ab628d059">
+                        <span class="glyphicon glyphicon-play"></span>play</a>
+                    </li>
+
+
+                    <li>  </li>
+                </ul>
+                </li>
+                <li class="file video-file">
+                <input type="checkbox" name="path_uuid[]" value="abc/test/b8f72b1b-394e-401e-84a3-88889eb0ff04" />
+
+                <span class="label label-success"></span>
+                <span class="glyphicon glyphicon-facetime-video"></span>
+                sun.mp4
+
+                <a class="fileinfo-link" href="/fileinfo-pathuuid/abc/test/b8f72b1b-394e-401e-84a3-88889eb0ff04">
+                    sun.mp4
+                </a>
+
+                <a href="/del/abc/test/b8f72b1b-394e-401e-84a3-88889eb0ff04"> <span class="glyphicon glyphicon-trash"> </span>delete</a>
+                <ul class="list-unstyled">
+                    <li>
+                    <a href="/viewvid/abc/test/b8f72b1b-394e-401e-84a3-88889eb0ff04">
+                        <span class="glyphicon glyphicon-play"></span>play</a>
+                    </li>
+
+
+                    <li>  </li>
+                </ul>
+                </li>
+                <li class="file"><label class="file-selector">
+                    <input type="checkbox" name="filepath[]" value="abc/test/24decae6-2f01-4908-bd93-81e06fda7ad0" />
+
+                    <span class="filename"><a href="/fileinfo-pathuuid/abc/test/24decae6-2f01-4908-bd93-81e06fda7ad0">t-14</a></span>
+                </label>&nbsp;
+                <ul class="list-unstyled file-info"><li>
+                    <a href="/viewtxt/abc/test/24decae6-2f01-4908-bd93-81e06fda7ad0">
+                        <span class="glyphicon glyphicon-zoom-in"> </span>Read
+                    </a>&nbsp;
+                    <a href="/del/abc/test/24decae6-2f01-4908-bd93-81e06fda7ad0">
+                        <span class="glyphicon glyphicon-remove"></span>Delete</a>&nbsp;
+                    <a href="/fileinfo-pathuuid/abc/test/24decae6-2f01-4908-bd93-81e06fda7ad0"> <i class="fa fa-paw"> </i> Paw-in </a>&nbsp;
+                </li></ul></li>
+                <li class="file"><label class="file-selector">
+                    <input type="checkbox" name="filepath[]" value="abc/test/0e875405-a629-4622-9378-5baa545438f5" />
+
+                    <span class="filename"><a href="/fileinfo-pathuuid/abc/test/0e875405-a629-4622-9378-5baa545438f5">j710434.json</a></span>
+                </label>&nbsp;
+                <ul class="list-unstyled file-info"><li>
+                    <a href="/viewtxt/abc/test/0e875405-a629-4622-9378-5baa545438f5">
+                        <span class="glyphicon glyphicon-zoom-in"> </span>Read
+                    </a>&nbsp;
+                    <a href="/del/abc/test/0e875405-a629-4622-9378-5baa545438f5">
+                        <span class="glyphicon glyphicon-remove"></span>Delete</a>&nbsp;
+                    <a href="/fileinfo-pathuuid/abc/test/0e875405-a629-4622-9378-5baa545438f5"> <i class="fa fa-paw"> </i> Paw-in </a>&nbsp;
+                </li></ul></li>
+                <li class="file"><label class="file-selector">
+                    <input type="checkbox" name="filepath[]" value="abc/test/ca251746-e397-4abd-afb2-4e460bf7e489" />
+
+                    <span class="filename"><a href="/fileinfo-pathuuid/abc/test/ca251746-e397-4abd-afb2-4e460bf7e489">j710419.json</a></span>
+                </label>&nbsp;
+                <ul class="list-unstyled file-info"><li>
+                    <a href="/viewtxt/abc/test/ca251746-e397-4abd-afb2-4e460bf7e489">
+                        <span class="glyphicon glyphicon-zoom-in"> </span>Read
+                    </a>&nbsp;
+                    <a href="/del/abc/test/ca251746-e397-4abd-afb2-4e460bf7e489">
+                        <span class="glyphicon glyphicon-remove"></span>Delete</a>&nbsp;
+                    <a href="/fileinfo-pathuuid/abc/test/ca251746-e397-4abd-afb2-4e460bf7e489"> <i class="fa fa-paw"> </i> Paw-in </a>&nbsp;
+                </li></ul></li>
+                <li class="file ggnote">
+                <label class="file-selector">
+                    <input type="checkbox" name="filepath[]" value="abc/test/bf3c2a35-f098-4903-9753-876e470fcf3c" />
+
+                    <span class="filename"><a href="/fileinfo-pathuuid/abc/test/bf3c2a35-f098-4903-9753-876e470fcf3c">what the speed?.ggnote</a></span>
+                </label>
+                <i class="fa fa-paperclip"></i>
+                <span class="timestamp" data-timestamp="1434815814984"> 1434815814984 </span>
+                <div class="note-content markdown"> <span class="markdown"><p>what the speed?<br><a href="http://54.178.88.149/ls/abc/test">Direct link</a> <br><a href="/i-want-read?url=http%3A%2F%2F54.178.88.149%2Fls%2Fabc%2Ftest">Web page pipe</a><br></p>
+                </span></div>
+                <ul class="file-info-extra"><li><span class="remove"> <i class="fa fa-trash-o"></i><a href="/del/abc/test/bf3c2a35-f098-4903-9753-876e470fcf3c">Delete</a></span>
+                    <span class="editor"> <i class="fa fa-edit"></i><a href="/edit-md/abc/test/bf3c2a35-f098-4903-9753-876e470fcf3c">Edit</a></span>
+                </li></ul></li>
+                <li class="file ggnote">
+                <label class="file-selector">
+                    <input type="checkbox" name="filepath[]" value="abc/test/03ad0755-9160-49c7-9575-bc7f38123114" />
+
+                    <span class="filename"><a href="/fileinfo-pathuuid/abc/test/03ad0755-9160-49c7-9575-bc7f38123114">testing _write_ *link* as note f.ggnote</a></span>
+                </label>
+                <i class="fa fa-paperclip"></i>
+                <span class="timestamp" data-timestamp="1434814001535"> 1434814001535 </span>
+                <div class="note-content markdown"> <span class="markdown"><p>testing <em>write</em> <em>link</em> as note file<br><a href="www.google.com">Direct link</a> <br><a href="/i-want-read?url=www.google.com">Web page pipe</a><br></p>
+                </span></div>
+                <ul class="file-info-extra"><li><span class="remove"> <i class="fa fa-trash-o"></i><a href="/del/abc/test/03ad0755-9160-49c7-9575-bc7f38123114">Delete</a></span>
+                    <span class="editor"> <i class="fa fa-edit"></i><a href="/edit-md/abc/test/03ad0755-9160-49c7-9575-bc7f38123114">Edit</a></span>
+                </li></ul></li>
+                <li class="file ggnote">
+                <label class="file-selector">
+                    <input type="checkbox" name="filepath[]" value="abc/test/02ba6be3-9a08-4b83-9fc9-29f326dc78ff" />
+
+                    <span class="filename"><a href="/fileinfo-pathuuid/abc/test/02ba6be3-9a08-4b83-9fc9-29f326dc78ff">testing _write_ link as note fil.ggnote</a></span>
+                </label>
+                <i class="fa fa-paperclip"></i>
+                <span class="timestamp" data-timestamp="1434813836245"> 1434813836245 </span>
+                <div class="note-content markdown"> <span class="markdown"><p>testing <em>write</em> link as note file<br><a href="www.google.com">Direct link</a> <br>Web page pipe: </i-want-read?url=www.google.com><br></p>
+            </span></div>
+            <ul class="file-info-extra"><li><span class="remove"> <i class="fa fa-trash-o"></i><a href="/del/abc/test/02ba6be3-9a08-4b83-9fc9-29f326dc78ff">Delete</a></span>
+                <span class="editor"> <i class="fa fa-edit"></i><a href="/edit-md/abc/test/02ba6be3-9a08-4b83-9fc9-29f326dc78ff">Edit</a></span>
+            </li></ul></li>
+            <li class="file ggnote">
+            <label class="file-selector">
+                <input type="checkbox" name="filepath[]" value="abc/test/04b662e1-6c63-4d1a-acfb-45ee39f0bdff" />
+
+                <span class="filename"><a href="/fileinfo-pathuuid/abc/test/04b662e1-6c63-4d1a-acfb-45ee39f0bdff">test by drop into REPL, write no.ggnote</a></span>
+            </label>
+            <i class="fa fa-paperclip"></i>
+            <span class="timestamp" data-timestamp="1434789818832"> 1434789818832 </span>
+            <div class="note-content markdown"> <span class="markdown"><p>node.js <em>debug</em> : <a href="https://nodejs.org/api/debugger.html">https://nodejs.org/api/debugger.html</a> <br>Sat Jun 20 2015 08:43:38 GMT+0000 (UTC)</p>
+            </span></div>
+            <ul class="file-info-extra"><li><span class="remove"> <i class="fa fa-trash-o"></i><a href="/del/abc/test/04b662e1-6c63-4d1a-acfb-45ee39f0bdff">Delete</a></span>
+                <span class="editor"> <i class="fa fa-edit"></i><a href="/edit-md/abc/test/04b662e1-6c63-4d1a-acfb-45ee39f0bdff">Edit</a></span>
+            </li></ul></li>
+
+            <li class="file"><label class="file-selector">
+                <input type="checkbox" name="filepath[]" value="abc/test/c63471f1-5156-4c00-be14-9e24dfac17b2" />
+
+                <span class="filename"><a href="/fileinfo-pathuuid/abc/test/c63471f1-5156-4c00-be14-9e24dfac17b2">test-write-8</a></span>
+            </label>&nbsp;
+            <ul class="list-unstyled file-info"><li>
+                <a href="/viewtxt/abc/test/c63471f1-5156-4c00-be14-9e24dfac17b2">
+                    <span class="glyphicon glyphicon-zoom-in"> </span>Read
+                </a>&nbsp;
+                <a href="/del/abc/test/c63471f1-5156-4c00-be14-9e24dfac17b2">
+                    <span class="glyphicon glyphicon-remove"></span>Delete</a>&nbsp;
+                <a href="/fileinfo-pathuuid/abc/test/c63471f1-5156-4c00-be14-9e24dfac17b2"> <i class="fa fa-paw"> </i> Paw-in </a>&nbsp;
+            </li></ul></li>
+            <li class="file"><label class="file-selector">
+                <input type="checkbox" name="filepath[]" value="abc/test/5170ec46-fa73-4f12-a9ed-a0634bb5bcca" />
+
+                <span class="filename">test-write-10</span>
+            </label>&nbsp;
+            <ul class="list-unstyled file-info"><li>
+                <a href="/viewtxt/abc/test/5170ec46-fa73-4f12-a9ed-a0634bb5bcca">
+                    <span class="glyphicon glyphicon-zoom-in"> </span>Read
+                </a>&nbsp;
+                <a href="/del/abc/test/5170ec46-fa73-4f12-a9ed-a0634bb5bcca">
+                    <span class="glyphicon glyphicon-remove"></span>Delete</a>&nbsp;
+                <a href="/fileinfo-pathuuid/abc/test/5170ec46-fa73-4f12-a9ed-a0634bb5bcca"> <i class="fa fa-paw"> </i> Paw-in </a>&nbsp;
+            </li></ul></li>
+            <li class="folder"><span class="glyphicon glyphicon-folder-close"> </span>&nbsp;&nbsp;<a href="/ls/abc/test/sub0503" >sub0503</a></li>
+            <li class="file"><label class="file-selector">
+                <input type="checkbox" name="filepath[]" value="abc/test/e0012764-756c-42e2-9e7a-30b459677b82" />
+
+                <span class="filename">ffmpeg-split.py</span>
+            </label>&nbsp;
+            <ul class="list-unstyled file-info"><li>
+                <a href="/viewtxt/abc/test/e0012764-756c-42e2-9e7a-30b459677b82">
+                    <span class="glyphicon glyphicon-zoom-in"> </span>Read
+                </a>&nbsp;
+                <a href="/del/abc/test/e0012764-756c-42e2-9e7a-30b459677b82">
+                    <span class="glyphicon glyphicon-remove"></span>Delete</a>&nbsp;
+                <a href="/fileinfo-pathuuid/abc/test/e0012764-756c-42e2-9e7a-30b459677b82"> <i class="fa fa-paw"> </i> Paw-in </a>&nbsp;
+            </li></ul></li>
+            <li class="file"><label class="file-selector">
+                <input type="checkbox" name="filepath[]" value="abc/test/80b2be42-66d2-443d-a4f6-d42339cc4a93" />
+
+                <span class="filename">u.js</span>
+            </label>&nbsp;
+            <ul class="list-unstyled file-info"><li>
+                <a href="/viewtxt/abc/test/80b2be42-66d2-443d-a4f6-d42339cc4a93">
+                    <span class="glyphicon glyphicon-zoom-in"> </span>Read
+                </a>&nbsp;
+                <a href="/del/abc/test/80b2be42-66d2-443d-a4f6-d42339cc4a93">
+                    <span class="glyphicon glyphicon-remove"></span>Delete</a>&nbsp;
+                <a href="/fileinfo-pathuuid/abc/test/80b2be42-66d2-443d-a4f6-d42339cc4a93"> <i class="fa fa-paw"> </i> Paw-in </a>&nbsp;
+            </li></ul></li>
+            <li class="file"><label class="file-selector">
+                <input type="checkbox" name="filepath[]" value="abc/test/be1d2890-673b-4314-8995-e2c50ef90bd7" />
+
+                <span class="filename">food.md</span>
+            </label>&nbsp;
+            <a href="/ss/.gg.file/abc/test/be1d2890-673b-4314-8995-e2c50ef90bd7"> food.md</a>&nbsp;
+            <span class="glyphicon glyphicon-star"></span>&nbsp;
+            <ul class="list-unstyled file-info"><li>
+                <a class="viewer" href="/viewmd/abc/test/be1d2890-673b-4314-8995-e2c50ef90bd7">Viewer</a>&nbsp;
+                <a class="editor" href="/edit-md/abc/test/be1d2890-673b-4314-8995-e2c50ef90bd7">Editor</a>&nbsp;
+                <a href="/fileinfo-pathuuid/abc/test/be1d2890-673b-4314-8995-e2c50ef90bd7"> <i class="fa fa-paw"> </i> Paw-in </a>&nbsp;
+                <a href="/del/abc/test/be1d2890-673b-4314-8995-e2c50ef90bd7">
+                    <span class="glyphicon glyphicon-remove"></span>Delete</a>&nbsp;
+                <a href="/ss/.gg.file/abc/test/be1d2890-673b-4314-8995-e2c50ef90bd7" >food.md</a>
+                <a href="/view/abc/test/food.md" >&nbsp; view</a>
+                <a href="/del/abc/test/be1d2890-673b-4314-8995-e2c50ef90bd7"> <span class="glyphicon glyphicon-remove"> </span></a>
+            </li></ul></li><li class="file"><label class="file-selector">
+                <input type="checkbox" name="filepath[]" value="abc/test/43b621eb-f4b2-453a-bde5-3d63110fbc27" />
+
+                <span class="filename">json-txt.json</span>
+            </label>&nbsp;
+            <ul class="list-unstyled file-info"><li>
+                <a href="/viewtxt/abc/test/43b621eb-f4b2-453a-bde5-3d63110fbc27">
+                    <span class="glyphicon glyphicon-zoom-in"> </span>Read
+                </a>&nbsp;
+                <a href="/del/abc/test/43b621eb-f4b2-453a-bde5-3d63110fbc27">
+                    <span class="glyphicon glyphicon-remove"></span>Delete</a>&nbsp;
+                <a href="/fileinfo-pathuuid/abc/test/43b621eb-f4b2-453a-bde5-3d63110fbc27"> <i class="fa fa-paw"> </i> Paw-in </a>&nbsp;
+            </li></ul></li>
+            <li class="file"><label class="file-selector">
+                <input type="checkbox" name="filepath[]" value="abc/test/6a3ef8da-f852-4062-a230-58a19caa6620" />
+
+                <span class="filename">.todo.json</span>
+            </label>&nbsp;
+            <ul class="list-unstyled file-info"><li>
+                <a href="/viewtxt/abc/test/6a3ef8da-f852-4062-a230-58a19caa6620">
+                    <span class="glyphicon glyphicon-zoom-in"> </span>Read
+                </a>&nbsp;
+                <a href="/del/abc/test/6a3ef8da-f852-4062-a230-58a19caa6620">
+                    <span class="glyphicon glyphicon-remove"></span>Delete</a>&nbsp;
+                <a href="/fileinfo-pathuuid/abc/test/6a3ef8da-f852-4062-a230-58a19caa6620"> <i class="fa fa-paw"> </i> Paw-in </a>&nbsp;
+            </li></ul></li>
+            <li class="file"><label class="file-selector">
+                <input type="checkbox" name="filepath[]" value="abc/test/db9b4f22-4160-4521-a412-1ed4138d37b2" />
+
+                <span class="filename">j.json</span>
+            </label>&nbsp;
+            <ul class="list-unstyled file-info"><li>
+                <a href="/viewtxt/abc/test/db9b4f22-4160-4521-a412-1ed4138d37b2">
+                    <span class="glyphicon glyphicon-zoom-in"> </span>Read
+                </a>&nbsp;
+                <a href="/del/abc/test/db9b4f22-4160-4521-a412-1ed4138d37b2">
+                    <span class="glyphicon glyphicon-remove"></span>Delete</a>&nbsp;
+                <a href="/fileinfo-pathuuid/abc/test/db9b4f22-4160-4521-a412-1ed4138d37b2"> <i class="fa fa-paw"> </i> Paw-in </a>&nbsp;
+            </li></ul></li>
+            <li class="file"><label class="file-selector">
+                <input type="checkbox" name="filepath[]" value="abc/test/b6cc80a1-3fad-4140-aa68-664999f76516" />
+
+                <span class="filename">test-write-25</span>
+            </label>&nbsp;
+            <ul class="list-unstyled file-info"><li>
+                <a href="/viewtxt/abc/test/b6cc80a1-3fad-4140-aa68-664999f76516">
+                    <span class="glyphicon glyphicon-zoom-in"> </span>Read
+                </a>&nbsp;
+                <a href="/del/abc/test/b6cc80a1-3fad-4140-aa68-664999f76516">
+                    <span class="glyphicon glyphicon-remove"></span>Delete</a>&nbsp;
+                <a href="/fileinfo-pathuuid/abc/test/b6cc80a1-3fad-4140-aa68-664999f76516"> <i class="fa fa-paw"> </i> Paw-in </a>&nbsp;
+            </li></ul></li>
+            <li class="file"><label class="file-selector">
+                <input type="checkbox" name="filepath[]" value="abc/test/91245669-58c3-4f1a-81aa-2a1bb304fa4d" />
+
+                <span class="filename">txt</span>
+            </label>&nbsp;
+            <ul class="list-unstyled file-info"><li>
+                <a href="/viewtxt/abc/test/91245669-58c3-4f1a-81aa-2a1bb304fa4d">
+                    <span class="glyphicon glyphicon-zoom-in"> </span>Read
+                </a>&nbsp;
+                <a href="/del/abc/test/91245669-58c3-4f1a-81aa-2a1bb304fa4d">
+                    <span class="glyphicon glyphicon-remove"></span>Delete</a>&nbsp;
+                <a href="/fileinfo-pathuuid/abc/test/91245669-58c3-4f1a-81aa-2a1bb304fa4d"> <i class="fa fa-paw"> </i> Paw-in </a>&nbsp;
+            </li></ul></li>
+            <li class="file ggnotes">
+            <label class="file-selector">
+                <input type="checkbox" name="filepath[]" value="abc/test/543cb090-5494-4c7e-acea-2ec5b594735f" />
+
+                <span class="filename">notes</span>
+            </label>
+            <i class="fa fa-paperclip"></i>
+            <span class="timestamp" value="1424763351563"> 1424763351563 </span>
+            <div class="notes-content markdown"><p>notes, msg, style, pp, keep running?</p>
+            </div>
+            <i class="fa fa-trash-o"></i><span class="remove"> <a href="/del/abc/test/543cb090-5494-4c7e-acea-2ec5b594735f">Delete</a></span>
+            <i class="fa fa-edit"></i><span class="editor"> <a href="/edit-md/abc/test/543cb090-5494-4c7e-acea-2ec5b594735f">Edit</a></span>
+            </li>
+
+            <li><span class="thumb"><img src="/ss/.gg.file/abc/test/48337b7f-ee67-4730-99e0-bb705a100828.thumbnail.jpg" alt="11.jpg"  /></span>
+            <div class="selector"><label class="file-selector">
+                    <input type="checkbox" name="filepath[]" value="abc/test/48337b7f-ee67-4730-99e0-bb705a100828" />
+
+                    <span class="filename">11.jpg</span>
+            </label></div><div class="download"><a href="/ss/.gg.file/abc/test/48337b7f-ee67-4730-99e0-bb705a100828">
+                    <i class="fa fa-cloud-download"></i> Download</a></div><div class="what"><span class="delete"><a href="/del/abc/test/48337b7f-ee67-4730-99e0-bb705a100828">
+                        <span class="glyphicon glyphicon-remove"></span>Delete</a></span>
+                <span class="time"> 2015-02-17T16:29:21.532Z </span>
+                <span class="value"> 0
+                    <i class="fa fa-cog"></i></span></div></li>
+
+            <li><span class="thumb"><img src="/ss/.gg.file/abc/test/95aba7d3-fe4b-4f9b-a08b-364222733ea1.thumbnail.jpg" alt="29.jpg"  /></span>
+            <div class="selector"><label class="file-selector">
+                    <input type="checkbox" name="filepath[]" value="abc/test/95aba7d3-fe4b-4f9b-a08b-364222733ea1" />
+
+                    <span class="filename">29.jpg</span>
+            </label></div><div class="download"><a href="/ss/.gg.file/abc/test/95aba7d3-fe4b-4f9b-a08b-364222733ea1">
+                    <i class="fa fa-cloud-download"></i> Download</a></div><div class="what"><span class="delete"><a href="/del/abc/test/95aba7d3-fe4b-4f9b-a08b-364222733ea1">
+                        <span class="glyphicon glyphicon-remove"></span>Delete</a></span>
+                <span class="time"> 2015-02-17T16:28:24.838Z </span>
+                <span class="value"> 0
+                    <i class="fa fa-cog"></i></span></div></li>
+
+            <li><span class="thumb"><img src="/ss/.gg.file/abc/test/1eed7e3b-7bec-4ff0-ae85-2f25291b83fd.thumbnail.jpg" alt="11.jpg"  /></span>
+            <div class="selector"><label class="file-selector">
+                    <input type="checkbox" name="filepath[]" value="abc/test/1eed7e3b-7bec-4ff0-ae85-2f25291b83fd" />
+
+                    <span class="filename">11.jpg</span>
+            </label></div><div class="download"><a href="/ss/.gg.file/abc/test/1eed7e3b-7bec-4ff0-ae85-2f25291b83fd">
+                    <i class="fa fa-cloud-download"></i> Download</a></div><div class="what"><span class="delete"><a href="/del/abc/test/1eed7e3b-7bec-4ff0-ae85-2f25291b83fd">
+                        <span class="glyphicon glyphicon-remove"></span>Delete</a></span>
+                <span class="time"> 2015-02-17T16:09:39.899Z </span>
+                <span class="value"> 0
+                    <i class="fa fa-cog"></i></span></div></li>
+
+            <li><span class="thumb"><img src="/ss/.gg.file/abc/test/9cf03fa6-f160-4f88-b79c-710cc91ac2a5.thumbnail.jpg" alt="25.jpg"  /></span>
+            <div class="selector"><label class="file-selector">
+                    <input type="checkbox" name="filepath[]" value="abc/test/9cf03fa6-f160-4f88-b79c-710cc91ac2a5" />
+
+                    <span class="filename">25.jpg</span>
+            </label></div><div class="download"><a href="/ss/.gg.file/abc/test/9cf03fa6-f160-4f88-b79c-710cc91ac2a5">
+                    <i class="fa fa-cloud-download"></i> Download</a></div><div class="what"><span class="delete"><a href="/del/abc/test/9cf03fa6-f160-4f88-b79c-710cc91ac2a5">
+                        <span class="glyphicon glyphicon-remove"></span>Delete</a></span>
+                <span class="time"> 2015-02-17T16:03:01.612Z </span>
+                <span class="value"> 0
+                    <i class="fa fa-cog"></i></span></div></li>
+
+            <li><span class="thumb"><img src="/ss/.gg.file/abc/test/e46ee638-b44f-48b0-b12e-c916b61b94c1.thumbnail.jpg" alt="11.jpg"  /></span>
+            <div class="selector"><label class="file-selector">
+                    <input type="checkbox" name="filepath[]" value="abc/test/e46ee638-b44f-48b0-b12e-c916b61b94c1" />
+
+                    <span class="filename">11.jpg</span>
+            </label></div><div class="download"><a href="/ss/.gg.file/abc/test/e46ee638-b44f-48b0-b12e-c916b61b94c1">
+                    <i class="fa fa-cloud-download"></i> Download</a></div><div class="what"><span class="delete"><a href="/del/abc/test/e46ee638-b44f-48b0-b12e-c916b61b94c1">
+                        <span class="glyphicon glyphicon-remove"></span>Delete</a></span>
+                <span class="time"> 2015-02-17T15:27:16.550Z </span>
+                <span class="value"> 0
+                    <i class="fa fa-cog"></i></span></div></li>
+
+            <li><span class="thumb"><img src="/ss/.gg.file/abc/test/49de44bb-2ac2-4d23-ab93-019011d466fb.thumbnail.jpg" alt="13.jpg"  /></span>
+            <div class="selector"><label class="file-selector">
+                    <input type="checkbox" name="filepath[]" value="abc/test/49de44bb-2ac2-4d23-ab93-019011d466fb" />
+
+                    <span class="filename">13.jpg</span>
+            </label></div><div class="download"><a href="/ss/.gg.file/abc/test/49de44bb-2ac2-4d23-ab93-019011d466fb">
+                    <i class="fa fa-cloud-download"></i> Download</a></div><div class="what"><span class="delete"><a href="/del/abc/test/49de44bb-2ac2-4d23-ab93-019011d466fb">
+                        <span class="glyphicon glyphicon-remove"></span>Delete</a></span>
+                <span class="time"> 2015-02-17T14:54:21.295Z </span>
+                <span class="value"> 0
+                    <i class="fa fa-cog"></i></span></div></li>
+
+            <li><span class="thumb"><img src="/ss/.gg.file/abc/test/1dbd4004-9f1b-41c9-930d-696e54d6b316.thumbnail.jpg" alt="7.jpg"  /></span>
+            <div class="selector"><label class="file-selector">
+                    <input type="checkbox" name="filepath[]" value="abc/test/1dbd4004-9f1b-41c9-930d-696e54d6b316" />
+
+                    <span class="filename">7.jpg</span>
+            </label></div><div class="download"><a href="/ss/.gg.file/abc/test/1dbd4004-9f1b-41c9-930d-696e54d6b316">
+                    <i class="fa fa-cloud-download"></i> Download</a></div><div class="what"><span class="delete"><a href="/del/abc/test/1dbd4004-9f1b-41c9-930d-696e54d6b316">
+                        <span class="glyphicon glyphicon-remove"></span>Delete</a></span>
+                <span class="time"> 2015-02-17T13:51:14.351Z </span>
+                <span class="value"> 0
+                    <i class="fa fa-cog"></i></span></div></li>
+
+            <li><span class="thumb"><img src="/ss/.gg.file/abc/test/5fcfd493-98fa-4bdd-9f82-03dbd08673bf.thumbnail.jpg" alt="12.jpg"  /></span>
+            <div class="selector"><label class="file-selector">
+                    <input type="checkbox" name="filepath[]" value="abc/test/5fcfd493-98fa-4bdd-9f82-03dbd08673bf" />
+
+                    <span class="filename">12.jpg</span>
+            </label></div><div class="download"><a href="/ss/.gg.file/abc/test/5fcfd493-98fa-4bdd-9f82-03dbd08673bf">
+                    <i class="fa fa-cloud-download"></i> Download</a></div><div class="what"><span class="delete"><a href="/del/abc/test/5fcfd493-98fa-4bdd-9f82-03dbd08673bf">
+                        <span class="glyphicon glyphicon-remove"></span>Delete</a></span>
+                <span class="time"> 2015-02-17T13:50:24.287Z </span>
+                <span class="value"> 0
+                    <i class="fa fa-cog"></i></span></div></li>
+            <li class="folder"><span class="glyphicon glyphicon-folder-close"> </span>&nbsp;&nbsp;<a href="/ls/abc/test/sub-test" >sub-test</a></li>
+
+        </ul> <!-- end of file list ul  -->
+        </div>
+
+        <!--
+        <div id="current_people"> 
+          <span> Send file to: </span>
+          <form id="current_people_form">
+            
+          </form>
+        </div>
+        -->
+        </section>
+    </div>
+
+
+    <!-- for buttons, float to left for wider screen, to top for extra small screen -->
+    <div id="tools2" class="clr"> 
+
+        <div id="tools_buttons" class="translate-this clr show-right-border">
+
+
+            <a  class="btn btn-default" href="/upfile/abc/test">
+                <span class="glyphicon glyphicon-cloud-upload"> </span>
+                <span data-i18n="nav.upload">Upload</span></a> 
+
+            <a  class="btn btn-default"  href="/add-folder/abc/test"> 
+                <span class="glyphicon glyphicon-plus"> </span>
+                <span data-i18n="nav.add_folder">Add-folder</span></a> 
+
+            <a  class="btn btn-default" href="/msgto/">
+                <span class="glyphicon glyphicon-comment"> </span>
+                <span data-i18n="nav.message">Message</span></a> 
+
+            <a  class="btn btn-default"  href="/write-notes/abc/test"> 
+                <i class="fa fa-pencil"></i>
+                <span data-i18n="nav.tools">Notes</span></a> 
+
+            <a  class="btn btn-default"  href="/link/a?cwd=abc%2Ftest"> 
+                <i class="fa fa-link"></i>
+                <span data-i18n="nav.mark-link">MarkLink</span></a> 
+
+            <a  class="btn btn-default"  href="/folder-tools/abc/test"> 
+                <span class="glyphicon glyphicon-cog"> </span>
+                <span data-i18n="nav.tools">Tools</span></a> 
+
+      </div>
+    </div>
+
+
+    <nav id="primary_nav">
+      <ul class="nav navbar-nav">
+
+        <li>
+        <a href="/people">
+          <i class="fa fa-user"> </i>
+          <span data-i18n="nav.people">People</span></a>
+        </li>
+
+        <li class="active">
+        <a href="/ls/">
+          <i class="fa fa-folder-o"> </i>
+          <span data-i18n="nav.file">Files</span></a>
+        </li>
+        <li>
+        <a href="/msgto/">
+          <i class="fa fa-comment-o"> </i>
+          <span data-i18n="nav.message">Message</span>
+        </a>
+        </li>
+        <li class="top"> 
+        <a href="#header">
+          <i class="fa fa-arrow-up"></i>
+          Go Top </a>
+        </li>
+      </ul>
+    </nav>
+    <!-- body end -->
+
+
+
+    <footer>
+        <div class="row-fluid goodagood-footer">
+            <p class="text-center"> goodagood, Andrew &reg; &copy;  <p>
+        </div>
+    </footer>
+
+
+  </div> <!-- end of container -->
+
+<!--
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="http://code.jquery.com/jquery.min.js"></script>
+<script src="/static/js/jquery.inspect.js"></script>
+
+min version:
+<script src="/static/bower_components/jquery/jquery.min.js"></script>
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/static/bower_components/underscore/underscore-min.js"></script>
+<script src="/static/backbone/backbone-min.js"></script>
+
+-->
+<script src="/static/js/i18next-1.7.3.js"></script>
+
+
+<script src="/static/bower_components/jquery/jquery.js"></script>
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+
+<script src="/static/bower_components/underscore/underscore.js"></script>
+<!-- put underscore.js before backbone!! -->
+<script src="/static/backbone/backbone.js"></script>
+
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+-->
+
+<!--[if lt IE 9]>
+<script src="/static/bower_components/html5shiv/dist/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+<![endif]-->
+
+
+
+<script>
+
+function fl(jquery){
+  var $ = jquery;
+  var cwd = "abc/test/tindex";
+
+  //  Change the url after testing
+  var post_url = 'http://54.178.71.88/client/post-for-file-meta-list';
+
+  //var url = url_prefix + cwd;
+
+  var ajax_data = {cwd:cwd, };
+
+  var param = {url:post_url, type:'POST', data: ajax_data, dataType:'json'};
+
+  console.log("going to do ajax: ", param);
+  $.ajax(param).done(function(j, status, jqXHR){
+      console.log('what j what: ', j.what);
+      console.log('keys of  j : ', _.keys(j));
+
+      // global variable for testing
+      jresult = j;
+
+      //render($, j.meta_list[0]);
+      var ul = mk_ul($, j.meta_list);
+      $("div#file_list").html(ul);
+  });
+}
+
+function render($, data){
+  var string = $("script#file-li-template-0827").html();
+  tstr = string; // for testing
+
+  var tpl = _.template(string);
+  var context = {filename:"", filesize:"", filetype:"", path_uuid:""};
+  context.filename = data.name;
+  context.filetype = data.type;
+  context.filesize = data.size;
+  context.path_uuid= data.path_uuid;
+
+  var htmlstr = tpl(context);
+
+  console.log(htmlstr);
+  return htmlstr;
+}
+
+function mk_ul($, list){
+  var htags = _.map(list, function(file_meta){
+      return render($, file_meta);
+  });
+
+  var ul = '<ul id="file-list-ul">';
+  ul += htags.join("\n");
+  ul += '</ul>';
+
+  console.log('mk ul: ', ul);
+
+  return ul;
+}
+
+
+$( document ).ready(function() {
+
+    //i18n.init(function(t){
+    //  $(".translate-this").i18n();
+    //});
+
+    var folder_path = "abc/test/tindex";
+
+    //  Change the url after testing
+    var url_prefix = 'http://54.178.71.88/client/get-file-meta-list/';
+
+    var url = url_prefix + folder_path;
+
+
+
+
+    //window.gg_data_holder = ;
+    //var folder_path = "<% if(typeof cwd !== 'undefined' && cwd) print(cwd); %>";
+
+    //$("#file_list li ").click(function(e){
+    //  //console.log(this.toString());
+
+    //  var file_id = $(this).find("input:checkbox").attr('value');
+    //  console.log(file_id);
+
+    //  var url = 'http://54.178.88.149:9090/test/add-file-value/';
+    //  var ajax_data = {file_id:file_id, type: 'click', };
+    //  var param = {url:url, type:'POST', data: ajax_data, dataType:'json'};
+
+    //  $.ajax(param)
+    //  .done(function(a,b, c){
+    //    //$("div#file_list input:checkbox").attr("checked", false);
+    //    console.log('ajax done: ', a,b,c);
+    //    })
+    //  .fail(function(a,b,c){
+    //    console.log('ajax fail: ', a,b,c);
+    //  });
+
+    //});
+
+
+    // VVVVVVVVVVVVVVVVVVVVVVV
+    // implement sending later
+    //var people_list = [];
+    //$("div#current_people  input:checkbox").change(function(e){
+    //  //$.inspect(e);
+
+    //  var name = $(this).val();
+    //  if(_.isEmpty(name)){ return false; }
+
+    //  if($(this).is(':checked')){
+    //    people_list = _.union(people_list, [name,]);
+    //  }else{
+    //    people_list = _.without(people_list, name);
+    //  }
+    //  //alert(people_list);
+    //});
+
+    //$("div#tools_buttons a#send_file").hide();
+    //$("div#current_people").hide();
+
+    //function init_people_list(){
+    //  people_list = [];
+    //  $("div#current_people input:checkbox").each(function(){
+    //    people_list.push($(this).val());
+    //  });
+    //}
+
+    //var src_list = [];
+    //$("div#file_list input:checkbox").change(function(e){
+    //  //$.inspect(e);
+
+    //  var name = $(this).val();
+    //  if(_.isEmpty(name)){
+    //    //alert('empty name');
+    //    return false;
+    //  }
+
+    //  if($(this).is(':checked')){
+    //    src_list = _.union(src_list, [name,]);
+    //  }else{
+    //    src_list = _.without(src_list, name);
+    //  }
+    //  //alert(src_list);
+
+    //  if(src_list.length == 1){ 
+    //    $("div#current_people").show(500);
+    //    $("div#current_people input:checkbox").attr("checked", "checked");
+    //    init_people_list();
+    //    $("div#tools_buttons a#send_file").show(500); //show the send menu.
+    //    $("div#tools_buttons a#send_file").addClass('btn-primary'); //show the send menu.
+    //  }
+    //  if(src_list.length == 0){ 
+    //    people_list = [];  // variable defined outside
+    //    $("div#current_people").hide(500);
+    //    $("div#tools_buttons a#send_file" ).hide(1000); //hide the send menu.
+    //  }
+    //});
+
+    //$("a#send_file").click(function(event){
+    //  //alert(e);
+    //  //alert(src_list);
+    //  //alert(people_list);
+    //  //alert('some thing');
+    //  event.preventDefault();
+    //  if(src_list.length <= 0 || people_list <= 0){
+    //    return false;
+    //  }
+    //  var file_list_str   = JSON.stringify(src_list);
+    //  var people_list_str = JSON.stringify(people_list);
+    //  //alert(file_list_str, people_list_str);
+
+    //  var url = 'http://54.178.88.149:9090/send-file/';
+    //  var ajax_data = {file_list_str:file_list_str, people_list_str : people_list_str, };
+    //  var param = {url:url, type:'POST', data: ajax_data, dataType:'json'};
+
+    //  $.ajax(param).done(function(){
+    //    $("div#file_list input:checkbox").attr("checked", false);
+    //  });
+    //});
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    // end of implement sending later
+
+
+    //$.inspect(this);
+
+    fl($);
+    console.log('end of the script'); // Means browser parsed here.
+});
+</script>
+
+
+
+<!--% if(typeof template !== 'undefined' && template) print(template); %-->
+<!-- For muji listing client -->
+
+<!-- omit 'li' tag?
+    <span class="thumb">
+        <img src="/ss/.gg.file/abc/imgvid/0cef0507-ea52-4cd9-95a8-d7a037d1e341.thumbnail" 
+        alt="gc-550-4.jpg"  />
+    </span>
+    <div class="selector"><label class="file-selector">
+        <input type="checkbox" name="filepath[]" value="abc/imgvid/0cef0507-ea52-4cd9-95a8-d7a037d1e341" />
+        <span class="filename">gc-550-4.jpg</span>
+        <span class="filename">gc-550-4.jpg</span>
+    </div>
+    <div class="download">
+        <a href="/ss/.gg.file/abc/imgvid/0cef0507-ea52-4cd9-95a8-d7a037d1e341">
+            <i class="fa fa-cloud-download"></i> Download</a>
+    </div>
+    <div class="what">
+        <span class="delete">
+            <a href="/del/abc/imgvid/0cef0507-ea52-4cd9-95a8-d7a037d1e341">
+                <span class="glyphicon glyphicon-remove"></span>Delete
+            </a>
+        </span>
+        <span class="value"> 0
+            <i class="fa fa-cog"></i>
+        </span>
+    </div>
+-->
+
+
+<script type="text/template" id="file-template">
+    <span class="thumb">
+      <!-- <a href="image viewer"> ... </a> -->
+      <img src="/ss/<%= thumb_key %>" width="<%= thumb_width %>" height="<%= thumb_height %>"
+      alt="<%= name %>"  />
+    </span>
+    <div class="selector"><label class="file-selector">
+      <input type="checkbox" name="filepath[]" value="<%= path_uuid %>" />
+      <span class="filename"><%= name %></span>
+    </div>
+    <div class="download">
+      <a href="/ss/<%= file_key %>"> <i class="fa fa-cloud-download"></i> Download</a>
+    </div>
+    <div class="del">
+      <span class="delete">
+          <a href="/del/<%= path_uuid %>">
+              <span class="glyphicon glyphicon-remove"></span>Delete
+          </a>
+      </span>
+    </div>
+    <div class="value">
+      <span class="value"><%= value %> 
+          <i class="fa fa-cog"></i>
+      </span>
+    </div>
+</script>
+
+
+<script type="text/template" id="file-li-template-0827">
+  <li class="file">
+      <span class="filename"> 
+        <a class="fileinfo-link" href="/fileinfo-pathuuid/<%=path_uuid%>">
+            <%= filename %>
+        </a>
+      </span>
+
+      <span class="filesize"> <%= filesize %> </span>
+      <span class="filetype"> <%= filetype %> </span>
+  </li>
+</script>
+
+
+<script type="text/template" id="item-template-old">
+  <div class="view">
+    <input class="toggle" type="checkbox" <%= done ? 'checked="checked"' : '' %> />
+    <label><%- title %></label>
+    <a class="destroy">
+      <span class="glyphicon glyphicon-remove-circle"></span>
+    </a>
+  </div>
+  <input class="edit" type="text" value="<%- title %>" />
+</script>
+
+<script type="text/template" id="stats-template">
+  <% if (done) { %>
+    <a id="clear-completed">Clear <%= done %> completed <%= done == 1 ? 'item' : 'items' %></a>
+  <% } %>
+  <div class="todo-count"><b><%= remaining %></b> <%= remaining == 1 ? 'item' : 'items' %> left</div>
+</script>
+
+
+
+<!-- end of template -->
+
+
+
+</body>
+<!-- vim: et ts=2 sw=2 tw=150
+-->
+</html>

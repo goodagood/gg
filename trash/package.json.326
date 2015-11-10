@@ -1,0 +1,19 @@
+{
+  "name": "passport-local-examples-login",
+  "version": "0.0.0",
+  "dependencies": {
+    "express": "4.x",
+    "express-session": "*",
+    "passport": ">= 0.0.0",
+    "passport-local": ">= 0.0.0",
+    "connect-flash": "~0.1.0",
+
+    "redis":"*",
+    "connect-redis":"*",
+    "consolidate":"*",
+    "handlebars":"*",
+
+    "sqlite3": ">= 2.1.0"
+
+  }
+}

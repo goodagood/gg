@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<!-- as basic skeleton for underscore.js, 2014 0605 -->
+<head>
+<meta http-equiv="content-type" content="text/html" />
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="description" content="index, goodagood testing" />
+<meta name="keywords" content="goodagood, filesystem, sharing" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Andrew">
+
+<title> <% if(typeof title != 'undefined' && title) print(title); %> </title>
+
+
+<link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="/static/css/first.css">
+
+
+</head>
+<body>
+
+  <% if(typeof header != 'undefined' && header) print(header); %>
+  <% if(typeof navbar != 'undefined' && navbar) print(navbar); %>
+  <% if(typeof body != 'undefined' && body) print(body); %>
+  <% if(typeof footer != 'undefined' && footer) print(footer); %>
+
+<!--
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="http://code.jquery.com/jquery.min.js"></script>
+-->
+
+
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/static/js/i18next-1.7.3.js"></script>
+
+<script src="/static/js/jquery.inspect.js"></script>
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+-->
+
+<!--[if lt IE 9]>
+<script src="/static/bower_components/html5shiv/dist/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+<![endif]-->
+
+
+<script>
+  $( document ).ready(function() {
+    //$.inspect(location);
+    //console.log( (this == $ ? 'yes' : 'no') );
+    //alert( (this == $ ? 'yes' : 'no') );
+    //$.inspect(this, 'window');
+
+    var src_list = [];
+
+    $("input:checkbox").prop('checked', false);
+
+    //console.log( 'ready' );
+    $("input:checkbox").change(function(e){
+      //$.inspect(e);
+      if($(this).is(':checked')){
+        //alert('val: ' + $(this).val() + ' name: ' + $(this).attr('name'));
+        src_list.push($(this).val());
+        alert(src_list);
+        }else{
+        remove(src_list, $(this).val());
+        //alert(src_list);
+      }
+    });
+
+    $("button#test_send").click(function(event){
+      event.preventDefault();
+      src_list.forEach(function(name){
+        var url = 'http://54.178.88.149:9090/sendmsg/';
+        var text = $('textarea').val();
+        //var param = {url:url, type:'POST', data:{to:name, cwd:cwd}, dataType:'json'}
+        var param = {url:url, type:'POST', data:{to:name, text_input:text, }, dataType:'json'}
+        //alert(cwd);
+        //alert(param);
+        //$.inspect(param.data);
+        $.ajax(param).done( function(err){ location.reload(true);});
+        //$("input:checkbox").prop('checked', false);
+      });
+    });
+
+    //$.inspect(this);
+
+    function remove(arr, item) {
+      for(var i = arr.length; i--;) {
+        if(arr[i] === item) {
+          arr.splice(i, 1);
+        }
+      }
+    }
+
+
+  });
+</script>
+</body>
+<!-- vim: et ts=2 sw=2 tw=150
+-->
+</html>
+
+
+
+

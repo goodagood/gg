@@ -1,0 +1,24 @@
+# data structure for job publish/subscribe
+
+var job = { 
+    name : 'new-file-meta', 
+    username : username, 
+    folder : cwd,
+    meta_s3key : meta.meta_s3key
+
+    # this added before publishing the job
+    # the two are same thing: the key of redis db, for the job hash.
+    id = key;
+    task_id = key;
+};
+
+    #task_json.id = key;
+    #task_json.task_id = key;
+    #
+
+#---
+meta
+    name : file name
+    path, storage
+    ...
+

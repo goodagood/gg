@@ -1,0 +1,83 @@
+
+<div class="container">
+  <!--<h2>Hello, <%= username %>.</h2>-->
+  <div class="uploader" id="feb18-uploader">
+    <!-- <h2 id="fupload-h2">Upload to <%= cwd %> </h2> -->
+
+    <p id="cwd" class="cwd">
+    <span class="second-hint">cwd</span><i class="fa fa-arrow-right"></i>:
+    <%= cwd_chain %>
+    </p>
+
+    <p> <%= message %></p>
+
+
+    <!-- This COST me a lot time:  enctype="multipart/form-data"  
+    enctype="multipart/x-www-form-urlencoded" >
+    enctype="multipart/form-data" >
+    --> 
+
+    <div class="form-wrapper">
+      <form name="upload_file" action="/upfile/<%=cwd%>" method="post" 
+        enctype="multipart/form-data" >
+        <!-- <input type="text" name="title"><br> 
+        <label>Choose file:</label>
+        <input type="file" name="files[]" multiple="multiple" class="btn btn-default">
+        -->
+        <input id="input-file" type="file" name="ofiles" multiple >
+        <br />
+
+        <div id="to-up-fn">
+            <p id="selected_file_names"> </p>
+        </div>
+        <input type="hidden" value="<%=cwd%>" name="cwd" id="cwd">
+
+        <input type="submit" value="Upload" id="submit">
+      </form>
+    </div>
+
+
+
+    <ul id="another-uploader">
+      <!--
+      <li class="active"><a href="/upfile/<%=cwd%>">Basic Upload</a></li>
+      Basic Plus UI type of blueimp -->
+      <li> <span class="glyphicon glyphicon-road"></span> Another uploader: <a href="/lsb/<%=cwd%>">Blue Upload</a></li>
+    </ul>
+  </div> <!-- uploader -->
+
+  <nav id="primary_nav">
+
+  <ul class="nav navbar-nav">
+
+    <li>
+    <a href="/people">
+      <i class="fa fa-user"> </i>
+      <span data-i18n="nav.people">People</span></a>
+    </li>
+
+    <li class="active">
+    <a href="/ls/">
+      <i class="fa fa-folder-o"> </i>
+      <span data-i18n="nav.file">Files</span></a>
+    </li>
+    <li>
+    <a href="/msgto/">
+      <i class="fa fa-comment-o"> </i>
+      <span data-i18n="nav.message">Message</span>
+    </a>
+    </li>
+    <li class="top"> 
+    <a href="#header">
+      <i class="fa fa-arrow-up"></i>
+      Go Top </a>
+    </li>
+
+  </ul>
+
+
+  </nav>
+
+</div> <!-- container -->
+
+

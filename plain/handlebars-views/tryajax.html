@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>Test list user info thingss 2014, 0429 </title>
+<meta name="description" content="goodagood testing">
+<meta name="author" content="Andrew">
+<meta http-equiv="expires" content="Fri, 21 Jun 2018 20:24:32 GMT" />
+<meta name="viewport" content="width=device-width">
+<!-- old references merged to new locations:
+<link rel="stylesheet" href="../bootstrap-combined.min.css">
+<link rel="stylesheet" href="/static/css/bootstrap-combined.min.css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<script src="../js/bootstrap-tree.js"></script>
+-->
+<link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/static/js/handlebars.js"></script>
+
+<script src="/static/js/jquery.inspect.js"></script>
+
+<script id="testa">
+  <p> This is to show whether handlebars.js works </p>
+</script>
+
+
+<script src="/static/bower_components/handlebars.js/lib/handlebars.js"></script>
+
+<script id="ajaxtesta">
+  <p> {{ key }} : {{ value }} </p>
+</script>
+
+<script id="another-test">
+  $(function(){
+    $.get('/ajaxdataa', function(data){
+      //alert(data);
+      //alert($.inspect(data));
+      var h = "<h1> Show data got by AJAX</h1>";
+      for (k in data){
+        h += "<p>" + k + " : " + data[k] + "</p>";
+      }
+      $("#testajax").html(h);
+    });
+  });
+
+</script>
+
+</head>
+<body class="container-fluid" style="">
+{{#if message }}
+<p>{{ message }}</p>
+{{/if}}
+<div id="testajax"> </div>
+<h1>Use a simple solution for tree view </h1>
+<p> Bootstrap-Themed Tree Widget Documentation </p>
+<div class="row-fluid">
+  <section id="try-user-info-list-section" role="main" class="span12">
+  <div id="put-user-info-here" class="tree">{{{ the_list }}} </div>
+  </section>
+  <section id="demonstration" role="main" class="span12">
+  <h2 id="demo1">Demonstration 1</h2>
+  <div class="tree well">
+    <ul>
+      <li>
+      <span><i class="icon-folder-open"></i> Parent</span> <a href="">Goes somewhere</a>
+      <ul>
+        <li>
+        <span><i class="icon-minus-sign"></i> Child</span> <a href="">Goes somewhere</a>
+        <ul>
+          <li>
+          <span><i class="icon-leaf"></i> Grand Child</span> <a href="">Goes somewhere</a>
+          </li>
+        </ul>
+        </li>
+        <li>
+        <span><i class="icon-minus-sign"></i> Child</span> <a href="">Goes somewhere</a>
+        <ul>
+          <li>
+          <span><i class="icon-leaf"></i> Grand Child</span> <a href="">Goes somewhere</a>
+          </li>
+          <li>
+          <span><i class="icon-minus-sign"></i> Grand Child</span> <a href="">Goes somewhere</a>
+          <ul>
+            <li>
+            <span><i class="icon-minus-sign"></i> Great Grand Child</span> <a href="">Goes somewhere</a>
+            <ul>
+              <li>
+              <span><i class="icon-leaf"></i> Great great Grand Child</span> <a href="">Goes somewhere</a>
+              </li>
+              <li>
+              <span><i class="icon-leaf"></i> Great great Grand Child</span> <a href="">Goes somewhere</a>
+              </li>
+            </ul>
+            </li>
+            <li>
+            <span><i class="icon-leaf"></i> Great Grand Child</span> <a href="">Goes somewhere</a>
+            </li>
+            <li>
+            <span><i class="icon-leaf"></i> Great Grand Child</span> <a href="">Goes somewhere</a>
+            </li>
+          </ul>
+          </li>
+          <li>
+          <span><i class="icon-leaf"></i> Grand Child</span> <a href="">Goes somewhere</a>
+          </li>
+        </ul>
+        </li>
+      </ul>
+      </li>
+      <li>
+      <span><i class="icon-folder-open"></i> Parent 2</span> <a href="">Goes somewhere</a>
+      <ul>
+        <li>
+        <span><i class="icon-leaf"></i> Child</span> <a href="">Goes somewhere</a>
+        </li>
+      </ul>
+      </li>
+    </ul>
+  </div>
+  </section>
+</div>
+<footer role="contentinfo" class="row-fluid visible-desktop">
+<div class="span4">
+  This code is provided as per the <a href="http://stackexchange.com/legal#3SubscriberContent">StackOverflow Subscriber Content License</a>.
+</div>
+<div class="span4">
+  <noscript>
+    This application provides the optimal experience when JavaScript is enabled.
+  </noscript>
+</div>
+<div class="span4 pull-right">
+  Version 0.0.1 ({{date}})
+</div>
+</footer>
+</body>
+<!-- vim: set et sw=2 ts=2: -->
+</html>

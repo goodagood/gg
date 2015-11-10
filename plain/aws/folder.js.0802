@@ -1,0 +1,832 @@
+var u      = require('underscore');
+var path   = require('path');
+
+var bucket = require('./bucket.js');
+var s3file = require('./file.js');
+var image_file = require('./image-file.js');
+var myconfig = require("../config-mj.js");
+
+var render   = require("./render-b.js");
+
+var json_file= require('./json-file.js');
+
+var log28  = require('../myutils/mylogb.js').double_log('/tmp/log28');
+//var test = require('nodeunit');
+
+function make_s3folder(folder_path, pass_out_folder_obj){
+  //
+  // An factory to make folder object. 0626
+  //
+  // There is a callback: @pass_out_folder_obj, it is a must, when read meta
+  //   we don't know time cost.
+  //
+  
+  var meta = {};
+  var members_file_name = '.gg.members.json';
+  var viewers_file_name = '.gg.viewers.json';
+
+
+  function _build_new_folder (_opt){
+    _init(_opt);
+  };
+
+
+  function _prepare_basic_path(){
+    if(typeof meta.path === 'undefined') meta.path = folder_path; //?
+    _calculate_s3_meta_file_path();
+  }
+
+  function _init(_opt){
+
+    u.defaults(meta, _opt); // make defaults
+
+    _prepare_basic_path();
+
+    meta.error   = false;
+    meta.name    = path.basename(folder_path);
+    meta.filetype= 'goodagood-folder';
+    
+    if(typeof meta.renders === 'undefined') meta.renders = {};
+    if(typeof meta.html === 'undefined') meta.html = {};
+
+    // 1:
+    //
+    // { 
+    //   file-name-1 : {file-meta-1},
+    //   file-name-2 : {file-meta-2},
+    //   ...
+    // }
+    //
+    // Use the 1st data structure:
+    //
+    meta.files = {};
+
+    meta.what    = myconfig.IamFolder;
+
+  }
+
+
+  function _calculate_s3_meta_file_path(){
+    meta.meta_file_path = calculate_folder_meta_file_s3key(meta.path);  ///
+    return meta.meta_file_path;
+  }
+
+  function _is_file_exists(filename){
+    return !!meta.files[filename];
+  }
+
+  function _add_file(file_meta){
+    // if the name exists, it will be replaced
+    meta.files[file_meta.name] = file_meta;
+    _render_folder_as_ul();
+  }
+
+  function _get_file_obj(name, callback){
+    // name is basename, no path included.
+    var file_meta = meta.files[name];
+    //console.log(file_meta);
+
+    s3file.new_s3_file_obj(file_meta, function(base){
+      //console.log(base);
+      base.set_meta(file_meta);
+      // When getting a file object, we use 'switch' for file type
+      base.switch_with_filetype(callback);
+    });
+  }
+
+
+
+
+  //d
+  // once data structure changed, it's hard to update file list from file names.
+  // This function is for when file s3key is equal to path
+  function update_file_list(callback){
+    bucket.list(meta.abspath, function(err, contents){b
+      if(err) { throw new Error(err); }
+
+      // prepare the callback, the trouble is it must wait until all files
+      // updated.
+      function _fun_to_call(){
+        process.nextTick(function(){
+          callback(meta['files']);
+        });
+      }
+      // make a function which will be called ONLY after all done in forEach.
+      var call_after_read_all = false;
+      if(typeof callback !== 'undefined' && callback){
+        var call_after_read_all = u.after(u.size(contents), _fun_to_call);
+      }
+
+      // get each meta, push meta of each file to array 'files'.
+      contents.forEach(function(one){
+        bucket.read_file_meta(one.Key, function(err, _meta_){
+          if(err) throw new Error(err);
+          meta.files.push(_meta_);
+          if(call_after_read_all) call_after_read_all();
+        });
+      });
+
+    });
+  }
+
+  function _retrieve_old_folder_meta(callback){
+    //
+    // @callback will get meta
+    //
+    if( typeof meta.meta_file_path === 'undefined' ) _prepare_basic_path();
+
+    bucket.read_json(meta.meta_file_path, function(err, _meta_){
+      if(err) {meta.error = err; if(callback) callback(null); return;}
+      meta = _meta_;
+      if(callback) callback(meta);
+    });
+  }
+
+  function _is_owner(username){
+    var guess_owner = meta.path.split('/')[0];
+    if(username === 'guess_owner') return true;
+
+    //if(typeof meta.owner === 'undefined') return false;
+    if(username === meta.owner) return true;
+    return false;
+  }
+
+  //function _is_member(username){
+  //  if(typeof meta.is_team_folder === 'undefined') return false;
+  //  if(meta.is_team_folder === false) return false;
+  //  return false;
+  //}
+
+  //function _is_viewer(){
+  //  return false;
+  //}
+
+  //function _is_public(){
+  //  if(typeof meta.is_public === 'undefined') return false;
+  //  return false;
+  //}
+
+  // added from 'team-folder', all folders need these functionalities
+
+  function _init_members_file(){
+    meta.is_team_folder = true;
+    //var file_name = '.members.json';
+    var content = [];
+    //if(meta.owner && meta.owner.username) owner_name = meta.owner.username;
+    if(meta.owner && meta.owner.username) content.push(meta.owner.username);
+    _new_json_file(members_file_name, content);
+  }
+
+  function _add_member(member_name, callback){
+    if( ! _is_file_exists(members_file_name)) _init_members_file();
+
+    _get_file_obj(members_file_name, function(member_file_obj){
+      member_file_obj.get_json(function(j){
+        j.push(member_name);
+        console.log(j);
+        member_file_obj.write_json(j); //?
+      });
+    });
+  }
+
+  function _get_all_members(callback){
+    if( ! _is_file_exists('.members.json')) _init_members_file();
+
+    _get_file_obj(members_file_name, function(member_file_obj){
+      member_file_obj.get_json(callback);
+    });
+  }
+
+  function _has_member(username, callback){
+    if(typeof meta.is_team_folder === 'undefined') return callback(false);
+    if(meta.is_team_folder === false) return callback(false);
+
+    _get_file_obj(members_file_name, function(member_file_obj){
+      if(!member_file_obj) return callback(false);
+      member_file_obj.get_json(function(j){
+        if(!u.isArray(j)) return callback(false);
+        if(username in j) return callback(true);
+        if('*' in j) return callback(true);
+        return callback(false);
+      });
+    });
+  }
+
+  function _new_json_file(filename, content_json){
+    var file_name = filename;
+    var file_path = path.join(meta.path, file_name);
+
+    //var json_str = JSON.stringify([]);  // an empty array.
+    //var storage = {type:'meta-text', note:'content in meta serielized json', text: json_str,};
+    //var members = [];
+
+    var data = {
+      //iam_meta : true,
+      name : file_name,
+      path : file_path,
+      filetype: "json",
+      owner : { username: meta.path, timestamp : Date.now() },
+      permission: {
+        owner : 'rwx',
+        group : '',
+        other : '',
+      },
+    };
+    json_file.new_json_file_obj(data, function(jobj){
+      jobj.set_up_from_json(content_json);
+      _add_file(jobj.get_meta());
+      _save_meta();
+    });
+  }
+
+  function _init_viewers_file(){
+    meta.is_open_folder = true;
+    var content = [];
+    _new_json_file(viewers_file_name, content);
+    //meta.
+  }
+
+  function _add_viewer(viewer_name, callback){
+    if( ! _is_file_exists(viewers_file_name)) _init_viewers_file();
+
+    _get_file_obj(viewers_file_name, function(viewer_file_obj){
+      viewer_file_obj.get_json(function(j){
+        j.push(viewer_name);
+        console.log(j);
+        viewer_file_obj.write_json(j); //?
+      });
+    });
+  }
+
+  function _get_all_viewers(callback){
+    if( ! _is_file_exists(viewers_file_name)) _init_viewers_file();
+
+    _get_file_obj(viewers_file_name, function(viewer_file_obj){
+      viewer_file_obj.get_json(callback);
+    });
+  }
+
+  function _has_viewer(username, callback){
+    _get_file_obj(viewers_file_name, function(viewer_file_obj){
+      viewer_file_obj.get_json(function(j){
+        if(!u.isArray(j)) return callback(false);
+        if(username in j) return callback(true);
+        if('*' in j) return callback(true);
+        return callback(false);
+      });
+    });
+  }
+
+
+  ////
+
+  function _render_folder_as_ul(){
+    var ul = '<ul class="folder-list list-unstyled">';
+    u.each(meta.files, function(file){
+      if(typeof file.html !== 'undefined'){
+        if(file.name.indexOf('.gg') !== 0){  // hide file with name: .gg*
+          ul += file.html.li;
+        }
+      }
+    })
+    ul += '</ul>';
+    meta.renders.ul = ul;
+  }
+
+  function _get_ul_renderring(){
+    // meta is not defined, in stupid case, as: not/exists/path
+    if(!meta) return null;
+
+    if(typeof meta.renders === 'undefined') meta.renders = {};
+    _render_folder_as_ul();
+    if(typeof meta.renders.ul !== 'undefined') return meta.renders.ul;
+    if(typeof meta.renders.ul === 'undefined') return ''; //?
+    return meta.renders.ul;
+  }
+
+  function _get_renderring_for_viewer(){
+    if(typeof meta.renders === 'undefined') meta.renders = {};
+    if(typeof meta.renders.ul_for_viewer !== 'undefined') return meta.renders.ul_for_viewer;
+    return "<ul><li>Currently not prepared ready for viewers</li></ul>";
+  }
+
+  function _get_renderring_for_public(){
+    if(typeof meta.renders === 'undefined') meta.renders = {};
+    if(typeof meta.renders.ul_for_public !== 'undefined') return meta.renders.ul_for_public;
+    return "<ul><li>Currently not prepared ready for public viewers</li></ul>";
+  }
+
+  function _ask_ul_renderring(viewer_name, callback){
+    // this will check viewer's name, 
+    // whether it's owner, member, viewer or unknown.
+    // The function stream-down to check and return callback when possible.
+    // callback will get <ul> list.
+
+    if(_is_owner(viewer_name)) return callback(_get_ul_renderring());
+
+    _has_member(viewer_name, function(is_member){
+      // member = owner, currently, 0801, they get same.
+      if(is_member)  return callback(_get_ul_renderring());
+
+      _has_viewer(viewer_name, function(is_viewer){
+        if(is_viewer){
+          return callback(_get_renderring_for_viewer());
+        }
+        return callback(_get_renderring_for_public());
+      });
+    });
+  }
+
+  function _save_meta(callback){
+    bucket.write_json(meta.meta_file_path, meta, function(err, reply){
+      if(callback){
+        if(err) return callback(err, null);
+        return callback(null, meta);
+      }
+    });
+  }
+
+  function _meta_smells(){
+    //
+    // Tell if meta data might be wrong.
+    //
+    if( u.isEmpty(meta) )                return true;
+    if(typeof meta.name === 'undefined') return true;
+    if(! meta.name)                      return true;
+    if(typeof meta.path === 'undefined') return true;
+    if(! meta.path)                      return true;
+    if(typeof meta.meta_file_path === 'undefined') return true; // for folder
+    if(! meta.meta_file_path)            return true;
+
+    return false;
+  }
+
+  function _render_file(filename, callback){
+    _get_file_obj(filename, function(file_obj){
+      file_obj.render_html_repr();
+      var file_meta = file_obj.get_meta();
+      meta.files[filename] = file_meta;
+    });
+  }
+
+  function _render_all_files(){
+    var keys = u.keys(meta.files);
+    keys.forEach(function(filename){
+      console.log(filename);
+      _render_file(filename, function(){});
+    });
+    _render_folder_as_ul();
+    _save_meta();
+  }
+
+  function _delete_file(filename){
+    _get_file_obj(filename, function(fobj){
+      // This is trying to delete the storage
+      fobj.delete_s3_storage();
+    });
+    delete meta.files[filename];
+    _render_folder_as_ul();
+    _save_meta();
+  }
+
+  function _rename_file(filename, new_name){
+    // here in function: meta means folder meta.
+    var new_meta = u.omit(meta.files[filename], 'path', 'html', 
+        'local_file', 'timestamp', 's3_stream_href', 'delete_href');
+    new_meta.name = new_name;
+    new_meta.path = path.join(meta.path ,new_name);
+
+    //console.log('old: ', meta.files[filename]);
+    s3file.new_s3_file_obj(new_meta, function(fobj){
+      fobj.set_meta(new_meta);
+      fobj.calculate_meta_defaults();
+      fobj.switch_with_filetype(function(typed_fobj){
+        typed_fobj.render_html_repr();
+        //console.log(typed_fobj.get_meta());
+        _add_file(typed_fobj.get_meta());
+        delete meta.files[filename];
+        _render_folder_as_ul();
+        _save_meta();
+      });
+    });
+  }
+
+  function _add_folder(name, callback){
+    //
+    // add folder of 'name', the folder will be created.
+    //
+    var folder_path = path.join(meta.path, name); // The abspath
+    var opt_ = {
+      name : name,
+      path : folder_path,
+      'parent-dir' : meta.path, // meta is of who adding the folder
+      timestamp : Date.now(),
+      permission : {owner:'rwx', group:'', other:''},
+      html: {},
+    };
+    new_folder(opt_, function(folder){
+      folder.self_render_as_a_file();
+      _add_file(folder.get_meta());
+      _save_meta(function(err, the_meta){
+        //console.log('the meta after save', the_meta);
+      });
+      folder.save_meta(function(err, the_meta){
+        if(callback) callback(folder);
+        //console.log('the new meta after save', the_meta);
+      });
+    });
+  }
+
+  function _self_render_as_a_file(){
+
+    var li = '<li class="folder">';
+
+    // file selector
+    //li += '<input type="checkbox" name="filepath[]" value="' + meta['path'] + '" />' ;
+
+    li += '<span class="glyphicon glyphicon-folder-close"> </span>&nbsp;';
+    li += '&nbsp;<a href="/ls/' + meta.path  + '" >' + meta['name'] + '</a>' ;
+    li += '</li>\n';
+    if (!meta.html)  meta.html = {};
+    if (typeof meta.html === 'undefined')  meta.html = {};
+
+    meta.html.li = li;
+  }
+
+  function _build_blueimp_pic_gallery_list(){
+    // only image file gatherred, and build to list as blueimp gallery asked.
+    var list = [];
+    var file_names = Object.keys(meta.files);
+    file_names.forEach(function(name){
+      if(meta.files[name].filetype === 'image'){
+        var fileInfo = meta.files[name];  // short name
+        var src = path.join(myconfig.s3_stream_prefix, fileInfo.storage.key);
+        var thumb;
+        if (fileInfo['thumbnail-s3key']){
+          thumb = path.join(myconfig.s3_stream_prefix, fileInfo['thumbnail-s3key']);
+        }else{
+          thumb = ''; // Should prepare a default thumbnail image.
+        }
+        
+        var one = '<a href="' + src +'" title="' + fileInfo.name + '" data-description="The value keep increasing justly" >';
+        one    += '<img src="' + thumb + '" alt="' + fileInfo.name + '"> </a>';
+
+        list.push(one);
+      }
+    });
+    return list;
+  }
+
+  function _sort_files_by_date(){
+
+    // sort the file by negative epoc seconds
+    var sorted = u.sortBy(meta.files, function(e){
+      // change the date string from aws to epoc mili-seconds
+      var date = new Date(e['lastModifiedDate']);
+      var epoc = date.getTime();
+      return 1 - epoc;
+    });
+
+    meta.files = sorted;
+  }
+
+  //function _add_team_member(members){
+  //}
+
+  var folder_obj = {
+    //
+    // Define an object and return the object, as in factory pattern.
+    // If an function is needed by this object, define it in the above and
+    // refer it as needed.
+    //
+
+    build_new_folder    : _build_new_folder,
+
+    //read_replace_meta : _read_replace_meta,
+    // same as the above
+    retrieve_old_folder_meta : _retrieve_old_folder_meta,
+
+    calculate_s3_meta_file_path : _calculate_s3_meta_file_path,
+
+    //update_file_list : update_file_list,
+
+    sort_files_by_date : _sort_files_by_date,
+
+    is_file_exists : _is_file_exists,
+    add_file : _add_file,
+    save_file : _add_file,
+
+    get_meta : function(){ return meta; },
+
+    save_meta : _save_meta,
+
+    is_owner  : _is_owner,
+    //is_member : _is_member,
+    //is_viewer : _is_viewer,
+    //is_public : _is_public,
+    init_members_file : _init_members_file,
+    init_viewers_file : _init_viewers_file,
+    has_member : _has_member,
+    add_member : _add_member,
+    get_all_members : _get_all_members,
+    has_viewer : _has_viewer,
+    add_viewer : _add_viewer,
+    get_all_viewers : _get_all_viewers,
+
+    render_folder_as_ul : _render_folder_as_ul,
+    get_ul_renderring   : _get_ul_renderring,
+    ask_ul_renderring   : _ask_ul_renderring,
+
+    render_all_files    : _render_all_files,
+    delete_file         : _delete_file,
+    add_folder          : _add_folder,
+    self_render_as_a_file : _self_render_as_a_file,
+    render_html_repr : _self_render_as_a_file,
+    get_file_obj : _get_file_obj,
+    rename_file : _rename_file,
+
+    new_json_file : _new_json_file,
+
+    build_blueimp_pic_gallery_list : _build_blueimp_pic_gallery_list,
+  }; // end of the object
+
+
+  pass_out_folder_obj(folder_obj);
+  //return folder_obj;
+
+}
+
+function peek_possible_exist_folder(folder_path, callback){
+  // 
+  // callback is directly passed from s3
+  //
+  var folder_meta_key = calculate_folder_meta_file_s3key(folder_path);
+  bucket.s3_object_exists(folder_meta_key, callback);
+}
+
+function new_folder(opt_, callback){
+  //
+  //
+  make_s3folder( opt_.path, function(folder){  // empty path also enough.
+    folder.build_new_folder(opt_);
+    callback(folder);
+  });
+}
+
+function retrieve_folder(folder_path, callback){
+  //
+  // Retrieve an exists folder.
+  //
+  make_s3folder( folder_path, function(folder){
+    folder.retrieve_old_folder_meta(function(meta){
+      callback(folder);
+    });
+  });
+}
+
+function test_retrieve_folder(){
+  retrieve_folder('abc', function(folder){
+    if(!folder){
+      console.log('not a folder?');
+      return;
+    }
+    console.log(folder.get_meta());
+    //console.log(folder);
+  });
+}
+
+
+function retrieve_folder_meta(folder_path, callback){
+  //
+  // Retrieve meta data of an exists folder.
+  //
+
+  make_s3folder( folder_path, function(folder){
+    folder.retrieve_old_folder_meta(callback);
+  });
+}
+
+function test_retrieve_folder_meta(){
+  retrieve_folder_meta('abc', function(meta){
+    if(!meta){
+      console.log('not a meta?');
+      console.log(typeof meta);
+      console.log('is null?:');
+      console.log(u.isNull(meta));
+      //return;
+    }
+
+    console.log(meta);
+  });
+}
+
+function calculate_folder_meta_file_s3key(folder_path){
+  //
+  // Give a folder path, calculate it's s3key of meta data file.
+  //
+  var s3key = path.join(myconfig.meta_file_prefix, folder_path);
+  return s3key;
+}
+
+
+function retrieve_file_meta(file_path, callback){
+    var folder_path = path.dirname(file_path);
+    var filename    = path.basename(file_path);
+
+    retrieve_folder_meta(folder_path, function(meta){
+        //console.log(meta);
+        //log78('folder meta', meta);
+        var file_meta = meta.files[filename];
+        callback(file_meta);
+    });
+}
+
+
+
+function retrieve_file_obj(file_path, callback){
+    var folder_path = path.dirname(file_path);
+    var filename    = path.basename(file_path);
+    //console.log(folder_path, filename);
+
+    retrieve_folder(folder_path, function(folder_obj){
+      //console.log(folder_obj); console.log(folder_obj.get_meta());
+      folder_obj.get_file_obj(filename, callback);
+    });
+}
+
+function test_retrieve_file_obj(){
+    var path = 'abc/Png.png';
+    retrieve_file_obj(path, function(fobj){
+        console.log(fobj.get_meta());
+    });
+}
+
+function delete_file(file_path, callback){
+  // callback not called
+  var folder_path = path.dirname(file_path);
+  var filename    = path.basename(file_path);
+
+  //console.log(folder_path, filename);
+
+  retrieve_folder(folder_path, function(folder_obj){
+    var folder_meta = folder_obj.get_meta();
+    var file_meta   = folder_meta.files[filename];
+
+    //console.log(file_meta);
+    if (!file_meta) return; //?
+
+    folder_obj.delete_file(filename);
+    if (callback) callback(folder_obj);
+  });
+}
+
+
+// cloned from ./bucket.js
+// It's going to change according to new folder, 0716
+function init_home_folder(username, callback){
+  // 
+  // 0626, ... 
+  //
+
+  // The s3key for folder meta file, 
+  // the file will be put to: s3://ggfsa/.meta/username
+  // The s3 storage is used as key-value storage for 
+  // goodagood file system data structure.
+  console.log("--- --- I AM IN init home folder");
+  var s3key = path.join(myconfig.meta_file_prefix, username);
+
+  var folder_opt = {}; 
+  //folder_opt['flag_to_read_in_meta'] = false;
+  folder_opt['path'] = username;
+  folder_opt['name'] = username; // Don't forget these two.
+  folder_opt['parent-dir'] = '';
+  folder_opt.owner = username;
+  folder_opt.permission = {owner: 'rwx', other:'', group:''};
+  folder_opt['create-timestamp'] = Date.now();  //mili-seconds
+  folder_opt['timestamp'] = Date.now();  //stamp when modified
+
+  new_folder(folder_opt, function(home_folder){
+    home_folder.add_folder('goodagood', function(goodagood){
+      goodagood.add_folder('in');
+      goodagood.add_folder('out');
+      goodagood.add_folder('message');
+      //goodagood.add_folder('etc');
+      //goodagood.add_folder('backup');
+    });
+    home_folder.add_folder('etc', function(etc){});
+    home_folder.add_folder('public', function(etc){});
+    home_folder.render_folder_as_ul();
+    home_folder.save_meta(callback);
+  });
+}
+
+
+function test_init_home_folder(){
+  var name = 'tmp';
+  init_home_folder(name, function(){});
+}
+
+
+function add_default_home_folders(home_folder, callback){
+    home_folder.add_folder('goodagood', function(goodagood){
+      goodagood.add_folder('in');
+      goodagood.add_folder('out');
+      //goodagood.add_folder('etc');
+      //goodagood.add_folder('backup');
+    });
+    home_folder.add_folder('etc', function(etc){});
+    home_folder.add_folder('public', function(etc){});
+    home_folder.render_folder_as_ul();
+    home_folder.save_meta(callback);
+}
+
+
+function test_read_folder_meta(){
+
+  var folder_path = 'muji';
+  make_s3folder(folder_path, {flag_to_read_in_meta:true,}, function(folder){
+    var m = folder.get_meta();
+    console.log(m);
+  });
+
+}
+
+function test_init_home_folder_many(){
+  var names = ['muji', 'andrew',  'dirty-show', 'test'];
+  names.forEach(function(name){
+    console.log(name);
+    init_home_folder(name, function(){});
+  });
+}
+
+
+
+function test_add_folder(){
+  // add default folders for username
+  //
+  var username = 'abc';
+  retrieve_folder(username, function(abc){
+    add_default_home_folders(abc);
+  });
+}
+
+function get_sorted_message_list_as_ul(username, callback){
+  //
+  // The message folder is set in config-mj.js
+  // message is sorted by new coming.
+  //
+  var message_folder_path = path.join(username, myconfig.message_folder);
+  retrieve_folder(message_folder_path, function(folder){
+    var files = folder.get_meta().files;
+    //console.log(files);
+    var names = Object.keys(files);
+    var sorted_names = u.sortBy(names, function(name){
+      var negative_timestamp = 0 - parseInt(files[name].timestamp);
+      return negative_timestamp;
+    });
+    //console.log(names, sorted_names);
+
+    var ul = '<ul class="folder-list list-unstyled">';
+    sorted_names.forEach(function(name){
+      var file = files[name];
+      if(typeof file.html !== 'undefined') ul += file.html.li;
+    });
+    ul += '</ul>';
+    
+    //console.log(ul);
+    //return ul;
+    callback(ul);
+  });
+}
+
+if (require.main === module){
+  //test_s3_folder();
+  //test_read_in_meta();
+  test_init_home_folder();
+  //test_init_home_folder_many();
+
+  //test_read_folder_meta();
+ 
+  //test_render_all_files();
+
+  //test_retrieve_folder();
+  //test_retrieve_folder_meta();
+
+  //test_retrieve_file_obj();
+  //_test_retrieve_file_meta();
+  //_test_delete_file();
+
+  //test_add_folder();
+
+}
+
+module.exports.make_s3folder   = make_s3folder;
+module.exports.retrieve_folder = retrieve_folder;
+module.exports.retrieve_folder_meta = retrieve_folder_meta;
+module.exports.retrieve_file_obj = retrieve_file_obj;
+module.exports.retrieve_file_meta = retrieve_file_meta;
+module.exports.delete_file = delete_file;
+module.exports.get_sorted_message_list_as_ul = get_sorted_message_list_as_ul;
+module.exports.init_home_folder = init_home_folder;
+
+// vim: set et ts=2 sw=2 fdm=indent:

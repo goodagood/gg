@@ -1,0 +1,301 @@
+
+
+
+0926
+  `meta` is json string, saved as s3 object.
+  S3 key of folder meta is equal to folder's path: 
+    
+    .gg.folder.meta/user-name/folder/path
+
+  S3 key of file meta get no path info, it's    
+
+    .gg.file.meta/user-name/file-uuid
+
+  File has contents, it is saved with s3 key:
+
+    .gg.file/user-name/file-uuid
+
+  We can know s3 key from folder path, but NOT from file path, s3 key for
+  file meta must be get from folder meta.  This helps when moving a files,
+  only 2 folder meta need to change in case.  Also helps when renaming.
+  This avoid conflicts of file names, because file has it's own UUID, there
+  is no need to check if file exists.  This helps easy operation for shared
+  folder.
+
+  Prefix and username of s3 keys actually gives name space, thus meta info 
+  can live in file system, and get retrieved.  This save the cost to use 
+  db for those information, the db approach will need great scalability.
+
+
+0918
+  data structure SHOULD changed to:
+  file/folder path: 
+  -----------------
+
+    .gg.file/user-name/file-uuid       # file object
+    .gg.file.meta/user-name/file-uuid  # file meta information
+    .gg.folder.meta/user-name/path/to/folder-name  # folder meta gets path
+
+    .meta/...  -- for meta info, first place for folder information:
+    .meta/user-name/path/to/folder-name
+     -> .gg.folder.meta/user-name/path/to/folder-name
+
+    .gg.new/user-name/uuid  # for new file info
+
+    .sys/...  -- for sys files that not appear in user's view.
+
+    # use if needed:
+    .gg.folder.info/user-name/path/to/folder-name/file-name-list
+    .gg.folder.info/user-name/path/to/folder-name/file-list-basic
+    .gg.folder.info/user-name/path/to/folder-name/viewer-file-list
+
+    folders in user space:
+    goodagood  -- folder for things goodagood need to use.
+    goodagood/message  -- a folder
+    goodagood/settings.json
+    goodagood/default.css 
+    
+    path/to/folder-name/.folder.css
+    path/to/folder-name/.members.json #?
+    path/to/folder-name/.viewers.json #?
+
+    folder-meta will has 2 data about file information: #?
+      file_ids   { uuid : {file meta}, ... }
+      file_names { name : [uuid,...], ...}
+
+
+0915
+  s3 file structure in next phase?
+  Not going to use uuid to replace file-name.
+
+  file/folder path: 
+  -----------------
+
+    .file/user-name/path/to/folder-name/file-name.extension
+    .meta/user-name/path/to/folder-name
+    .meta/... -- for meta info
+    .new/...  -- for new file info
+    .sys/...  -- for sys files that not appear in user's view.
+
+    .meta/user-name/goodagood  -- folder for things goodagood need to use.
+    .meta/user-name/goodagood/message  -- a folder
+    .meta/user-name/goodagood/settings.json
+    .meta/user-name/goodagood/default.css 
+    
+    .meta/user-name/path/to/folder-name/.folder.css
+    .meta/user-name/path/to/folder-name/.members.json
+    .meta/user-name/path/to/folder-name/.viewers.json
+
+    .folder-info/user-name/path/to/folder-name/file-name-list
+    .folder-info/user-name/path/to/folder-name/file-list-basic
+    .folder-info/user-name/path/to/folder-name/viewer-file-list
+
+
+0911
+  file/folder path: 
+
+    user-name/path/to/file-name.extension
+    user-name/path/to/folder-name
+
+
+  user folder structure:
+
+  user-name/goodagood/.metas/user-name/path/to/file-name.extension
+                            --------------------------------------
+                      .metas/user-name/path/to/file-name.extension
+
+  user-name/goodagood/.new/user-name/path/to/file-name.extension
+                          --------------------------------------
+                      .new/user-name/path/to/file-name.extension
+
+  user-name/path/to/uuid/file-name.extension
+  user-name/path/to/uuid
+  user-name/path/to/file-name.extension
+
+  user-name/.files/
+
+
+0629
+    meta of folder will contain most meta of files.
+    file will be store in username/.file/uuid
+
+0620
+    link: link to another file
+
+        {
+            what : 'goodagood s3 link file' (set in config)
+            source: 'the s3key of source (target) file',
+
+            'meta-file' : '_link file need no meta file_',  //
+            'html-renderring': { },
+            owner: who,
+            permissions: { }, 
+            'create-date' : miliseconds of unix epoc,
+            //more ...
+        }
+
+0619
+    0622
+    folder will become `meta`, no need to make a file named same as folder.
+    folder has only meta, no file.
+
+    0619
+    folder is an json file.
+        current folder is '.' (one dot).
+        parent folder is '..', it's a link to parent folder.
+
+        {
+            what : 'goodagood s3 folder' (set in config)
+            s3key: 'the s3key of this folder file',
+
+            path : string, full path of the folder,
+            name : folder name,
+            parent : parent folder
+            'html-renderring': { },
+            owner: who,
+            permissions: {
+            },
+            'create-date' : miliseconds of unix epoc,
+            'last-modified' : miliseconds,
+            //more ...
+        }
+
+0607
+----
+    Image thumbnails put under name space: .thumbnails
+    JSON file for each file put in name space: .meta
+
+0602
+----
+    file meta data is stringified json, file name is 'filename.gmeta':
+        {
+            "file-type" : string,
+            size:
+            date:
+
+            creator: {
+                who  : string,
+                when : time,
+                //...
+            },
+
+            license: { },
+
+            value-contributors: {
+                one : { 
+                    points/percentage : value,
+                }
+                two : {
+                    //...
+                }
+                ...
+            },
+
+            permission: {
+                owner : string, rwx
+                group : string,
+                other : string,
+            }
+            //...
+        }
+
+0601
+----
+    image thumbnail: put in the sub-folder:
+    ./.thumbnails/image-file-name.100x100.ext
+
+    where .ext is the extention of file name.
+          100x100 is width x height in pixels of the thumbnail.
+
+
+0530
+----
+    gpath : the path we used for user files, it's: username/path/to/files
+
+0528
+----
+
+user home structure:
+
+var user_home_structure = {
+    username : {
+        goodagood  : {
+            public : 'folder',
+        },
+        //...
+    } // only one attribute, it's the structure.
+}
+
+/* 
+ * I am going to save storage in redis database, 
+ * to do this, I am going to use S3 directly.  0527
+ */
+
+file in redis:
+    Each file will has an record in redis database, it's key-value database, 
+    a redis file key with hash of file information. 
+
+    Excepts user home folder, most file name will not be represented by the
+    redis key.  The hash of file info. or the .ggfoldercfg will has an key of
+    name.  This is to save the name space, redis is key-value things.
+
+    Attributes:
+        .ggwhat : folder/folder_option/file/hash
+
+
+    redis_file_key: {
+        .ggwhat : "file_info"
+        name    : string, // file name
+        abspath : string,
+        storage_type  : s3/local_file/...,
+        permission    : same as unix file permission
+        modified_time : unix mili-seconds,
+        default_behavior : edit/download/display/run media player/...
+        is_link          : true or false
+        any_key          : string_value
+        ...
+    }
+
+
+Folder
+------
+
+    Folder is special file:
+
+    redis_folder_key: {
+        .ggfoldercfg : json_rec_key,
+        .ggwhat      : "folder"  // the type of this data hash is folder
+        file_name_1  : redis_file_key,
+        file_name_2  : redis_file_key,
+        ...
+    }
+
+        .ggfoldercfg : {
+            // folder is a special file, most configurations for files can appear here.
+            parent_dir : redis_file_key,
+            .ggwhat    : "folder_option"
+            abspath    : string,
+            s3key      : string
+
+        }
+
+    Home folder:
+        It's just a folder, as of user's home folder.
+
+
+
+User information
+----------------
+
+
+    username : {
+        password   : xxxxxxxxx,
+        home_foler : redis folder key,
+        .ggwhat    : "user_information",
+        referrer   : another user,
+        nickname   : string,
+        any attr.  : most is string,
+        //...
+    }
+
+// vim: set et sw=4 ts=4 tw=78

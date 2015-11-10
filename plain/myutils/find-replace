@@ -1,0 +1,53 @@
+
+Find and replace in files
+-------------------------
+
+    # this is i am using:
+    ack-grep -l  --ignore-dir node_modules  --js  \
+        'require.+config-mj\.js.+;' | xargs -I{} perl -pi -e  \
+        's/require.+config-mj\.js.*$/ require("gg-credentials").config/g'  {}
+
+    #? 2015 1028
+    ack-grep -l  --ignore-dir node_modules  --js  \
+        'require.+gg-credentials.+config;' | xargs -I{} perl -pi -e  \
+        's/require.+gg-credentials.+config;/ require\("\.\.\/config\/config\.js"\);/g'  {}
+
+    # this not do the fucking job
+    ack-grep  --print0  -l  --ignore-dir node_modules --js \
+        'old-string'  | xargs -0 -n 1 sed -i -e 's/old-string/new-string/g'
+
+Explain: 
+    old-string : the string to be replaced.
+    new-string : replace old-string with this one.
+    --print0   : use 'null' instead of new line, for cases file name not good.
+    -l         : print only filename
+    --ignore-dir : ignore the directory
+    --js       : js files, for more help see: ack-grep --help=type
+    -0         : use 'null' instead of new line
+    -n         : number of arguments pass in
+    -i         : replace inplace
+
+more examples:
+
+    grep -r -l from . | xargs -0 -n 1 sed -i -e 's/from/to/g'
+
+You can also use ack-grep (sudo apt-get install ack-grep or visit
+http://petdance.com/ack/) as well, if you know you only want a certain type of
+file, and want to ignore things in version control directories. e.g., if you
+only want text files,
+
+    ack -l --print0 --text from | xargs -0 -n 1 sed -i -e 's/from/to/g'
+    # --text means search text files, and --js will be js files.
+    # `from` here is an arbitrary commonly occurring keyword
+
+    ack -l --print0 --js --ignore-dir some_dir old_string | xargs -0 -n 1 sed -i -e 's/old_string/new_string/g'
+
+
+An alternative to using sed is to use perl which can process multiple files per
+command, e.g.,
+
+    grep -r -l from . | xargs perl -pi.bak -e 's/from/to/g'
+    grep -r -l from . | xargs perl -pi     -e 's/from/to/g'   # without backup
+
+
+

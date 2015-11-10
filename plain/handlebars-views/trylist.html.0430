@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>Test list user info thingss 2014, 0429 </title>
+<meta name="description" content="goodagood testing">
+<meta name="author" content="Andrew">
+<meta http-equiv="expires" content="Fri, 21 Jun 2018 20:24:32 GMT" />
+<meta name="viewport" content="width=device-width">
+<!-- old references merged to new locations:
+<link rel="stylesheet" href="../bootstrap-combined.min.css">
+<link rel="stylesheet" href="/static/css/bootstrap-combined.min.css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<script src="../js/bootstrap-tree.js"></script>
+-->
+<link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/static/js/handlebars.js"></script>
+
+<script id="testa">
+  <p> This is to show whether handlebars.js works </p>
+</script>
+
+<script id="astemplate">
+  <div class="tree" id="mytest">
+    <ul>
+      <li>
+      <span><i class="icon-calendar"></i> Home Folder</span>
+      <ul>
+        <li><span class="badge badge-success"> ggdefaults.cfg</span></li>
+        <li><span class="badge badge-success"> Who is here? {{ who }}</span></li>
+        <li>
+        <span class="badge badge-success"><i class="icon-minus-sign"></i> gpub </span> &ndash; For public things.
+        <ul>
+          <li>
+          <a href=""><span><i class="icon-time"></i> 8.00</span> &ndash; Changed CSS to accomodate...</a>
+          </li>
+        </ul>
+        </li>
+        <li>
+        <span class="badge badge-success"><i class="icon-minus-sign"></i> Tuesday, January 8: 8.00 hours</span>
+        <ul>
+          <li>
+          <span><i class="icon-time"></i> 6.00</span> &ndash; <a href="">Altered code...</a>
+          </li>
+          <li>
+          <span><i class="icon-time"></i> 2.00</span> &ndash; <a href="">Simplified our approach to...</a>
+          </li>
+        </ul>
+        </li>
+        <li>
+        <span class="badge badge-warning"><i class="icon-minus-sign"></i> Wednesday, January 9: 6.00 hours</span>
+        <ul>
+          <li>
+          <a href=""><span><i class="icon-time"></i> 3.00</span> &ndash; Fixed bug caused by...</a>
+          </li>
+          <li>
+          <a href=""><span><i class="icon-time"></i> 3.00</span> &ndash; Comitting latest code to Git...</a>
+          </li>
+        </ul>
+        </li>
+        <li>
+        <span class="badge badge-important"><i class="icon-minus-sign"></i> Wednesday, January 9: 4.00 hours</span>
+        <ul>
+          <li>
+          <a href=""><span><i class="icon-time"></i> 2.00</span> &ndash; Create component that...</a>
+          </li>
+        </ul>
+        </li>
+      </ul>
+      </li>
+      <li>
+      <span><i class="icon-calendar"></i> 2013, Week 3</span>
+      <ul>
+        <li>
+        <span class="badge badge-success"><i class="icon-minus-sign"></i> Monday, January 14: 8.00 hours</span>
+        <ul>
+          <li>
+          <span><i class="icon-time"></i> 7.75</span> &ndash; <a href="">Writing documentation...</a>
+          </li>
+          <li>
+          <span><i class="icon-time"></i> 0.25</span> &ndash; <a href="">Reverting code back to...</a>
+          </li>
+        </ul>
+        </li>
+      </ul>
+      </li>
+    </ul>
+  </div>
+</script>
+
+<script src="/static/bower_components/handlebars.js/lib/handlebars.js"></script>
+
+<!-- <script src="/js/bootstrap-tree.js"></script>  put it below: -->
+<script>
+$(document).ready(function() {
+  function treerender(){
+    $('.tree > ul').attr('role', 'tree').find('ul').attr('role', 'group');
+    $('.tree').find('li:has(ul)'
+          ).addClass('parent_li'
+              ).attr('role', 'treeitem'
+                  ).find(' > span'
+                      ).attr('title', 'Collapse this branch'
+                          ).on('click', function (e) {
+                              //
+                              var children = $(this).parent('li.parent_li').find(' > ul > li');
+                              if (children.is(':visible')) {
+                                  children.hide('fast');
+                                  $(this).attr('title', 'Expand this branch'
+                                      ).find(' > i'
+                                          ).addClass('icon-plus-sign'
+                                              ).removeClass('icon-minus-sign');
+                              }
+                              else {
+                                  children.show('fast');
+                                  $(this).attr('title', 'Collapse this branch'
+                                      ).find(' > i'
+                                          ).addClass('icon-minus-sign'
+                                              ).removeClass('icon-plus-sign');
+                              }
+                              e.stopPropagation();
+                          });
+    }
+    //end of function treerender
+    //treerender();
+
+    // test handlebars first
+    //alert("firstly");
+    var testa_txt = $("#testa").html();
+    //var template = Handlebars.compile(testa_txt);
+    //var context = {who: 'Anyone'};
+    //var hhtml = template(context);
+    $("#testadiv").append(testa_txt);
+
+    //alert("i got ready");
+    var handlebars_txt = $("#astemplate").html();
+    var template = Handlebars.compile(handlebars_txt);
+    var context = {who: 'Anyone'};
+    var hhtml = template(context);
+    //alert(hhtml);
+    $("#my-place-holder").append(hhtml);
+
+    treerender();
+
+  });
+</script>
+
+</head>
+<body class="container-fluid" style="">
+{{#if message }}
+<p>{{ message }}</p>
+{{/if}}
+<h1>Use a simple solution for tree view <span class="glyphicon glyphicon-star"><span></h1>
+<p> 
+    glyphicon? <span class="glyphicon glyphicon-star-empty"> 
+</p>
+<p> Bootstrap-Themed Tree Widget Documentation </p>
+<div class="row-fluid">
+  <section id="demonstration" role="main" class="span12">
+  <h2 id="demo1">Demonstration 1</h2>
+  <div class="tree well">
+    <ul>
+      <li>
+      <span><i class="icon-folder-open"></i> Parent</span> <a href="">Goes somewhere</a>
+      <ul>
+        <li>
+        <span><i class="icon-minus-sign"></i> Child</span> <a href="">Goes somewhere</a>
+        <ul>
+          <li>
+          <span><i class="icon-leaf"></i> Grand Child</span> <a href="">Goes somewhere</a>
+          </li>
+        </ul>
+        </li>
+        <li>
+        <span><i class="icon-minus-sign"></i> Child</span> <a href="">Goes somewhere</a>
+        <ul>
+          <li>
+          <span><i class="icon-leaf"></i> Grand Child</span> <a href="">Goes somewhere</a>
+          </li>
+          <li>
+          <span><i class="icon-minus-sign"></i> Grand Child</span> <a href="">Goes somewhere</a>
+          <ul>
+            <li>
+            <span><i class="icon-minus-sign"></i> Great Grand Child</span> <a href="">Goes somewhere</a>
+            <ul>
+              <li>
+              <span><i class="icon-leaf"></i> Great great Grand Child</span> <a href="">Goes somewhere</a>
+              </li>
+              <li>
+              <span><i class="icon-leaf"></i> Great great Grand Child</span> <a href="">Goes somewhere</a>
+              </li>
+            </ul>
+            </li>
+            <li>
+            <span><i class="icon-leaf"></i> Great Grand Child</span> <a href="">Goes somewhere</a>
+            </li>
+            <li>
+            <span><i class="icon-leaf"></i> Great Grand Child</span> <a href="">Goes somewhere</a>
+            </li>
+          </ul>
+          </li>
+          <li>
+          <span><i class="icon-leaf"></i> Grand Child</span> <a href="">Goes somewhere</a>
+          </li>
+        </ul>
+        </li>
+      </ul>
+      </li>
+      <li>
+      <span><i class="icon-folder-open"></i> Parent 2</span> <a href="">Goes somewhere</a>
+      <ul>
+        <li>
+        <span><i class="icon-leaf"></i> Child</span> <a href="">Goes somewhere</a>
+        </li>
+      </ul>
+      </li>
+    </ul>
+  </div>
+  <h2 id="demo2">Demonstration 2</h2>
+  <div id="my-place-holder"> </div>
+  <div id="testadiv"> </div>
+  </section>
+  <section id="usage" role="main" class="span12">
+  <h2>Usage <small>I'll flesh this section out with greater detail when I have time</small></h2>
+  <ul>
+    <li>Compile the LESS files into CSS (or use <a href="../bootstrap-combined.min.css" target="css">the pre-compiled CSS</a>)</li>
+    <li>Include the CSS into your HTML page</li>
+    <li>Include the jQuery into your HTML page</li>
+    <li>Generate appropriately classed and nested UL and LI into your HTML page</li>
+  </ul>
+  </section>
+  <section id="references" class="span12">
+  <h2>Useful resources</h2>
+  <p><a href="https://github.com/jhfrench/bootstrap-tree">GitHub project</a></p>
+  <p>See <a href="http://jsfiddle.net/jhfrench/GpdgF/" target="jsFiddle">http://jsfiddle.net/jhfrench/GpdgF/</a> for a working example that you can tinker with.</p>
+  </section>
+  <section id="credit" class="span12">
+  <h2> goodagood is creating good things</h2>
+  <p>This project is inspired by many great engineering adventures, and is trying to demonstrate we can achieve high enough if we follow good engineering principles. </p>
+  </section>
+</div>
+<footer role="contentinfo" class="row-fluid visible-desktop">
+<div class="span4">
+  This code is provided as per the <a href="http://stackexchange.com/legal#3SubscriberContent">StackOverflow Subscriber Content License</a>.
+</div>
+<div class="span4">
+  <noscript>
+    This application provides the optimal experience when JavaScript is enabled.
+  </noscript>
+</div>
+<div class="span4 pull-right">
+  Version 0.0.1 (Last Updated: July 15, 2013)
+</div>
+</footer>
+</body>
+<!-- vim: set et sw=2 ts=2: -->
+</html>

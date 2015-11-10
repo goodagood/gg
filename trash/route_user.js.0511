@@ -1,0 +1,138 @@
+//var passport = require('passport')
+var myuser = require('./myuser.js');
+var tv = require('./myutils/tv.js');  // for tree views 
+
+var cel = require('connect-ensure-login');
+
+var myconfig = require('./config-mj.js');
+
+function route_user(app){
+  app.get('/trylist', 
+    //passport.authenticate('local', { failureRedirect: '/login', successRedirect:'/trylist', failureFlash: true }),
+    cel.ensureLoggedIn('/login'),
+
+    function(req, res){
+      var user_clone = JSON.parse(JSON.stringify(req.user));
+      delete user_clone.password;
+      var user_list_ul = tv.make_ul_list(user_clone);
+
+      res.render('trylist', 
+        {user: req.user, 
+          user_ul : user_list_ul,
+          date:new Date().toString(), 
+          message: req.flash('error') });
+  });
+
+  app.get('/tryajax', function(req, res){
+    console.log(req.user);
+    var data = { date : new Date().toString(), a:1, b:2 };
+    var html = "<h1> Show data got by AJAX</h1>";
+    html = html + "<ul>" +
+      '<li>' + 
+        '<span class="glyphicon glyphicon-minus"></span> <span>User Info List</span> <a href="">Goes somewhere</a>' + 
+        "<ul>" +
+          '<li>' +
+            '<span class="glyphicon glyphicon-minusi"></span><span> WHAT1? </span> <a href="">Goes somewhere</a>' +
+          '</li>' +
+          '<li>' +
+            '<span class="glyphicon glyphicon-file"></span><span> WHAT2? </span> <a href="">Goes somewhere</a>' +
+          '</li>' +
+        "</ul>" +
+      "</li>" +
+      "</ul>";
+
+    for (k in req.user){
+      html += "<p>" + k + " : " + req.user[k] + "</p>";
+    }
+    res.render('tryajax', { 
+      user:     req.user,
+      the_list: html,
+      date:     new Date().toString(),
+      message:  req.flash('error') });
+  });
+
+  app.get('/ajaxdataa', function(req, res){
+    var data = { date : new Date().toString(), a:1, b:2 };
+    res.json(data);
+  });
+
+  app.get('/testb/*', function(req, res){
+    console.log("testb : " + req.url);
+    console.log( req.params );
+    console.log( req.user );
+    res.send("testb : " + req.url);
+  });
+
+  app.get('/user/:id', function(req, res){
+    console.log("user id : " + req.params.id);
+    var uid  = req.params.id;
+    var user = myuser.findByUsername(uid, function(err, user){
+      if (err){
+        res.render('testuser',{user:null});
+      }else{
+
+        var user_clone = JSON.parse(JSON.stringify(req.user));
+        delete user_clone.password;
+        var user_list_ul = tv.make_ul_list(user_clone);
+
+
+        console.log('obj user: ', user);
+        res.render('testuser', {user:user});
+      }
+    });
+    //console.log( req.params );
+    //res.send("user id : " + req.params.id);
+    //res.send("user  : " + user);
+  });
+
+  app.get('/adduser', function(req, res){
+    res.render('adduser', { user: req.user, message: req.flash('error') });
+  });
+
+  app.post('/adduser', function(req, res){
+
+    var username = req.body.username;
+    var password = req.body.password;
+    var repeat_password = req.body.repeat_password;
+    var referrer = req.body.referrer;
+
+    var user = {};
+    user.username = req.body.username;
+    user.password = req.body.password;
+    user.repeat_password = req.body.repeat_password;
+    user.referrer = req.body.referrer;
+    myuser.add_user(user);
+
+    console.log(username, password, repeat_password, referrer);
+    res.redirect('/login')
+  });
+}
+
+
+function clone_default_folder_file(user_obj){
+  myconfig.default_folders.forEach(function(entry){
+    user_obj[entry] = '';
+  });
+
+  myconfig.default_files.forEach(function(entry){
+    user_obj[entry] = '';
+  });
+  return user_obj;
+}
+
+exports.route_user = route_user;
+
+/* test */
+function test_clone_default_folder_file(){
+  var fake_user = {username:'haha', id:'haha'};
+  var cloned = clone_default_folder_file(fake_user);
+  console.log(cloned);
+}
+
+
+if (require.main === module){
+  test_clone_default_folder_file();
+}
+
+
+// vim: set et ts=2 sw=2:

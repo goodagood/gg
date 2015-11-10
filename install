@@ -1,0 +1,82 @@
+2015 0928
+    # graphicsmagick, i already have imagemagick, but it need one more line
+    #     in 'node.js gm package':  imagemagick = gm.subClass({imageMagick:true});
+    #
+    #sudo npm install graphicsmagick
+
+2015 0808
+    sudo npm install coffee-script -g
+    # cd ~/workspace/muji
+    # coffee -o ./plain/   -c  ./coffee/...
+
+2015 0717
+    npm install require-all  #github.com/felixge/node-require-all
+2015 0614
+    i18next: name space seperator should be: `:`
+             they use  `.` as the seperator in the example, which causes fails.
+
+2015 0612
+    try to install mongodb on 71.88, to make sys logging and detect attacking.
+
+2015 0611
+    54.178.71.88
+    cloned muji instance, upgraded to ubuntu 14.04, as load balancing node.
+
+2015 0610
+
+    If reboot, need to redo bash command ./plain/myutils/port-forward-0404
+
+    **
+    Failed due to drop into VPC, I can't add it to the Elastic Load
+    Balancer, which need classic ec2 instance. Going to redo it by
+    clone the old muji instance.
+
+    2015 0607
+        apt-get install  tree nodejs nodejs-dev ruby ruby-dev python-dev git-core
+        
+        # install:  python-virtualenv ipython virtualenvwrapper
+        
+        #for ffmpeg:
+        #https://launchpad.net/~mc3man/+archive/ubuntu/trusty-media
+
+        sudo add-apt-repository ppa:mc3man/trusty-media
+        sudo apt-get update
+        sudo apt-get dist-upgrade
+
+        sudo apt-get install  ffmpeg
+
+        # get files for  ~/.ssh
+        # ssh-keygen
+        # move others from 54.178.88.179
+        
+        # move: .vimrc .bashrc .inputrc .screenrc .vim .profile
+        # move: /var/my-certs/  /var/goodagood/   #0609
+
+        # move and fix:  workspace/muji
+
+        # to download and compile, install  node.js
+        # required: gcc, g++, gnu make
+        # ./configure make make install
+
+        # remove packages: nodejs npm
+        # a lot npm error, 
+        # remove ~/.npm
+        # sudo npm install npm -g  # to set the npm come with the compiled version
+
+    0608
+        17:32
+        install redis-tool
+
+        sudo npm install nodeunit -g
+
+        sudo apt-get install -y build-essential openssl libssl-dev pkg-config
+
+        use nginx, pass through to node.js
+
+    0609
+        change /etc/hosts /etc/hostname, because sudo warnning.
+
+        cd myblueimp; npm  install
+        apt-get install sqlite3
+        
+

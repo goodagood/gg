@@ -1,0 +1,14 @@
+{
+    "app": {
+        "name": "goodagood"
+    },
+    "nav": {
+        "home": "树根",
+        "people": "人",
+        "file": "文件",
+        "config": "配置",
+        "upload": "上传",
+        "message": "沟通",
+        "add_folder": "新目录",
+    }
+}

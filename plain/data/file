@@ -1,0 +1,77 @@
+
+{   'image-file' : 'the next two are meta for image file, before and after 
+                    processes' 
+}
+
+{
+    "local_file": "/home/ubuntu/tmp/Uruguay-OKs-Plan.jpg",
+    "name": "ub.jpg",
+    "dir": "abc",
+    "owner": "abc",
+    "path": "abc/ub.jpg",
+    "timestamp": 1413682239377,
+    "uuid": "c57f8ab8-f382-4099-af76-c85297fdf673",
+    "meta_s3key": ".gg.new/abc/c57f8ab8-f382-4099-af76-c85297fdf673",
+    "initial_key": ".gg.new/abc/c57f8ab8-f382-4099-af76-c85297fdf673",
+    "s3key": ".gg.file/abc/c57f8ab8-f382-4099-af76-c85297fdf673",
+    "storage": {
+        "type": "s3",
+        "key": ".gg.file/abc/c57f8ab8-f382-4099-af76-c85297fdf673"
+    }
+}
+
+
+
+{ 
+    local_file: '/home/ubuntu/tmp/Uruguay-OKs-Plan.jpg',
+    name: 'ub.jpg',
+    dir: 'abc',
+    owner: 'abc',
+    path: 'abc/ub.jpg',
+    timestamp: 1413682239377,
+    uuid: 'c57f8ab8-f382-4099-af76-c85297fdf673',
+    meta_s3key: '.gg.file.meta/abc/c57f8ab8-f382-4099-af76-c85297fdf673',
+    initial_key: '.gg.new/abc/c57f8ab8-f382-4099-af76-c85297fdf673',
+    s3key: '.gg.file/abc/c57f8ab8-f382-4099-af76-c85297fdf673',
+    storage:
+        { 
+            type: 's3',
+            key: '.gg.file/abc/c57f8ab8-f382-4099-af76-c85297fdf673'
+        },
+    filetype: 'image',
+    s3_stream_href: '/ss/.gg.file/abc/c57f8ab8-f382-4099-af76-c85297fdf673',
+    delete_href: '/del/abc/ub.jpg',
+    view_href: '/viewtxt/abc/ub.jpg',
+    uuid_path: 'abc/c57f8ab8-f382-4099-af76-c85297fdf673.jpg',
+    what: 'I-am-goodagood-file.2014-0625.',
+    permission: { owner: 'rwx', group: '', other: '' },
+    'file-types': [],
+    storages:
+        [ file: 
+            { type: 's3',
+              key: '.gg.file/abc/c57f8ab8-f382-4099-af76-c85297fdf673' }
+        ],
+    html: { 
+        li: '<li><input type="checkbox" name="filepath[]" value="abc/ub.jpg" />
+             <a href="/ss/.gg.file/abc/c57f8ab8-f382-4099-af76-c85297fdf673" >
+             ub.jpg</a> <a href="/del/abc/ub.jpg">
+             <span class="glyphicon glyphicon-remove"> </span></a>
+             <ul class="list-unstyled">
+             <li><img src="/ss/.gg.file/abc/c57f8ab8-f382-4099-af76-c85297fdf673.thumbnail" 
+             alt="ub.jpg"  /></li>\n</ul></li>\n' 
+          },
+    value: { amount: 0, unit: 'GG' },
+    thumb:
+      { defaults:
+          { width: 100,
+            height: 100,
+            quality: 100,
+            s3key: '.gg.file/abc/c57f8ab8-f382-4099-af76-c85297fdf673.thumbnail' 
+          }
+      },
+    'thumbnail-s3key': '.gg.file/abc/c57f8ab8-f382-4099-af76-c85297fdf673.thumbnail' 
+}
+
+
+
+

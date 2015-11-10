@@ -1,0 +1,13 @@
+
+    <a href="<%= ls_folder_href %>" class="ls-folder listor-href">
+        <%= folder_name %>
+    </a>
+    <span class="icon folder-icon" data-icon-href="<%= folder_path %>">
+        <img src="<%= folder_icon_src %>"
+            class="icon folder-icon"
+            data-id="<%= folder_path %>"
+            alt=""
+        >
+    </span>
+    <span class="folder-sperator">/</span>
+

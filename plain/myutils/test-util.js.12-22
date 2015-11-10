@@ -1,0 +1,56 @@
+
+var test   = require('nodeunit');
+var myutil = require('./myutil.js');
+
+function test_uuid_file_name(test){
+    test.expect(1);
+    var filename = myutil.uuid_file_name_for_username('abc.gif', 'username_a');
+    console.log(filename);
+    //test.ok(typeof filename === 'string',  'yes, it is string');
+    test.ok(true,  'yes, it is true');
+    test.done();
+}
+
+exports.test_uuid_file_name = test_uuid_file_name;
+
+exports.testSomething = function(test){
+    test.expect(1);
+    test.ok(true, "this assertion should pass");
+    test.done();
+};
+
+
+
+function get_uuid_file_name(){
+    var filename = myutil.uuid_file_name_for_username('abcgif', 'username_a');
+    console.log(filename);
+}
+
+
+exports.p    = console.log;
+
+
+exports.stop = function(seconds) {
+    var seconds = seconds || 1;
+    var milli_sec = seconds * 1000;
+    setTimeout(process.exit, milli_sec);
+};
+
+
+exports.sleep= function(seconds, callback){
+    var seconds = seconds || 1;
+    var milli_sec = seconds * 1000;
+
+    setTimeout(function(){
+        callback(null, seconds);
+    }, milli_sec);
+};
+
+exports.promise_to_sleep = Promise.promisify(sleep);
+
+if(require.main === module){
+    get_uuid_file_name();
+}
+
+
+// vim: set et ts=2 sw=2 fdm=indent:

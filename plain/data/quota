@@ -1,0 +1,14 @@
+
+user:
+    quota : the limit, the disk space and amount of upload/download
+    add-up-byte
+    upload-byte
+    download-byte
+
+
+folder: Same as user quota, but for folder.
+    quota:
+    total-file-size:
+    uploaded:
+    downloaded:
+

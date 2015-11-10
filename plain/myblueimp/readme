@@ -1,0 +1,27 @@
+
+
+2015
+----
+
+    should i give up this way, and remove sqlite3 dependence.
+
+
+2014
+----
+
+0307
+
+    I am trying to use sqlite3 as local DB.
+    $ npm install sqlite3
+
+0327
+
+    /public/
+
+0328
+
+    Try to make map between local folder and s3 bucket.  It seems need to 
+    set up `yas3fs`/`s3fs` before uploading start.
+
+
+

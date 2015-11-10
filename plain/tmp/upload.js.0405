@@ -1,0 +1,97 @@
+//var myuser = require('./myuser.js');
+var formidable = require('formidable'),
+    util = require('util');
+
+// logger
+var npmlog = require('npmlog');
+var fs = require('fs');
+npmlog.stream = fs.createWriteStream('/tmp/log41');
+if (!npmlog.stream) console.log('logger failed to get stream');
+
+var conf = require('./config-mj.js');
+var upload_dir = conf.formidable_upload_dir;
+
+var path = require('path');
+var mv = require('mv');
+
+function myupload(app){
+  //app.get('/testa', function(req, res){
+  //  res.render('testa', { user: req.user, message: req.flash('error') });
+  //});
+
+  app.get('/upload', function(req, res){
+    res.render('uploada', { user: req.user, message: req.flash('error') });
+  });
+
+  app.post('/upload', function(req, res){
+
+    // parse a file upload
+    var form = new formidable.IncomingForm();
+
+    form.on('fileBegin', function (name, file) {
+        npmlog.info("on fileBegin" + name + '  ' + file);
+        //npmlog.info("name : " + util.inspect(name));
+        //npmlog.info("file : " + util.inspect(file));
+    }).on('field', function (name, value) {
+        npmlog.info("on field"); // test
+        npmlog.info("name : " + util.inspect(name));
+        npmlog.info("value : " + util.inspect(value));
+        //if (name === 'redirect') {
+        //    redirect = value;
+        //}
+    }).on('file', function (name, file) {
+        npmlog.info("on file"); // test
+        npmlog.info("name : " + util.inspect(name));
+        npmlog.info("file : " + util.inspect(file));
+    }).on('aborted', function () {
+        npmlog.info("on aborted");
+    }).on('error', function (e) {
+        npmlog.info("on error");
+        npmlog.info(e);
+    }).on('progress', function (bytesReceived, bytesExpected) {
+        npmlog.info("on progress");
+        npmlog.info( " [ " + bytesReceived + "/" + bytesExpected + " ]");
+    }).on('end', function(){
+      console.log(" event: end ");
+    });
+
+    form.parse(req, function(err, fields, files) {
+        npmlog.info("\nform parse begin, show the form: \n");
+        npmlog.info( Date() );
+        npmlog.warn(util.inspect(form));
+
+        console.log(files);
+        for (var f in files){
+          console.log(" files[f]: ");  // use the square parenthe..
+          console.log(files[f].name);
+          console.log(files[f].path);
+          var move2 = path.join(upload_dir, files[f].name);
+          console.log("move to: " + move2);
+          mv(files[f].path, move2, function(err){
+            if(err){ 
+              console.log("move error");
+            }else{
+              console.log("moved");
+            }
+
+          });
+          //fs.rename(files[f].path, move2, function(err){
+          //  if(err){ 
+          //    console.log("rename error");
+          //  }else{
+          //    console.log("renamed");
+          //  }
+         //});
+          console.log(files[f]);
+        }
+
+    });
+
+    //return;
+
+    res.redirect('/login');
+  });
+}
+
+exports.myupload = myupload;
+// vim: set et ts=2 sw=2:

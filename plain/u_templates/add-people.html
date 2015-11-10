@@ -1,0 +1,22 @@
+
+    <h2> Add people </h2>
+    <div>
+        <form id="name_input" action="/msgto/<% 
+            if(typeof towhom !== 'undefined' && towhom) print(towhom); 
+            %>" method="post" enctype="multipare/x-www-form-urlencoded" class="form-inline" role="form">
+
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"> Enter:  
+                        <span class="glyphicon glyphicon-user"> </span>
+                    </span>
+                    <input type="text" name="peoplename"  class="form-control" placeholder="username">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Add User">
+            </div>
+        </form>
+    </div>
+

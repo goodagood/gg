@@ -1,0 +1,26 @@
+
+ack-grep -l  pattern | xargs perl -pi -E 's/original-words/replaced-words/g'
+
+# when pattern become complex:
+
+ack-grep -l  /complex-pattern/  >  TMP.FILE
+cat TMP.FILE | xargs perl -pi -E 's/original-words/replaced-words/g'
+
+
+xargs
+
+basically the list of files generated
+by ack are being appended to the end of the perl -pi -E
+'s/pattern/replacemnt/g' command.
+
+perl -pi
+
+The -p option causes Perl to create a loop around your program which iterates
+over filename arguments. 
+
+The -i option causes Perl to edit the file in place.  
+
+The -E option causes Perl to execute the
+one line of code specified as the program. In our case the program is just a
+Perl regex substitution.
+

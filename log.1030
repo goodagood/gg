@@ -1,0 +1,80 @@
+# git 
+    when local branch delete files
+
+
+
+    If you deleted a file from the working tree, then commit the deletion:
+
+        git commit -a -m "A file was deleted"
+
+    And push your commit upstream:
+
+        git push
+
+
+    To push a local branch to remote and track it too,
+    In Git 1.7.0+ you can do the following:
+
+        $ git checkout -b feature_branch_name
+        #... edit files, add and commit ...
+        $ git push -u origin feature_branch_name
+
+    and it will set up the tracking information during the push
+    
+
+
+
+## 2015, 0421
+    To use milli_uuid as unique file/folder id.
+
+    The chance of a uuid clash is small enough, but it can accumulate, 
+    which means if file id put in one name space, the chance to clash also
+    accumulate.  milli_uuid will split it but milli seconds, so it can not
+    accumulate.
+
+## redis down, dispeared, 0305, 2015
+
+    trying to install a redis on local
+
+
+## collecting file will sleep, 
+
+5000ms, see file-collector-v2.coffee, do_s3_jobs
+02-13
+
+
+bare coffee to js
+-----------------
+
+    # using:
+    coffee -o to/js/path/ -cw src/path/of/coffee/scripts
+
+    # `-b` option to stop adding file wrapper, So can be load by node.js REPL
+    coffee -b -o to/js/path/ -cw src/path/of/coffee/scripts
+
+
+mocha testing fails randomly
+----------------------------
+
+This kills, the reason is out of common debuging.
+It might be: coffee scripts conversion, promise mess up callbacks, or mocha itself.
+
+1211, 2014
+
+
+mocha.js test, timeout
+----------------------
+
+    describe('Testing Module',function(){
+
+    it('Save Data',function(done){
+
+        this.timeout(15000);
+
+        var data={a:'aa',b:'bb'};
+
+        module.save(data,function(err,res){
+             should.not.exist(err);
+             done();
+        });
+    });

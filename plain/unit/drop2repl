@@ -1,0 +1,28 @@
+#!/usr/bin/expect
+
+# easy tool by 'expect' to jump to points.
+
+spawn node
+expect ">"
+send "var p = console.log;\r"
+expect ">"
+
+#send ".load  ./u-rm-file.js\r"
+#send ".load  ./c-init-root.js\r"
+#send ".load  ./u-aux.js\r"
+#send ".load  ./u-pre-people.js\r"
+send ".load  ./u-phome.js\r"
+#send ".load  ./u-collector-v2.js\r"
+#send ".load  ./u-notes.js\r"
+#send ".load  ./u-listor.js\r"
+#send ".load  ./u-ls-anyway.js\r"
+#send ".load  ./u-user-icon.js\r"
+#send ".load  ./u-member-2.js\r"
+#send ".load  ./u-msg.js\r"
+#send ".load  ./u-text-file-v1.js\r"
+#send ".load  ./u-file-basic.js\r"
+#send ".load  ./u-image.js\r"
+#send ".load  ./u-folder-basic.js\r"
+
+expect "ok start interact:"
+interact

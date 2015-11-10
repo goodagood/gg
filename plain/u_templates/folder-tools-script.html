@@ -1,0 +1,104 @@
+
+
+<script>
+  $( document ).ready(function() {
+    // past in by template
+    var cwd = '<% if(typeof cwd !== 'undefined' && cwd) print(cwd); %>';
+
+    //console.log( (this == $ ? 'yes' : 'no') );
+    //alert( (this == $ ? 'yes' : 'no') );
+    //$.inspect(this, 'window');
+
+    var src_list = [];
+
+    $("input:checkbox").prop('checked', false);
+
+    //console.log( 'ready' );
+    $("input:checkbox").change(function(e){
+      //$.inspect(e);
+      if($(this).is(':checked')){
+        //alert('val: ' + $(this).val() + ' name: ' + $(this).attr('name'));
+        src_list.push($(this).val());
+        //alert(src_list);
+        }else{
+        remove(src_list, $(this).val());
+        //alert(src_list);
+      }
+    });
+
+    $("a#add-members").click(function(event){
+      event.preventDefault();
+      //src_list.forEach(function(name){
+        var names = JSON.stringify(src_list);
+        var url = 'http://54.178.88.149:9090/add-member/';
+        var param = {url:url, type:'POST', data:{names:names, folder_path:cwd}, dataType:'json'}
+        //alert(cwd);
+        //alert(param);
+        //$.inspect(param.data);
+        $.ajax(param).done(function(){
+          location.reload(treu);
+          $("input:checkbox").prop('checked', false);
+        });
+      //});
+    });
+
+    $("#delete-members").click(function(event){
+      event.preventDefault();
+      var names = JSON.stringify(src_list);
+      var url = 'http://54.178.88.149:9090/delete-members/';
+      var param = {url:url, type:'POST', data:{name:names, team_path:cwd}, dataType:'json'}
+      //alert(cwd);
+      //alert(param);
+      //$.inspect(param.data);
+      $.ajax(param).done(function(){
+        location.reload(treu);
+        $("input:checkbox").prop('checked', false);
+      });
+    });
+
+    $("a#add-viewers").click(function(event){
+      event.preventDefault();
+      var names = JSON.stringify(src_list);
+      var url = 'http://54.178.88.149:9090/add-viewer/';
+      var param = {url:url, type:'POST', data:{name:names, team:cwd}, dataType:'json'}
+      //alert(cwd);
+      //alert(param);
+      //$.inspect(param.data);
+      $.ajax(param).done(function(){
+        location.reload(treu);
+        $("input:checkbox").prop('checked', false);
+      });
+    });
+
+    $("#delete-viewers").click(function(event){
+      event.preventDefault();
+      var names = JSON.stringify(src_list);
+      var url = 'http://54.178.88.149:9090/delete-viewer/';
+      var param = {url:url, type:'POST', data:{name:names, team_path:cwd}, dataType:'json'}
+      //alert(cwd);
+      //alert(param);
+      //$.inspect(param.data);
+      $.ajax(param).done(function(){
+        location.reload(treu);
+        $("input:checkbox").prop('checked', false);
+      });
+    });
+
+
+    //$.inspect(this);
+
+    function remove(arr, item) {
+      for(var i = arr.length; i--;) {
+        if(arr[i] === item) {
+          arr.splice(i, 1);
+        }
+      }
+    }
+
+    //alert(cwd);
+
+  });
+</script>
+
+<!-- vim: et ts=2 sw=2 tw=150
+-->

@@ -1,0 +1,260 @@
+###
+# The file used to pass messages
+# 
+###
+
+
+path    = require 'path'
+util    = require 'util'
+Promise = require('bluebird')
+u       = require("underscore")
+
+file_module   = require("./simple-file-v3.js")
+folder_module = require("./folder-v5.js")
+json_file     = require "./simple-json.js"
+
+myutil        = require('../myutils/myutil.js')
+
+myconfig =  require("../config/config.js")
+
+
+new_msg_file_obj = (file_meta, pass_out_object) ->
+
+    # Global data in this function:
+    Meta = file_meta #should be an object works as hash
+    Obj  = null
+    Err  = ''
+    Simple_file_obj = null
+    Msg  = {}
+
+
+    render_html_repr = ()->
+
+        # Note: it deleted callback
+        #
+        # Results will be saved to Meta.html.li, it represent the file in web page
+        #
+
+        msg_json = Msg
+
+        #text = msg_json.message
+        text = msg_json.text
+        text = "WoW! Message Contents must go to no-where." if not text? or not text
+        #console.log(msg_json); console.log(text)
+
+        # first, from whom:
+        li = '<li><span class="glyphicon glyphicon-leaf"></span> &nbsp;\n'
+        if ( msg_json.from )
+            li    += util.format('<span class="username"> %s </span>:\n', msg_json.from)
+        li    += '<ul class="file-info list-unstyled">'
+
+        # sub list: the content:
+        li    +=  '<li><div class="well message ">\n'
+        li    +=  text
+        li    +=  '</div></li>\n'
+
+        # reply to:
+        li    += '<li><span class="glyphicon glyphicon-share"></span> &nbsp;'
+        li    += '<a class="reply-to" data-i18n="reply-to" href="/msgto/' + msg_json.from + '">'
+        li    += 'Reply to &nbsp; <span class="username badge">' + msg_json.from + '</span></a></li>\n'
+
+
+        # filename
+        li    += '<li>'
+        li += '<input type="checkbox" name="filepath[]" value="' + Meta['path'] + '" />&nbsp;'
+        li    +=  Meta.name + '&nbsp;</li>\n'
+
+        # and more:
+        remove = util.format('<li> <a href="%s">' +
+            '<span class="glyphicon glyphicon-trash"> </span>' +
+            '&nbsp; delete &nbsp;</a></li>\n' , Meta['delete_href'] )
+
+        li    += remove
+        li    +=  '<li>' + new Date(parseInt(msg_json.timestamp)) + '</li>\n'
+        li    += '</ul></li>\n'
+
+        if not Meta.html?
+            Meta.html = {}
+        Meta.html.li = li
+        #callback(li)
+        return li
+        
+    fetch_msg_json = (callback)->
+        Obj.read_to_string(
+            (err, str)->
+                j = JSON.parse(str)
+                #Msg = j
+                callback(null, j)
+        )
+
+    get_msg_text = (callback)->
+        if not u.isEmpty Msg
+            if Msg.text?
+                return callback(null, Msg.text)
+            else
+                callback('no text in Msg : "get msg text"', null)
+        else
+            fetch_msg_json (err, msg)->
+                Msg = msg
+                if Msg.text?
+                    return callback(null, Msg.text)
+                else
+                    return callback('no text after fetched msg', null)
+
+    
+
+    file_module.simple_s3_file_obj file_meta, (err, fobj)->
+
+        Simple_file_obj = fobj
+        #fobj.set_meta(Meta)
+        #fobj.calculate_meta_defaults()
+        #Meta = fobj.get_meta()
+        Obj = fobj
+        fetch_msg_json (err, msg)->
+            return pass_out_object(err, msg) if err
+            Msg = msg
+            render_html_repr()
+
+            Obj.render_html_repr = render_html_repr
+            Obj.fetch_msg_json   = fetch_msg_json
+            Obj.get_msg_text     = get_msg_text
+
+            pass_out_object(null, Obj)
+
+
+
+promised_new_msg_file_obj = Promise.promisify(new_msg_file_obj)
+
+
+# Follow 'collector' rule, meta to file object, pass file object to callback.
+new_msg_file_from_meta = (meta, callback)->
+    new_msg_file_obj(meta, (err, mobj)->
+        #p 'mobj object: ', mobj
+        #info = mobj.get_meta()
+        #p 'info, new msg from meta: ', info
+
+        mobj.calculate_meta_defaults()
+        #mobj.upgrade_to_s3storage_collection()
+        mobj.render_html_repr()
+        #p 'html: ', info.html.li
+        mobj.save_meta_file (err, reply) ->
+            p 'new from meta, save meta FILE, (err, reply): ', err, reply
+            callback err, mobj
+    )
+
+
+#d, this make it text file? 
+write_msg_file = (from, to, text)->
+    
+    json = {
+        from : from
+        to   : to
+        text : text
+        uuid : myutil.get_uuid() #the uuid is going to be used by 2, to/from.
+        timestamp : Date.now()
+    }
+    text = JSON.stringify json, null, 4 # use 4 space tab, and easy to read.
+
+    # To 'to'
+    owner = json.to
+    # dir : user/goodagood/message
+    dir   = path.join(owner, myconfig.message_folder)
+    fname = "From_#{json.from}_#{json.timestamp}.ggmsg"
+    file_module.write_text_file(owner, dir, fname, text).then(
+        ()->
+            # To 'from', i.e. clone to self
+            owner = json.from
+            dir   = path.join(owner, myconfig.message_folder)
+            fname = "To_#{json.to}_#{json.timestamp}.ggmsg"
+            file_module.write_text_file(owner, dir, fname, text)
+    ).then(
+        ()->
+            return json
+    )
+
+get_first_msg = (username, callback)->
+    Folder = null
+
+    _folder_path = path.join(username, myconfig.message_folder)
+    folder_module.retrieve_promisified_folder(_folder_path).then((folder) ->
+        Folder = folder
+        meta = folder.get_meta()
+        uuid_list = Object.keys(meta.files)
+        uuid_list[0]
+    ).then (first) ->
+        # 'first' is the first uuid of msg file.
+        Folder.uuid_to_file_obj first, callback
+      
+
+#read_json_file = (full_path)->
+#    dir      = path.dirname(full_path)
+#    filename = path.basename(full_path)
+#
+#    folder_module.retrieve_folder(dir).then(
+#        (folder)->
+#            folder.read_text_file(filename)
+#    ).then(
+#        (txt)->
+#            #p 'txt: ', txt
+#            json = JSON.parse(txt)
+#    )
+
+
+module.exports.write_msg_file = write_msg_file
+module.exports.new_msg_file_from_meta = new_msg_file_from_meta
+module.exports.get_first_msg = get_first_msg
+
+# # checkings: # #
+
+p = console.log
+stop = () ->
+    setTimeout process.exit, 500
+
+# parameters during checking
+user1 = 'abc'
+user2 = 'aa'
+
+test_owner_name  = 'abc'
+test_folder_name = 'abc'
+test_json_file_name = 'test.json'
+test_file_name   = 'txt25'
+
+check_write_msg = ()->
+    write_msg_file(user1, user2, '01/05, 15:22pm\nhi').then(
+        (what)->
+            p "what you got after 'check write msg'?\n", what
+    ).then(stop)
+
+
+check_new_msg_from_meta = ()->
+
+    meta = {
+        "name": "To_aa_1417582119799.ggmsg",
+        "path": "abc/goodagood/message/To_aa_1417582119799.ggmsg",
+        "owner": "abc",
+        "size": 154,
+        "dir": "abc/goodagood/message",
+        "timestamp": 1417582120069,
+        "uuid": "97ac58d9-e0e5-4e6b-8e58-27e05ed9ee31",
+        "meta_s3key": ".gg.new/abc/goodagood/message/97ac58d9-e0e5-4e6b-8e58-27e05ed9ee31",
+        "initial_key": ".gg.new/abc/goodagood/message/97ac58d9-e0e5-4e6b-8e58-27e05ed9ee31",
+        "s3key": ".gg.file/abc/goodagood/message/97ac58d9-e0e5-4e6b-8e58-27e05ed9ee31",
+        "storage": {
+            "type": "s3",
+            "key": ".gg.file/abc/goodagood/message/97ac58d9-e0e5-4e6b-8e58-27e05ed9ee31"
+        }
+    }
+    new_msg_file_from_meta meta, (err, obj)->
+        p 'check new msg from meta, 1, (err, obj): ', err, obj
+        obj.save_file_to_folder()
+            .then ()->
+                stop()
+        #
+
+
+
+if require.main is module
+    check_write_msg()
+    #check_new_msg_from_meta()
+
+

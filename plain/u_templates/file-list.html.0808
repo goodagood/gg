@@ -1,0 +1,47 @@
+
+<br class="space10px" />
+<div class="row-fluid">
+    <div class="btn-group btn-group-sm">
+        <button type="button" class="btn btn-default">
+            <a href="/upfile/<%=cwd%>">
+            <span class="glyphicon glyphicon-cloud-upload"> </span>
+            <span data-i18n="nav.upload">Upload</span></a>
+        </button>
+        <button type="button" class="btn btn-default">
+            <a  href="/add-folder/<%=cwd%>"> 
+            <span class="glyphicon glyphicon-plus"> </span>
+            <span data-i18n="nav.add_folder">Add-folder</span></a>
+        </button>
+        <button type="button" class="btn btn-default">
+            <a href="/msgto/">
+            <span class="glyphicon glyphicon-comment"> </span>
+            <span data-i18n="nav.message">Message</span></a>
+        </button>
+        <button type="button" id="file_sending" class="btn btn-default">
+            <a  href="">
+            <span class="glyphicon glyphicon-send"> </span>
+            <span data-i18n="nav.send_file">Send</span></a>
+        </button>
+        <button type="button" class="btn btn-default">
+            <a  href="/tools/<%=cwd%>"> 
+            <span class="glyphicon glyphicon-cog"> </span>
+            <span data-i18n="nav.tools">Tools</span></a>
+        </button>
+        <!--
+        <button type="button" class="btn btn-default">Right</button>
+        -->
+    </div>
+</div>
+<br class="space10px" />
+
+<div class="row-fluid">
+    <section id="demonstration" role="main" class="span12">
+    <p id="cwd">Current folder : <strong>
+        <% if(typeof cwd_chain !== 'undefined' && cwd_chain) print(cwd_chain); %>
+    </strong>
+    </p>
+    <div class="tree">
+        <%= user_folder_ul %>
+    </div>
+    </section>
+</div>

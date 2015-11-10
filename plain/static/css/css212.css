@@ -1,0 +1,70 @@
+
+body {
+    /*border-top: 10px solid green; testing*/
+    background-color: #2d2d2d;
+}
+
+div#file_list ul li {
+    display: inline-block;
+    float:left;
+    text-align: center;
+    width:120px;
+    padding: 0.5em;
+    margin: 0.5em;
+}
+
+div#file_list ul.folder-list li  img {
+    display: block;
+    position: relative;
+    /*float:left;*/
+    margin: 0.3em auto;
+    padding: 0.5em;
+}
+
+span.value {
+    display: inline-block;
+    color: #c60;
+    padding: 0.3em 1em;
+    /*background-color:#ffff99;*/
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
+    clear:both;
+}
+
+span.value i {
+    color: #c60; /*#f90; #ccbb00;*/
+}
+
+/* fix value? */
+div#file_list ul.folder-list li  div.what {
+    /*border: 1px solid;*/
+    display:block;
+    position:relative;
+    float:none;
+    text-align:center;
+    vertical-align: bottom;
+    clear: left;
+}
+
+div#file_list ul.folder-list li  label.file-selector {
+    display:block;
+    clear:right;
+}
+div#file_list ul.folder-list li  div a {
+    clear : right;
+}
+div#file_list ul.folder-list li  div.selector {
+    display:none;
+}
+
+div#file_list ul.folder-list li  span.delete {
+    display:none;
+}
+div#file_list ul.folder-list li  span.time {
+    display:none;
+}
+div#file_list ul.folder-list li  div.download {
+    display:none;
+}

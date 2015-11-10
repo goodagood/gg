@@ -1,0 +1,118 @@
+var u      = require('underscore');
+var path   = require('path');
+
+var bucket = require('./bucket.js');
+var ft     = require('../myutils/filetype.js');
+var myutil = require('../myutils/myutil.js');
+
+var myconfig = require("../config-mj.js");
+var render   = require("./render-b.js");
+var image    = require("./image.js");
+var s3folder = require("./folder.js");
+var s3file   = require("./file.js");
+
+
+function new_markdown_file_obj(file_meta, pass_file_obj){
+  //
+  // For markdown file object.
+  //
+  // 0722
+  //
+  
+  var meta = file_meta;
+
+  s3file.new_s3_file_obj(meta, function(fobj){
+    //
+    // It going to be wrapped here, in a callback where we have parent obj
+    // and data.
+    //
+
+    fobj.set_meta(meta);
+    // Now, we have file object and it's meta data.  Here it get modified
+    // for markdown files:
+
+
+    function _render_html_repr(){
+      //
+      // Results will be saved to meta.html.li, it represent the file in 
+      // web page
+      //
+      //meta.html['li'] = render.render_image_as_li(meta);
+
+      var data;
+      //if(meta.storage.text) data = meta.storage.text;
+      if(meta.storage.text) text = meta.storage.text;
+
+      var html_li = '<li><span class="label label-success"> <span class="glyphicon glyphicon-info-sign"></span></span>\n';
+      html_li    += '<a href="' + meta.s3_stream_href + '" >' + meta.name + '</a>\n' ;
+      html_li    += '<a href="/view/' + meta.path + '" >' + '&nbsp; view' + '</a>\n' ;
+
+      var remove = [' <a href="', meta['delete_href'], '"> <span class="glyphicon glyphicon-remove"> </span></a>'].join('');
+      html_li += remove + '\n';
+
+      html_li += '</li>\n';
+
+      if( !meta.html ) meta.html = {};
+      meta.html.li = html_li;
+      return html_li;
+    }
+
+    function _get_file_content(){
+      return meta.storage.text;
+    }
+
+    function _put_to_s3(callback){
+      // empty is enough.
+    }
+
+    function _delete_s3_storage(){
+      //
+      // nothing need to delete for filetype: goodagood-markdown-text-meta
+    }
+
+    function _clone_content_to_user(user_name, callback){
+      // Can we use the parent method, 
+      // when the method will be over-rided after a while?
+      // Can we do it this way:
+      // fobj._clone_content_to_user(....)
+      //
+      var tgt_meta  = {};
+
+      var fid  = myutil.get_uuid();
+      var new_name = fid + path.extname(meta.name); 
+
+      var tgt_s3key = path.join(user_name, '.files', new_name );
+
+      var tgt_storage = {type:'s3', key: tgt_s3key};
+
+      tgt_meta.storage   = tgt_storage;
+      bucket.copy_file(meta.storage.key, tgt_s3key); //This has no callback
+
+      // For thumbnail, only default thumbnail
+      tgt_meta['thumbnail-s3key'] = image.make_thumb_key_from_file_key(tgt_meta.storage.key);
+      bucket.copy_file(meta['thumbnail-s3key'], tgt_meta['thumbnail-s3key']); //This has no callback
+
+      callback(tgt_meta);
+    }
+
+    // Object with new functionalities
+    var new_functions = {
+      put_to_s3 : _put_to_s3,
+      delete_s3_storage : _delete_s3_storage,
+      render_html_repr : _render_html_repr,
+      clone_content_to_user : _clone_content_to_user,
+    };
+
+    u.extend(fobj, new_functions);
+    pass_file_obj(fobj); // This callback pass out the image file object.
+  });
+
+}
+
+
+if (require.main === module){
+}
+
+module.exports.new_markdown_file_obj  = new_markdown_file_obj;
+
+// vim: set et ts=2 sw=2 fdm=indent:
