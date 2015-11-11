@@ -139,11 +139,11 @@ function get_file_obj (file_meta, pass_file_obj) {
       thumb_src = "";
       if (meta["thumbnail-s3key"] != null) {
         thumb_key = meta["thumbnail-s3key"];
-        thumb_src = path.join(s3_stream_prefix, thumb_key);
+        thumb_src = path.join(myconfig.s3_stream_prefix, thumb_key);
       }
       if (meta.thumb != null) {
         thumb_key = meta.thumb.defaults.s3key;
-        thumb_src = path.join(s3_stream_prefix, thumb_key);
+        thumb_src = path.join(myconfig.s3_stream_prefix, thumb_key);
       }
       h["thumb-src"] = thumb_src;
       h["thumb-img"] = "<img src=\"" + thumb_src + "\" alt=\"" + h["basename"] + "\"  />";

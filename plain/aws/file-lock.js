@@ -16,12 +16,14 @@ var file_module = require('./simple-file-v3.js');
 
 //var redis_host = myconfig.redis_host;
 //var redis_port = myconfig.redis_port;
-var secrets = require("../config/secret-dir.js");
-var redis_host = secrets.conf.redis.redis_host;
-var redis_port = secrets.conf.redis.redis_port;
+//var secrets = require("../config/secret-dir.js");
+//var redis_host = secrets.conf.redis.redis_host;
+//var redis_port = secrets.conf.redis.redis_port;
+//var rclient = redis.createClient(redis_port, redis_host);
 
+var redis_basic = require("../myutils/redis-basic.js");
+var rclient = redis_basic.client;
 
-var rclient = redis.createClient(redis_port, redis_host);
 
 var File_Lock_Prefix = 'file.lock.';
 

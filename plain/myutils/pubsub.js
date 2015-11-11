@@ -12,12 +12,15 @@ var prepare    = require('../aws/prepare-home.js');
 var secrets    = require("../config/secret-dir.js");
 var redis_host = secrets.conf.redis.redis_host;
 var redis_port = secrets.conf.redis.redis_port;
+var redis_pass = secrets.conf.redis.requirepass;
 
 var redis = require("redis");
-var client = redis.createClient(redis_port, redis_host);
+//var client = redis.createClient(redis_port, redis_host);
+var client = redis.createClient(redis_port, redis_host, {auth_pass: redis_pass});
 
 // the 'client' above used for subscribe 
-var cmd_client = redis.createClient(redis_port, redis_host);
+//var cmd_client = redis.createClient(redis_port, redis_host);
+var cmd_client = redis.createClient(redis_port, redis_host, {auth_pass: redis_pass});
 
 // hardwired:
 var channel         = 'tasks';

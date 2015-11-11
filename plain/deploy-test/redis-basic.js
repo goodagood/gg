@@ -11,19 +11,21 @@ var util  = require('util');
 //var redis_host = conf.redis_host
 //var redis_port = conf.redis_port;
 //if(!redis_port) redis_port = 6379;
-var secrets = require("../config/secret-dir.js");
-var redis_host = secrets.conf.redis.redis_host;
-var redis_port = secrets.conf.redis.redis_port;
+//var secrets = require("../config/secret-dir.js");
+//var redis_host = secrets.conf.redis.redis_host;
+//var redis_port = secrets.conf.redis.redis_port;
 
-var redis = require("redis");
+//var redis = require("redis");
 
-var p = console.log;
 
 //p('redis, ', redis_port, redis_host, redis);
-
-var client = redis.createClient(redis_port, redis_host);
+//var client = redis.createClient(redis_port, redis_host);
 //var client = redis.createClient(6379, '54.178.88.149');
 
+var redis_basic = require("../myutils/redis-basic.js");
+var client = redis_basic.client;
+
+var p = console.log;
 
 // if you'd like to select database 3, instead of 0 (default), call
 // client.select(3, function() { /* ... */ });

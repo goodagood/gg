@@ -4,7 +4,7 @@
 
 handlebars = require('handlebars')
 
-p = console.log;
+p = console.log
 
 
 Key_value_li = '''

@@ -1,7 +1,21 @@
+#!/bin/bash
 
 # forward (http) 80 to 9090, where node.js listenning.  
 # The 2nd is for request from localhost
 
-sudo iptables -t nat -I PREROUTING -p tcp  --dport 80 -j REDIRECT --to-ports 9090
+## Change this file to executable.
+## Create /etc/init/myport.conf
+## 
+## sudo vim /etc/init/myport.conf
+## 
+## with content like the following:
+## 
+##     description     "forward port 80 to 9090 for muji project"
+##     start on startup
+##     task
+##     exec /path/to/this/file/name
+##     #currently:  /home/ubuntu/workspace/gg/plain/myutils/port-forward-0404
 
-sudo iptables -t nat -I OUTPUT -p tcp -o lo  --dport 80 -j REDIRECT  --to-ports 9090
+
+sudo iptables -t nat -I PREROUTING -p tcp        --dport 80 -j REDIRECT --to-ports 9090
+sudo iptables -t nat -I OUTPUT     -p tcp -o lo  --dport 80 -j REDIRECT --to-ports 9090

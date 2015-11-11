@@ -17,12 +17,19 @@ myconfig =  require("../config/config.js")
 #redis_host = myconfig.redis_host
 #redis_port = myconfig.redis_port
 
-secrets = require("../config/secret-dir.js")
-redis_host = secrets.conf.redis.redis_host
-redis_port = secrets.conf.redis.redis_port
+#secrets = require("../config/secret-dir.js")
+#redis_host = secrets.conf.redis.redis_host
+#redis_port = secrets.conf.redis.redis_port
 
-redis    = require("redis")
-client   = redis.createClient(redis_port, redis_host)
+#redis    = require("redis")
+
+#client   = redis.createClient(redis_port, redis_host)
+
+redis_basic = require("../myutils/redis-basic.js")
+client = redis_basic.client
+
+
+
 avatar   = require("../users/avatar.js")
 
 s3folder = require("./folder-v5.js")

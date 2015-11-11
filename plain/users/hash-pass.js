@@ -22,10 +22,10 @@ var p = console.log;
 
 function find_user(username, callback){
   rclient.exists(username, function(err, name_exists){
-    //console.log("hit redis, and ", username, " exists.");
     if(err){
-      return callback(new Error(err));
+      return callback(err);
     }
+    console.log("hit redis, and ", username, name_exists);
     if(name_exists === 0){
       // Name not exists
       return callback(null, null);
@@ -151,7 +151,8 @@ function check_set_salt(username){
 
 if(require.main === module){
     p('yes');
-    //check_find_and_check('andrew');
-    check_set_salt('ar');
+    check_find_and_check('andrew');
+
+    //check_set_salt('ar');
 }
 

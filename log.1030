@@ -8,6 +8,7 @@
     cd gg
     coffee -o ./plain/aws  -c ./coffee/aws/folder-v5.coffee
 
+    redis-cli -h host.address -a `cat passphrase.file`
 
 # git 
     when local branch delete files

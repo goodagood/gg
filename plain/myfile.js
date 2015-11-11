@@ -8,25 +8,29 @@ var clog = console.log;
 var util = require('util');
 var see  = util.inspect;
 
-// rclient : redis client
-if (typeof rclient === 'undefined'){
-  //var redis_host = "54.248.54.80", redis_port = null;
-  //var redis_host = conf.redis_host, redis_port = conf.redis_port;
 
-  var secrets = require("./config/secret-dir.js")
-  var redis_host = secrets.conf.redis.redis_host
-  var redis_port = secrets.conf.redis.redis_port
+var redis_basic = require("./myutils/redis-basic.js");
+var rclient = redis_basic.client;
 
-  var redis = require("redis");
-  var rclient = redis.createClient(redis_port, redis_host);
-
-  // if you'd like to select database 3, instead of 0 (default), call
-  // rclient.select(3, function() { /* ... */ });
-
-  rclient.on("error", function (err) {
-      console.log("Error from redis client: " + err);
-  });
-}
+//// rclient : redis client
+//if (typeof rclient === 'undefined'){
+//  //var redis_host = "54.248.54.80", redis_port = null;
+//  //var redis_host = conf.redis_host, redis_port = conf.redis_port;
+//
+//  var secrets = require("./config/secret-dir.js")
+//  var redis_host = secrets.conf.redis.redis_host
+//  var redis_port = secrets.conf.redis.redis_port
+//
+//  var redis = require("redis");
+//  var rclient = redis.createClient(redis_port, redis_host);
+//
+//  // if you'd like to select database 3, instead of 0 (default), call
+//  // rclient.select(3, function() { /* ... */ });
+//
+//  rclient.on("error", function (err) {
+//      console.log("Error from redis client: " + err);
+//  });
+//}
 
 
 function save_file_info(file_info, callback){

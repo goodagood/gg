@@ -8,6 +8,9 @@ var conf  =   require("../config/config.js");
 
 var util  = require('util');
 
+
+var p = console.log;
+
 var mylog = require("./mylog.js")
 
 //var redis_host = conf.redis_host, redis_port = conf.redis_port;
@@ -15,9 +18,10 @@ var mylog = require("./mylog.js")
 var secrets = require("../config/secret-dir.js");
 var redis_host = secrets.conf.redis.redis_host;
 var redis_port = secrets.conf.redis.redis_port;
+var redis_pass = secrets.conf.redis.requirepass;
 
 var redis = require("redis");
-var client = redis.createClient(redis_port, redis_host);
+var client = redis.createClient(redis_port, redis_host, {auth_pass: redis_pass});
 
 // if you'd like to select database 3, instead of 0 (default), call
 // client.select(3, function() { /* ... */ });
@@ -115,9 +119,12 @@ function serialize_obj_and_save(){
 
 
 // testing
-function test_serial_number(){
+function chk_serial_number(){
   serial_number(function(err, num){
+    if(err) return process.exit(p('err: ', err));
+
     console.log("number is " + num.toString());
+    process.exit();
   });
 }
 
@@ -177,13 +184,16 @@ function test_get_obj_without_hidden(){
 }
 
 function chk_redis_connect(){
-
+  client.keys('e.sess.rs*', function(err, what){
+    p(err, what);
+    process.exit();
+  });
 }
 
 
 if (require.main === module){
-  chk_redis_connect();
-  //test_serial_number();
+  //chk_redis_connect();
+  chk_serial_number();
 
   //client.set('tmp1', 'tmp1value', function(err, reply){
   //  console.log(typeof reply);
@@ -195,7 +205,7 @@ if (require.main === module){
   //test_save_obj();
   //test_get_obj_without_hidden();
 
-  setTimeout(function(){ client.quit(); }, 5000);  // close the redis.
+  //setTimeout(function(){ client.quit(); }, 5000);  // close the redis.
 }
 
 

@@ -3,13 +3,17 @@
 var myconfig   =   require("../config/config.js");
 
 var secret     = require('../config/secret-dir.js');
-var redis_conf = secret.conf.redis;
+//var redis_conf = secret.conf.redis;
 
-var redis_host = redis_conf.redis_host;
-var redis_port = redis_conf.redis_port;
+//var redis_host = redis_conf.redis_host;
+//var redis_port = redis_conf.redis_port;
 
-var redis  = require("redis");
-var client = redis.createClient(redis_port, redis_host);
+
+var redis_basic = require("./redis-basic.js");
+var client = redis_basic.client;
+
+//var redis  = require("redis");
+//var client = redis.createClient(redis_port, redis_host);
 
 var myutil = require('./myutil.js');
 

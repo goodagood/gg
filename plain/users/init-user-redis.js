@@ -13,17 +13,18 @@ var hname = require("./home-number.js");
 
 var myconfig =   require("../config/config.js");
 
+var redis_basic = require("../myutils/redis-basic.js");
+var client = redis_basic.client;
+
 var secrets = require("../config/secret-dir.js");
-var redis_host = secrets.conf.redis.redis_host;
-var redis_port = secrets.conf.redis.redis_port;
+//var redis_host = secrets.conf.redis.redis_host;
+//var redis_port = secrets.conf.redis.redis_port;
 
 var aws_conf   =  secrets.conf.aws;
 
-//var redis_host = myconfig.redis_host,
-//    redis_port = myconfig.redis_port;
 
-//  should we create client and close it every time?
-var client = redis.createClient(redis_port, redis_host);
+////  should we create client and close it every time?
+//var client = redis.createClient(redis_port, redis_host);
 
 var p    = console.log;
 
