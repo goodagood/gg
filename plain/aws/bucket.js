@@ -228,6 +228,43 @@ function list(prefix, callback){
 }
 
 
+// failed to work
+// bucket-list.js might be the way, not tested.
+function list_all(prefix, max_number, callback){
+  max_number = max_number || 999;
+
+  var params = {
+    Bucket : root_bucket,
+    Prefix : prefix,
+    MaxKeys: max_number,
+  };
+  var s3 = s3a.get_s3_obj();
+
+  var all_keys = [];
+  function list_all_keys(marker, cb)
+  {
+    params.Marker = marker;
+    //s3.listObjects({Bucket: s3bucket, Marker: marker}, function(err, data){});
+    s3.listObjects(params, function(err, data){
+      if(err) return cb(err, all_keys);
+
+      all_keys.push(data.Contents);
+
+      p('all keys length: ', all_keys.length);
+      p('data contents length: ', data.Contents.length);
+      p('data contents 0 1 2: ', data.Contents.slice(0,3));
+      p('is truncated       : ', data.IsTruncated);
+      p('data next marker   : ', data.NextMarker);
+
+      // recursively:
+      if   (data.IsTruncated) list_all_keys(data.NextMarker, cb);
+      else cb(null, all_keys);
+    });
+  }
+
+  list_all_keys(null, callback);
+}
+
 function get_object(s3key, callback){
   // callback is from aws s3, callback(err, data)
   //var s3 = new AWS.S3();
@@ -237,6 +274,33 @@ function get_object(s3key, callback){
     Key:    s3key,
   };
   s3.getObject(params, callback);
+}
+
+
+function read_json(s3path, callback){
+  //console.log('--- bucket read json, s3path: ', s3path);
+  read_file(s3path, function(err,data){
+    if (err){
+      return callback(err, null);
+    }
+    if (typeof data !== 'string'){
+      return callback('data not string', null);
+    }
+    if (!data){
+      return callback('not data?', null);
+    }
+
+
+    var json = null;
+    try{
+        json = JSON.parse(data);
+    }catch(e){
+        return callback(e, null);
+    }
+
+    callback(null, json);
+
+  });
 }
 
 
@@ -1290,33 +1354,6 @@ function put_object(s3key, object, callback){
     s3.putObject(params, callback);
 }
 
-function read_json(s3path, callback){
-  //console.log('--- bucket read json, s3path: ', s3path);
-  read_file(s3path, function(err,data){
-    if (err){
-      return callback(err, null);
-    }
-    if (typeof data !== 'string'){
-      return callback('data not string', null);
-    }
-    if (!data){
-      return callback('not data?', null);
-    }
-
-
-    var json = null;
-    try{
-        json = JSON.parse(data);
-    }catch(e){
-        return callback(e, null);
-    }
-
-    callback(null, json);
-
-  });
-}
-
-
 function write_s3_json_file(s3key, obj, callback){
   // 
   // write an object to s3, with json stringified text
@@ -1558,8 +1595,9 @@ module.exports.read_to_string = read_file;
 module.exports.write_text_file= write_text_file;
 module.exports.delete_object  = delete_object;
 
-module.exports.s3list = s3list;
-module.exports.list   = list;
+module.exports.s3list   = s3list;
+module.exports.list     = list;
+module.exports.list_all = list_all;  //not pass, 2015 1111
 
 module.exports.get_object = get_object;
 

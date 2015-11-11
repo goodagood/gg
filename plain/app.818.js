@@ -112,10 +112,12 @@ var session    = require('express-session') ,
 var secrets = require("./config/secret-dir.js");
 var redis_host = secrets.conf.redis.redis_host;
 var redis_port = secrets.conf.redis.redis_port;
+var redis_pass = secrets.conf.redis.requirepass;
 
 var redis_store_instance = new RedisStore({
   port: redis_port,
   host: redis_host,
+  pass: redis_pass,
   prefix: 'e.sess.rs'
 });
 

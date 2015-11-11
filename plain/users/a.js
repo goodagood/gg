@@ -141,7 +141,7 @@ function save_user_to_redis(user_info, callback){
   var hash_pass = require("./hash-pass.js");
   hash_pass.hash_password_for_userinfo(user_info, function(err, user_hash){
     if (err) {
-      p('in save u t r, h p . h p f u : err: ', err);
+      p('in save u t r, h p . h p f u : err: ', err, user_info);
       return callback(err, null);
     }
     // The parameter user info has been modified, it's been called user_hash now:
