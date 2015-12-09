@@ -72,53 +72,67 @@ function fill_in_user_info(info){
  * User name as user id.
  */
 function init_user_home(user, callback) {
-    var folder_opt = make_root_folder_options(user);
-    if(!folder_opt) return callback('failed to get home folder opt, when init user home');
-    p('goint to build new folder, after set home folder opt  n f a s, 1128 1208 1006'); p(folder_opt);
+    var id = user.id;
 
-    var Home;
+    if(!id) return callback('must provide an root id, in init root');
+    //if(!u.isString(id)) id = id.toString();
 
-    // This got one time not pass, it works now, don't know what. 2015 1108
-    folder_module.build_new_folder(folder_opt).then(function(folder) {
-        Home = folder;
+    var Goodagood, Home, folder_opt;
+    //s3key = path.join(myconfig.meta_file_prefix, username);
+    //s3key = path.join(myconfig.folder_meta_prefix, id);
 
-        // If we don't write down the home folder, it can not be locked
-        // to add more folder? save_meta not work because it need lock.
-        Home.promise_to_write_meta(); 
-    }).then(function(){
-        p('start to add sub folders? 1208 03:30pm');
-        add_sub_folders(Home);
-    }).then(function(){
-        p('start to add gg');
-        add_gg(Home);
-    }).then(function(){  // no parameters
-        p('before callback from init user home');
-        callback(null, Home);
-    }).catch(callback);
+    folder_opt = {};
+    folder_opt['path'] = id;
+    folder_opt['name'] = id;
+    folder_opt['parent-dir'] = '';
 
-}
+    folder_opt.owner = user.username;
+    folder_opt.permission = {
+        owner: 'rwx',
+        other: '',
+        group: ''
+    };
+    folder_opt['create-timestamp'] = Date.now();
+    folder_opt['timestamp'] = Date.now();
 
-// indev
-function init_user_home_root_part(user, callback) {
-    var folder_opt = make_root_folder_options(user);
-    if(!folder_opt) return callback('failed to get home folder opt, when init user home');
-    p('goint to build new folder, after set home folder opt  n f a s, 1128 1208 1006'); p(folder_opt);
-
-    var Home;
+    p('goint to buidl n f a s, 1128 1006'); p(folder_opt);
 
     // This got one time not pass, it works now, don't know what. 2015 1108
     folder_module.build_new_folder(folder_opt).then(function(folder) {
-        Home = folder;
-
-        // If we don't write down the home folder, it can not be locked
-        // to add more folder? save_meta not work because it need lock.
-        Home.promise_to_write_meta(); 
-    }).then(function(){  // no parameters
-        p('user home should be initialized and written? 05:30');
-        callback(null, Home);
+        p('start to add sub folders? 1202 10:08pm');
+        add_sub_folders(folder);
+    }).then(function(folder){
+        callback(null, folder);
     }).catch(callback);
 
+    //return folder_module.build_new_folder(folder_opt).then(function(folder) {
+    //    Home = folder;
 
+    //    // debuging
+    //    var hmeta = Home.get_meta();
+    //    p( 'home meta: ', hmeta);
+
+    //    // write with locking, perhaps some need retrieve it.
+    //    return Home.promise_to_write_meta()
+    //}).then(function(what){
+    //    callback(null, Home);
+    //}).catch(callback);
+
+
+    ///// 'build new folder' will not save it.
+    ///return folder_module.build_new_folder(folder_opt).then(function(folder) {
+    ///    Home = folder;
+
+    ///    // debuging
+    ///    //var hmeta = Home.get_meta();
+    ///    //p( 'home meta: ', hmeta);
+
+    ///    // write with locking, perhaps some need retrieve it.
+    ///    return Home.promise_to_write_meta()
+    ///}).then(function(){
+    ///    return add_sub_folders(Home);
+    ///}).catch(callback);
+    
 }
 
 
@@ -245,9 +259,8 @@ function add_gg(home){
 
 /*
  * Build a new home from user info, where id will be username.
+ * not tested.
  * 2015 1122
- * not throughly work. The strange thing is it not finished when callback.
- * 1209
  */
 function new_home(user_info, callback){
     take_in_user_info(user_info, function(err, user_hash){
@@ -271,11 +284,27 @@ module.exports.add_sub_folders = add_sub_folders;
 
 
 
-/*
- * no files prepared for the new home
- * 2015 1208
- */
 
+// the old before 2015 1108
+
+// seems no different from the old 'init home c'? beside 'owner undefined' attr.
+
+// add default files:
+//   folder.css
+//   file.css
+// add people/member.json
+// ...
+
+var pre_people = require("../users/pre-people-file.js");
+function init_people_file(root_id, callback){
+    // @root_id : is user id, also home id.
+
+    // wite an empty people file the the home id, before it get user check in.
+    pre_people.write_people_json(root_id, {}, callback);
+}
+
+function init_member_file(folder_path){
+}
 
 
 

@@ -1,4 +1,10 @@
 
+pubsub
+    currently redis
+
+    try npm module?:
+        pubsub-js
+
 File Object:
 
     delete_s3_storage

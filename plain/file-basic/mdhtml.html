@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
 <html lang="en">
-<!-- as basic sample for folder listing, when user set the folder listor to:
-     user-index
-     2015 0826
+<!-- Template for markdown to fill in. I am trying to let markdown use local
+     links, style and medias from relative folder path.
+     2015 1112
 -->
 
 <head>
@@ -12,10 +12,10 @@
 <meta name="description" content="index, goodagood testing" />
 <meta name="keywords" content="goodagood, filesystem, sharing" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="author" content="Andrew">
+<meta name="author"   content="Andrew">
 
 <title> 
-    test user index html
+  Markdown Template {{{ file_name }}}
 </title>
 
 <!--
@@ -53,18 +53,22 @@
     min-height: 80%;
   }
 
-
-  div#file_list {
-    position:relative;
-    padding-top: 0.5rem;
-    padding-left: 0.5rem;
-    min-height: 200px; /* how to set percentage? */
-
-
-    background-color: #e5e4e3;
-    border-radius: 4px;
+  img {
+    max-width: 90%;
   }
 
+  /* to center image */
+  p img {
+    display:block; /* required */
+    margin-left:  auto;
+    margin-right: auto;
+  }
+
+
+  div#cwd{
+    padding-top: 1rem;
+    padding-left:0.5rem;
+  }
   div.cwd {
     padding-left:1rem;
     display:inline;
@@ -82,9 +86,9 @@
   .logo{
     display: inline-block;
     height: 38px;
-    background-color: #566d7e;
+    background-color: inherit;
     padding: 0 30px;
-    color: #eee;
+    color: #333;
     text-align: center;
     font-size: 18px;
     font-weight: 600;
@@ -230,7 +234,7 @@
 
   <footer>
       <div class="row-fluid goodagood-footer">
-          <p class="text-center"> goodagood, Andrew &reg; &copy;  <p>
+          <p class="text-center"> goodogood, Andrew &reg; &copy;  <p>
       </div>
   </footer>
 

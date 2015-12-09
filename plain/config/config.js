@@ -17,6 +17,9 @@ config.user_name_roll_of_roll = 'user.name.roll.of.roll';
 config.user_id_max = 1403770226; // epoc seconds now.
 
 
+// pattern to serving local file
+config.gglocal_pattern = /\/gglocal\//i;
+
 
 /* log file setting */
 config.logfile = '/tmp/logfile';

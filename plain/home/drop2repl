@@ -8,6 +8,8 @@ send "var p = console.log;\r"
 expect ">"
 
 send ".load  ./u-slow-home.js\r"
+#send ".load  ./check-drop.js\r"
+#send ".load  ./c-half-folder.js\r"
 
 expect "ok start interact:"
 interact

@@ -124,6 +124,7 @@ make_s3folder = (folder_path) ->
         path_ = path_ || _meta_.path
 
         _meta_.folder_meta_s3key = make_folder_meta_file_s3key(path_) # deprecated sometime?
+        # same value:
         _meta_.meta_s3key = _meta_.folder_meta_s3key # this is going to be still used?
         
         return _meta_.folder_meta_s3key
@@ -631,9 +632,14 @@ make_s3folder = (folder_path) ->
         # callback get (err, unlocker)
         locker.lock_path_async(_meta_.path, callback)
 
+
+    # not use this for root initialization
     save_meta = (callback) ->
         #p('in save meta, ', _meta_.renders.ul.substr(0, 100))
+        p('in save meta, ', _meta_.meta_s3key, _meta_.path)
         lock_async((lock_err, unlocker)->
+            p(lock_err, '--!!--') if lock_err
+            #p('in save meta, write json ', _meta_)
             bucket.write_json _meta_.meta_s3key, _meta_, (write_err, write_reply)->
                 unlocker((unlock_err, unlock_reply)->
                     callback(write_err, write_reply)
@@ -1796,8 +1802,9 @@ make_s3folder = (folder_path) ->
 
     # return a promise:
     return promise_to_give_obj()
-
 # --- end of make_s3folder ---
+
+
 
 make_promisified_s3folder = (folder_path)->
     make_s3folder(folder_path).then(
@@ -1846,16 +1853,19 @@ retrieve_folder_meta = (folder_path) ->
 
 
 #doing
-build_new_folder_and_save = (opt)->
+build_root_folder_and_save = (opt)->
     make_s3folder(opt.path).then(
         (folder)->
             folder.init(opt)
             return folder
     ).then(
         (folder)->
-            folder.self_render_as_a_file()
+            p "after init? 1128 1:53pm"
+            return folder
+            #folder.self_render_as_a_file()
             #folder.save_meta(callback)
-            folder.promise_to_list_files_and_save()
+            #folder.promise_to_list_files_and_save()
+            # Comment out all above it becomes same the 'build new folder'
     )
 
 
@@ -2254,7 +2264,7 @@ module.exports.build_new_folder = build_new_folder
 
 module.exports.retrieve_file_objs = retrieve_file_objs
 module.exports.retrieve_first_file_obj = retrieve_first_file_obj
-module.exports.build_new_folder_and_save  = build_new_folder_and_save #?
+module.exports.build_root_folder_and_save  = build_root_folder_and_save #?
 
 
 module.exports.get_file_uuid         = get_file_uuid

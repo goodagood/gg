@@ -193,6 +193,25 @@ router.get(/^\/get-with-local-files\/(.+)/, function(req, res, next){
 });
 
 
+router.get(/^\/md-with-local-files\/(.+)/, function(req, res, next){
+      var username; 
+      if (typeof req.user !== 'undefined') username = req.user.username;
+
+      var full_path = req.params[0];
+      p('full path: ', full_path);
+
+      if (!full_path) return res.send('<h1> err, no full_path </h1>');
+
+      //var filename = path.basename(full_path);
+
+      var mdloc = require("../file-basic/md-with-loc.js");
+      mdloc.render_md_with_local_files(full_path, function(err, html){
+          if(err) return res.send('<h1> err, md with loc, 11 11 </h1>');
+
+          res.send(html);
+      });
+});
+
 /*
  * Same as the above, but convert relative links then give the html.
  */

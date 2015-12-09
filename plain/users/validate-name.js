@@ -15,6 +15,7 @@ var user   = require("./a.js");
 
 var folder_module = require("../aws/folder-v5.js");
 
+var p = console.log;
 
 /*
  * User name pattern:

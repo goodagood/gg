@@ -304,7 +304,30 @@ function read_json(s3path, callback){
 }
 
 
-// 2015 1022e end of moving back
+function write_s3_json_file(s3key, obj, callback){
+  // 
+  // write an object to s3, with json stringified text
+  // 
+  // @callback is optional, if presented, it will get called with `putObject` 
+  // reply.
+  // 
+
+  // make the string represent of json obj.
+  var text = null;
+  try{
+      // 4 means tab-width
+      text = JSON.stringify(obj, null, 4);
+  }catch(e){
+      return callback(e, null);
+  }
+
+  //p('2015 1205 going to write json stringified ', text);
+  write_string_to_s3(s3key, text, callback);
+}
+var write_json = write_s3_json_file;
+
+
+// 2015 1022e end of moving back, 2015 1205
 
 
 
@@ -1159,21 +1182,8 @@ function update_file_meta(file_s3key, hash, callback){
 }
 
 
-//d
-function test_update_file_meta(){
-  var file_key = 'abc/one';
-  var file_key = 'abc/one/tmp';
-  read_file_meta(file_key, function(err, meta){
-    console.log('old meta: ', meta);
-  });
 
-  update_file_meta(file_key, {wow:'ho 2, who'}, function(err, data){
-    console.log('This should be new : ', data);
-  });
-  //update_file_meta(file_key, {randoma: Date()} );  // missing callback
-}
-
-
+//d 2015 1205
 function print_file_meta(file_key){
   read_file_meta(file_key, function(err, meta){
     if(err) console.log('ERR: ', err);
@@ -1354,39 +1364,7 @@ function put_object(s3key, object, callback){
     s3.putObject(params, callback);
 }
 
-function write_s3_json_file(s3key, obj, callback){
-  // 
-  // write an object to s3, with json stringified text
-  // 
-  // @callback is optional, if presented, it will get called with `putObject` 
-  // reply.
-  // 
 
-  // make the string represent of json obj.
-  var text = null;
-  try{
-      // 4 means tab-width
-      text = JSON.stringify(obj, null, 4);
-  }catch(e){
-      return callback(e, null);
-  }
-
-
-  var params = {
-      Bucket: root_bucket,
-      Key:    s3key,
-      Body:   text,
-  };
-  //console.log('params'); console.log(params);
-
-  s3.putObject(params, function(err, s3reply) {
-    if(typeof callback !== 'undefined' && callback){
-      if (err) {return callback(err, null);}
-      else     {return callback(null, s3reply);}
-    }
-  });
-}
-var write_json = write_s3_json_file;
 
 
 // This will create 300 files, BE CAREFUL
@@ -1601,6 +1579,10 @@ module.exports.list_all = list_all;  //not pass, 2015 1111
 
 module.exports.get_object = get_object;
 
+// 2015 1205
+module.exports.write_s3_json_file = write_s3_json_file;
+module.exports.write_json = write_json;
+
 // before 1022
 //module.exports.list2 = list2;
 //module.exports.list3 = list3; //d
@@ -1634,9 +1616,7 @@ module.exports.delete_with_prefix = delete_with_prefix;
 // write meta need s3key in meta, no seperate s3key to specify.
 //module.exports.write_meta = write_meta;  
 
-//module.exports.write_text_file = write_text_file;
-module.exports.write_s3_json_file = write_s3_json_file;
-module.exports.write_json = write_json;
+
 module.exports.update_json = update_json;
 //module.exports.build_gallery_list = build_gallery_list;
 module.exports.copy_file = copy_file;

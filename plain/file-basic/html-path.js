@@ -8,6 +8,8 @@ var fs      = require('fs');
 var path    = require('path');
 
 
+var gglocal_pattern = /\/gglocal\//i;
+
 var p = console.log;
 
 
@@ -53,7 +55,6 @@ function testa(){
 }
 //testa();
 
-var gglocal_pattern = /\/gglocal\//i;
 
 function check_gglocal(href){
     var has = gglocal_pattern.test(href);
@@ -83,6 +84,9 @@ function change_to_full_path(href, cwd, prefix){
 }
 
 
+/*
+ * /gglocal/ will be changed
+ */
 function transfer_html(html, cwd, prefix){
     if(!html) return '';
 

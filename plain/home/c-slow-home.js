@@ -1,13 +1,18 @@
+/*
+ * copy from u-slow-home.js, but to do checking instead to drop into REPL
+ * 2015 1205
+ */
 
-var u = require("underscore");
 
 var sh = require("./slow-home.js");
 var user = require("../users/a.js");
 var folder_module = require("../aws/folder-v5.js");
 
 var rf = require("./root-folder.js");
-var retriever = require("../folder/retriever.js");
 
+var u = require("underscore");
+
+var retriever = require("../folder/retriever.js");
 var p = console.log;
 
 
@@ -45,19 +50,21 @@ function get_user(name){
  * This is somehow when the user has been put into redis.
  * 2015 1128
  */
-function build(name){
+function build_for_user(name){
     name = name || 'intro';
 
     user.find_by_user_name(name, function(err, info){
         if(err) return process.exit(p('find by user name err: ', err));
+        p('build, after find by username ');
         p(info);
 
         sh.init_user_home(info, function(err, folder){
-            if(err) return process.exit(p('init user home    err: ', err));
+            if(err) return process.exit(p('build, init user home    err: ', err));
 
-            p('folder? ');
-            p(u.keys(folder).sort().join("  \t  "));
-            process.exit();
+            p('build, after init user ... folder? ');
+            //p(u.keys(folder).sort().join("  \t  "));
+            p(folder.get_meta().uuid);
+            setTimeout(process.exit, 33000);
         });
     });
 }
@@ -88,28 +95,41 @@ function c_add_gg(cwd){
  */
 function add_one_user(info){
     info = info || {
-        username: 'jobs',
+        username: 'cat-03',
         password: 'kkkooo',
         referrer: 'andrew'
     };
 
     sh.new_home(info, function(err, what){
-        if(err) return process.exit(p('add one user err: ', err));
+        if(err) return process.exit(p('Err, for ', info, 'add one user err: ', err));
 
-        p('what? ');
-        p(u.keys(what).sort().join("  \t  "));
-        process.exit();
+        //p(u.keys(what).sort().join("  \t  "));
+        p('have we got enough folder functions: ', u.keys(what).length);
+        setTimeout(process.exit, 33000);
     });
 }
 
 
 
+function retrieve_a(folder_name, callback){
+    folder_name = folder_name ||      'jobs';
+
+    retriever.retrieve_folder(folder_name).then(function(folder){
+        p('a, got folder, ', folder.get_meta().path);
+        callback(null, folder);
+        //p(folder);
+    }).catch(function(err){
+        p('a, ', err);
+        callback(err);
+    });
+}
+
 
 // ** to drop into repl
 var o = {};
 
-function drop(name){
-    name = name || 'intro';
+function c_drop(name){
+    name = name || 'jobs';
 
     user.find_by_user_name(name, function(err, info){
         if(err) return p('find by user name err: ', err, o.e1 = err);
@@ -129,12 +149,13 @@ function drop(name){
             p('the home folder of user "', info.username,  '" exists: ', yes);
             if(err && !yes){
                 p('going to do the root folder:');
-                rf.make_root(info, function(err, root){
+                //init_root_1(info, function(err, root){})
+                retrieve_a(info.path, function(err, root){
                     if(err) return p('init user home err: ', err, o.e2 = err);
 
                     o.root = root;
-                    p('it shoul populated');
-                    p( "ok start interact:");
+                    p('it shoul got root');
+                    process.exit(p( "ok start interact:"));
                 });
             }
         });
@@ -143,51 +164,43 @@ function drop(name){
 }
 
 
+var add = require("./add.js");
+
 function init_root_1(ui, callback){
     // @ui: user information
     rf.make_root(ui, function(err, root){
-        if(err) return p('init user home err: ', err, o.e2 = err);
+        if(err) return callback(err, p('rf.make root err: ', err, o.e2 = err));
 
-        o.root = root;
-        p('it shoul populated');
-        p( "ok start interact:");
+        var meta = root.get_meta();
+
+        p( "ok 11:40am  meta:"); p(meta);
+        root.write_meta(callback);
+
+        //add sub: public...
+
+        //callback(null, root);
     });
 }
 
 
-function retrieve_a(folder_name, callback){
-    folder_name = folder_name ||      'jobs';
+var retriever = require("../folder/retriever.js");
 
-    retriever.retrieve_folder(folder_name).then(function(folder){
-        p('a, got folder, ', folder.get_meta().path);
-        callback(null, folder);
+function retrieve_one(root_name){
+    root_name = root_name ||      'jobs';
+
+    retriever.retrieve_folder(root_name).then(function(folder){
+        p('got folder, ', folder.get_meta().path);
         //p(folder);
+        //sh.add_sub_folders(folder);
+        process.exit(p('retre. folder '));
     }).catch(function(err){
-        p('a, ', err);
-        callback(err);
+        p(err);
+        process.exit( p('you are in catch err:'));
     });
 }
 
 
-function folder_exists(fpath){
-    folder_module.is_folder_exists(fpath, function(err, yes){
-        if(err){
-            p('got err when check "is folder exists" for the path, ', fpath, err);
-            return;
-        }
-        if(yes){
-            p('return, we got ', yes)
-        return;
-        }
-        p('the folder "',  '" exists: ', yes);
-        if(err && !yes){
-            p('not err, and not yes');
-        }
-        process.exit();
-    });
-}
-
-function drop_home(name){
+function check_home(name){
     name = name || 'jobs';
 
     user.find_by_user_name(name, function(err, info){
@@ -197,34 +210,37 @@ function drop_home(name){
         p(info);
 
         p('going to retrieve a        :');
-        retrieve_a(info.id, function(err, root){
-            if(err) return p('drop home err: ', err, o.e2 = err);
+        retrieve_a(info.path, function(err, root){
+            if(err) return p('init user home err: ', err, o.e2 = err);
 
             o.root = root;
-            o.meta = root.get_meta();
-            p('it shoul got root');
-            p( "ok start interact:");
-            //process.exit(p( "ok start interact:"));
+            sh.add_sub_folders(root).then(function(root){
+                p('it shoul add subs');
+                //process.exit(p( "ok start interact:"));
+            }).then(function(){
+                return sh.add_gg(root);
+            }).then(function(){
+                p('you got gg?');
+            }).catch(function(err){
+                p('catch: ', err);
+                process.exit(p( "ok start interact:"));
+            });
         });
 
     });
 }
 
-
-//drop('jobs'); 
-//drop_home('cat-03');
 //p( "ok start interact:");
 
 if(require.main === module){
-    //test_get_user_info_for_intro();
-    //get_user();
+    //c_drop('jobs');
+    //retrieve_one();
+    //check_home('jobs');
 
-    //build('jobs');
-    //c_add_gg();
+    add_one_user({username:'cat-05', password:'kkkooo', referrer:'andrew'});
+    //build_for_user('cat-04');
 
-    //add_one_user();
-    //
-    folder_exists('cat-03');
     //process.exit(p('ok?, 0836am'));
 }
+
 

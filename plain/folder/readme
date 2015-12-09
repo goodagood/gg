@@ -1,0 +1,10 @@
+
+To split things from ../aws/folder-v5.js(coffee) to make it more reuseable and
+maintainable.
+
+2015 1130
+
+
+<!--
+    vim: set ft=markdown tw=78:
+-->
