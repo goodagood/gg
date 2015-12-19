@@ -94,11 +94,11 @@ function c_add_gg(cwd){
  * 2015 1128
  */
 function add_one_user(info){
-    info = info || {
-        username: 'cat-03',
-        password: 'kkkooo',
-        referrer: 'andrew'
-    };
+    //info = info || {
+    //    username: 'cat-03',
+    //    password: 'kkkooo',
+    //    referrer: 'andrew'
+    //};
 
     sh.new_home(info, function(err, what){
         if(err) return process.exit(p('Err, for ', info, 'add one user err: ', err));
@@ -237,7 +237,7 @@ if(require.main === module){
     //retrieve_one();
     //check_home('jobs');
 
-    add_one_user({username:'cat-05', password:'kkkooo', referrer:'andrew'});
+    add_one_user({username:'cat-07', password:'kkkooo', referrer:'andrew'});
     //build_for_user('cat-04');
 
     //process.exit(p('ok?, 0836am'));
