@@ -4,6 +4,7 @@
  */
 
 
-module.exports.intro =  '/file/md-with-local-files/intro/public/intro.md';
+module.exports.intro  = '/file/md-with-local-files/intro/public/intro.md';
 module.exports.reason = '/file/md-with-local-files/intro/public/reasons.md';
-module.exports.value =  '/file/md-with-local-files/intro/public/value.md';
+module.exports.value  = '/file/md-with-local-files/intro/public/value.md';
+module.exports.toclaim = '/file/md-with-local-files/intro/public/clean-claim.md';

@@ -240,7 +240,6 @@ folder_tool.folder_tool_urls(app);
 var wlink = require("./hrouters/web-link.js");
 app.use("/link", wlink);
 
-// Start to refactor routes?
 var test = require("./hrouters/test-a.js");
 app.use("/test", test);
 
@@ -252,6 +251,10 @@ app.use("/client", client);
 var ggfile = require("./hrouters/file.js");
 app.use("/file", ggfile);
 
+
+/* still need to change things about basic user registration, 2015 1221 */
+var user2 = require("./hrouters/user.js");
+app.use("/user", user2);
 
 // for google auth.
 //google.routes(app, passport);

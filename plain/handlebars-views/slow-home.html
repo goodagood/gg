@@ -1,0 +1,125 @@
+<!DOCTYPE HTML>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="description" content="goodagood add user">
+<meta name="author" content="Andrew">
+<meta http-equiv="expires" content="Fri, 21 Jun 2018 20:24:32 GMT" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="goodagood" />
+
+<link rel="shortcut icon" href="/static/favicon.ico" />
+
+<link rel="stylesheet" href="/static/css/fa/css/font-awesome.min.css">
+<link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap-glyphicons.css">
+
+<link rel="stylesheet" href="/static/css/adduser.css">
+
+
+<title> {{{title}}} user register </title>
+<!--
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="http://code.jquery.com/jquery.min.js"></script>
+
+<script src="/static/js/jquery.inspect.js"></script>
+
+<link href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="/static/bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
+-->
+
+
+<style type="text/css">
+  .margin10px {margin:10px;}
+  .max768 {max-width: 768px;}
+  .max640 {max-width: 640px;}
+</style>
+</head>
+
+<body class="max768">
+
+
+{{#if message }}
+<p>{{ message }}</p>
+{{/if}}
+
+<header>
+  <h1> <span class="logo"> <a href="http://www.goodagood.com/">goodagood</a> <span></h1>
+</header>
+
+<div class="mycontainer margin10px max640">
+  <form action="/user/slow-home" method="post" id="add-user-form"
+    enctype="multipart/x-www-form-urlencoded" >
+    <div class="form-group">
+    <label for="username" data-i18n="en2zh:username">Username:</label>
+    <input class="form-control" type="text" name="username" id="username" />
+    </div>
+
+    <div class="form-group">
+    <label data-i18n="en2zh:password">Password:</label>
+    <input class="form-control" type="password" name="password"/>
+    </div>
+
+    <div class="form-group">
+    <label data-i18n="en2zh:repeat-password">Repeat password:</label>
+    <input class="form-control" type="password" name="repeat_password"/>
+    </div>
+
+    <div class="form-group">
+    <label data-i18n="en2zh:op-referrer">Referrer (optional):</label>
+    <input type="text" class="form-control" name="referrer" title="who told your about this application"/><br/>
+    </div>
+
+    <input class="btn btn-primary" type="submit" value="OK"/>
+  </form>
+</div>
+
+<p> {{{comments}}} </p>
+
+<br />
+<footer style="clear:both">
+  <p>
+    goodogood/goodagood, Andrew, &copy; <span id='showlang'> </span>
+  </p>
+</footer>
+
+
+</body>
+
+<script src="/static/bower_components/jquery/jquery.min.js"></script>
+<!--
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+-->
+<script src="/static/bower_components/i18next/i18next.min.js"></script>
+
+<script>
+    $( document ).ready(function() {
+        //console.log( (this == $ ? 'yes' : 'no'); );
+        //$.inspect(this, 'window');
+
+        var transkv = {
+          zh:{
+            en2zh:{
+              password: "密码*",
+              "username": "用户名*",  
+              "op-referrer": "介绍人",
+              "repeat-password":"重复密码*"
+            }
+          }
+        };
+        i18n.init({resStore:transkv}, function(){
+          $("form#add-user-form").i18n();
+          console.log('ok?');
+        });
+
+        $("span#showlang").html(i18n.lng());
+
+
+    });
+</script>
+
+<!-- vim: et ts=2 sw=2
+-->
+</html>

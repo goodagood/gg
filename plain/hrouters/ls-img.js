@@ -11,8 +11,8 @@ var
     deliver, htool,
     ls_for_owner, ls_for_public, 
     mytemplate, myuser, myutil,
-    path, path_chain, people, social, test_clone_default_folder_file,
-    test_make_cwd_chain, tv, u, util;
+    path_chain, people, social, test_clone_default_folder_file,
+    test_make_cwd_chain, tv;
 
 var util  = require("util");
 var path  = require("path");
