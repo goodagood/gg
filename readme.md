@@ -11,17 +11,17 @@ Currently, node.js and express.js for server side scripts.
 
 [more](http://goodogood.me/file/md-with-local-files/intro/public/intro.md)
 
-# Reason
+# Some stupid reasons why I am doing this project
 
-    Actually, this folder can show markdown with local referrence,
-    such images, css, js.
+    Actually, this folder (intro/public) can show markdown
+    with local referrences, such images, css, js.
 
-[A markdown file shown directly about the
-reason](http://goodogood.me/file/md-with-local-files/intro/public/reason.md)
+[A markdown file, about my stupid 
+reasons doing this project](http://goodogood.me/file/md-with-local-files/intro/public/reason.md)
 
-[How to value codes](http://goodogood.me/file/md-with-local-files/intro/public/byte-value.md)
+[How we value codes](http://goodogood.me/file/md-with-local-files/intro/public/byte-value.md)
 
-[How to value generally](http://goodogood.me/file/md-with-local-files/intro/public/byte-value.md)
+[How we value generally](http://goodogood.me/file/md-with-local-files/intro/public/value.md)
 
 
 ## end
