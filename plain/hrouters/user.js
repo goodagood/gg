@@ -33,7 +33,7 @@ router.post('/slow-home', function(req, res, next){
     var geturl = '/user/slow-home/';
     var user_info = {};
     if(!check_adduser_body(req, user_info)){
-        p('!--!! not user info in /user/slow-home');
+        p('!--!! not ok check user info in /user/slow-home?', user_info);
         return res.redirect(geturl);
     }
     p('\n\npost /slow-home got user_info: ', user_info);
