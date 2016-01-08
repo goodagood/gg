@@ -58,3 +58,11 @@ append_log(merged)
 # to set this run every 10 minutes:
 # crontab -u username -e
 # */10 * * * * /path/to/this/script
+#
+# To make nodemon respect .git changes, but not node_modules
+# put $HOME/nodemon.json, 
+# {
+#   "ignoreRoot": ["node_modules"]
+# }
+#
+# 2016 0107
