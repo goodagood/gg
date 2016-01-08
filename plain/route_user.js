@@ -200,7 +200,7 @@ function route_user(app){
         res.redirect('/ls/');
       });
     });
-  })
+  });
 
 }
 
