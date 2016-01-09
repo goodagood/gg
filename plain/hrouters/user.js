@@ -21,10 +21,12 @@ var request = require("request");
 var cwdChain = require("../cwd-chain/cwd-chain.js");
 var p = console.log;
 
+var to_https = require("../myutils/to-https.js");
 router.get("/slow-home", function(req, res){
     var comments = 'This supposed to be slow, we try to make user id same as user name';
     var title    = 'to build home slowly, but try to fit id with user name';
 
+    if(req.protocol === "http") return res.redirect(to_https.make_https_href(req));
     res.render('slow-home', {title:title, comments:comments });
 });
 
@@ -52,11 +54,43 @@ router.post('/slow-home', function(req, res, next){
             if(err) {return next(err);}
 
             //var where = '/ls/' + username;
-            var where = '/ls/'; //+ username; //?
             console.log('\n\nin post /user/slow-home, to redirect');
-            return res.redirect(where); 
+            if(req.protocol === "https") return res.redirect(to_https.make_https_href(req, '/ls/'));
+            return res.redirect('/ls/'); 
         });
 
+    });
+});
+
+
+router.get("/check-name-can-be-used", function(req, res){
+    var title    = 'used when no js '
+
+    var ok;
+
+    var username;
+    if(req.query.username) username = req.query.username;
+
+    if(req.protocol === "http") return res.redirect(to_https.make_https_href(req));
+    res.render('name-can-be-used', {title:title, message: "Type name to check" });
+});
+
+
+var nameid = require('../users/validate-name.js');
+router.post('/check-name-can-be-used', function(req, res, next){
+    var msg = '';
+
+    var username;
+    if(!req.body.username) return res.render('name-can-be-used', {message:"give me a user name" });
+    username = req.body.username;
+
+    nameid.user_name_could_be_used_as_id(username, function(err, yes, reason){
+        if(err)    msg += 'err: ' + err.toString();
+        if(yes)    msg += 'Ok, seems the name: "' + username + '" is ok to register. ';
+        if(reason) msg += reason.toString();
+        if(!msg)   msg  = ":: The server must be down, or doing some stupid things.";
+
+        res.render('name-can-be-used', {message: msg });
     });
 });
 

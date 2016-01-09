@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="description" content="slow home add user, goodogood, goodagood">
+<meta name="author" content="Andrew">
+<meta http-equiv="expires" content="Fri, 21 Jun 2018 20:24:32 GMT" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="goodogood goodagood" />
+
+<link rel="shortcut icon" href="/static/favicon.ico" />
+
+<link rel="stylesheet" href="/static/css/fa/css/font-awesome.min.css">
+<link rel="stylesheet" href="/static/css/bootstrap-glyphicons.css">
+
+<link rel="stylesheet" href="/static/css/skeleton.css">
+<link rel="stylesheet" href="/static/css/slow-home.css">
+
+
+<title> {{{title}}}check username can be used  </title>
+<!--
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="http://code.jquery.com/jquery.min.js"></script>
+
+<script src="/static/js/jquery.inspect.js"></script>
+
+<link href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="/static/bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
+-->
+
+
+<style type="text/css">
+  .margin10px {margin:10px;}
+  .max768 {max-width: 768px;}
+  .max640 {max-width: 640px;}
+</style>
+</head>
+
+<body class="max768">
+
+
+<header>
+  <h1> <span class="logo"> <a href="http://goodogood.me/">goodogood</a> <span></h1>
+</header>
+
+<div class="mycontainer margin10px max640">
+  <p> {{{ message }}} </p>
+  <form action="/user/check-name-can-be-used" method="post" id="check-name-form"
+    enctype="multipart/x-www-form-urlencoded" >
+    <div class="igroup">
+    <label for="username" data-i18n="en2zh:username">Username:</label>
+    <input class="form-control" type="text" name="username" id="username" />
+    </div>
+
+    <div class="igroup">
+      <label> </label>
+      <input class="btn btn-primary" type="submit" value="Check"/>
+    </div>
+  </form>
+</div>
+
+
+<br />
+<footer style="clear:both">
+  <p>
+    goodogood/goodagood, Andrew, &copy; <span id='showlang'> </span>
+  </p>
+</footer>
+
+
+</body>
+
+
+<!-- 
+This page is used for when user has no js support.
+
+  2016 0109
+  vim: et ts=2 sw=2
+-->
+</html>

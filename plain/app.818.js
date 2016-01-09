@@ -188,8 +188,11 @@ app.get('/',
 //  res.render('account', { user: req.user });
 //});
 
+var to_https = require("./myutils/to-https.js");
 app.get('/login', function(req, res, next){
   //res.render('login', { user: req.user, message: req.flash('error') });
+
+  if(req.protocol === "http") return res.redirect(to_https.make_https_href(req));
   lang.render_lang(req, res, next, 'login.html', { user: req.user, message: req.flash('error') });
 });
 
@@ -277,6 +280,12 @@ var fs = require('fs');
 //
 //https.createServer(options, app).listen(port_ssl  );
 //console.log("app listen on port: ", port_ssl, " for https\n");
+
+// 2016 0109
+var https_srv = require("./myutils/https.js");
+https_srv.make_https_server(app).listen(port_ssl);
+console.log("app listen on port: ", port_ssl);
+
 
 
 // 

@@ -27,6 +27,14 @@ function route_user(app){
     res.end("<html><body><h1> ping.html </h1></body></html>");
   });
 
+
+  app.get('/6D506D2215AE6C4AEC241F02C138D138', function(req, res){
+    //MD5 = 6D506D2215AE6C4AEC241F02C138D138
+    //SHA-1 = 2D88131B183CB967B457E5EE5A5200C50F461E66 
+    //for csr certify, comod
+    res.send('2D88131B183CB967B457E5EE5A5200C50F461E66 \r\n comodoca.com ');
+  });
+
   // test req.login(), req.logout()
   app.get('/i-am-superman', function(req, res, next){
     req.logout();
@@ -181,7 +189,7 @@ function route_user(app){
     // all name length <= 3 been occupied:
     if(username.length <= 3) return res.json({err: false, 'is-name-occupied':true});
 
-    myuser.is_name_occupied(user_info.username, function(err, name_exists){
+    myuser.is_name_occupied(username, function(err, name_exists){
       if(err){
         return res.json({err: err, 'is-name-occupied':'unknown'});
       }

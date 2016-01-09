@@ -9,7 +9,7 @@
 <meta name="author" content="Andrew">
 <meta http-equiv="expires" content="Fri, 21 Jun 2018 20:24:32 GMT" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="keywords" content="goodogood goodagood" />
+<meta name="keywords" content="user register goodogood goodagood" />
 
 <link rel="shortcut icon" href="/static/favicon.ico" />
 
@@ -42,9 +42,6 @@
 <body class="max768">
 
 
-{{#if message }}
-<p>{{ message }}</p>
-{{/if}}
 
 <header>
   <h1> <span class="logo"> <a href="http://goodogood.me/">goodogood</a> <span></h1>
@@ -59,12 +56,10 @@
     </div>
 
     <div class="igroup">
-      <label data-i18n="en2zh:nameok">Name ok:</label>
-      <div id="name-can-be-used-div">
-        <a href="/user/check-name-can-be-use"
-          id="check-name-can-be-used"
-          class="btn">Go to check names</a>
-      </div>
+    <label data-i18n="en2zh:nameok">Name ok:</label>
+      <a href="/user/check-name-can-be-use"
+        id="check-name-can-be-use"
+        class="btn">Check names</a>
     </div>
 
     <div class="igroup">
@@ -83,13 +78,13 @@
     </div>
 
     <div class="igroup">
-      <label> </label>
+      <label></label>
       <input class="btn btn-primary" type="submit" value="OK"/>
     </div>
   </form>
 </div>
 
-<p> {{{comments}}} </p>
+<p id="comments"> {{{comments}}} </p>
 
 <br />
 <footer style="clear:both">
@@ -119,46 +114,32 @@
               password: "密码*",
               "username": "用户名*",  
               "op-referrer": "介绍人",
-              "repeat-password":"重复密码*",
-              "nameok":"名字能用"
+              "repeat-password":"重复密码*"
             }
           }
         };
         i18n.init({resStore:transkv}, function(){
           $("form#add-user-form").i18n();
-          //console.log('lang ok?');
+          console.log('lang ok?');
         });
 
         $("span#showlang").html(i18n.lng());
 
-
-
         /* name avalable checkings */
-        $("a#check-name-can-be-used").hide();
-        $("div#name-can-be-used-div").html("<span>No</span>");
-
         function check_name(name){
           name = name || null;
 
           var url = '/is-name-occupied';
-          var ajax_data = {username:name,  };
+          var ajax_data = {username:'give-me-user-name',  };
           var param = {url:url, type:'POST', data: ajax_data, dataType:'json'};
 
           $.ajax(param)
-          .done(function(name_quest, b, c, d){
-              //$("div#file_list input:checkbox").attr("checked", false);
-              console.log('ajax done: ', name_quest,'b:', b, 'c', c, 'd: ', d);
-              if(!name_quest.err){
-                if(!name_quest['is-name-occupied']){
-                  $("a#check-name-can-be-used").hide();
-                  $("div#name-can-be-used-div").html("<span>Yes</span>");
-                }else{
-                  $("div#name-can-be-used-div").html("<span>No</span>");
-                }
-              }
+          .done(function(a,b, c){
+            //$("div#file_list input:checkbox").attr("checked", false);
+            console.log('ajax done: ', a,'b:', b, 'c', c);
             })
           .fail(function(a,b,c){
-              console.log('ajax fail: ', a, 'b: ', b, 'c: ', c);
+            console.log('ajax fail: ', a,b,c);
           });
         }
 
@@ -166,11 +147,8 @@
         // get the name
         $("input#username").keyup(function(){
             var username = $(this).val();
-            if(username.length > 3){
-              check_name(username);
-            }else{
-              $("div#name-can-be-used-div").html("<span>No</span>");
-            }
+            if(username.length > 3) check_name(username);
+            console.log(username.length);
             return true;
         });
 
