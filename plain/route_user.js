@@ -28,7 +28,7 @@ function route_user(app){
   });
 
 
-  app.get('/6D506D2215AE6C4AEC241F02C138D138', function(req, res){
+  app.get('/6D506D2215AE6C4AEC241F02C138D138.txt', function(req, res){
     //MD5 = 6D506D2215AE6C4AEC241F02C138D138
     //SHA-1 = 2D88131B183CB967B457E5EE5A5200C50F461E66 
     //for csr certify, comod
