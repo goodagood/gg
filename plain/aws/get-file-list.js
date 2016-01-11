@@ -311,18 +311,29 @@ function check_file_basics(){
 }
 
 
+function chk_reverse_order(cwd){
+    cwd = cwd || 'abc/add-2';
 
+    get_file_metas_in_reverse_time_order(cwd, function(err, list){
+        if (err) return process.exit(p(err));
+        p('list: ');
+        p(list);
+        process.exit();
+    });
+}
 
 
 if (require.main === module) {
     //p('checkings');
     //chk_a();
     //check_get_file_metas();
-    check_file_basics();
+    //check_file_basics();
 
     //check_folder_sort_metas();
 
     //check_a_list();
+
+    chk_reverse_order();
 }
 
 

@@ -57,8 +57,9 @@ router.post("/post-for-file-meta-list", function(req, res){
     var get_file_list = require("../aws/get-file-list.js");
     p('in post for file meta list');
 
-    var cwd = req.body.cwd;
-    var username;
+    var cwd      = req.body.cwd;
+    var username = req.body.username; // this not supposed to go product
+    check_id(req);
 
     if(req.user) username = req.user.username;
 
@@ -77,6 +78,10 @@ router.post("/post-for-file-meta-list", function(req, res){
 });
 
 
+function check_id(req){
+    p('check id, req headers');
+    p(req.headers);
+}
 
 
 

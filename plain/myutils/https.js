@@ -8,8 +8,11 @@ var sdir = require("../config/secret-dir.js")
 var cdir = sdir.locations.credential_dir;
 
 
-var keyFile  = path.join(cdir, 'my-certs', 'key-0109-2016.pem');
-var certFile = path.join(cdir, 'my-certs', 'cert-0109-2016.pem');
+//var keyFile  = path.join(cdir, 'my-certs', 'key-0109-2016.pem');
+//var certFile = path.join(cdir, 'my-certs', 'cert-0109-2016.pem');
+
+var keyFile  = path.join(cdir, 'my-certs', 'comodo/goodogood.key');
+var certFile = path.join(cdir, 'my-certs', 'comodo/goodogood_me.crt');
 
 
 var p = console.log;

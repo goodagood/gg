@@ -30,6 +30,7 @@
     "qunit": "https://github.com/jquery/qunit.git#~1.16.0",
     "skeleton": "~2.0.4",
     "underscore": "~1.7.0",
-    "wysihtml": "~0.4.17"
+    "wysihtml": "~0.4.17",
+    "handlebars": "~4.0.5"
   }
 }
