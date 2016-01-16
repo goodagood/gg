@@ -390,7 +390,7 @@ function list_img (params, callback){
     //p('username folder path: ', username, folder_path);
 
     var template_path = path.join(path.dirname(__dirname), "handlebars-views/ls-img.html");
-    p('temp path: ', template_path);
+    p('list img, temp path: ', template_path);
     var temp_text = fs.readFile(template_path, {encoding:'utf-8'}, function(err, tpl_text){
         if(err) return callback(err, null);
 

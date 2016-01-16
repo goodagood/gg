@@ -251,9 +251,9 @@ simple_s3_file_obj = (meta_src, callback) ->
 
     # Make <ul> from meta.
     convert_meta_to_ul = () ->
-        attr_names = ['name', 'path', 'owner', 'timestamp',
-            'size', 'permission' ]
-        exclude = ['uuid', 'html', 'storage', 'storages']
+        attr_names = ['name', 'path', 'owner', 'type', 'timestamp',
+            'size', 'permission', 'value' ]
+        exclude = ['html', 'storage', 'storages']
         # download/delete/view href?
 
         _show_meta = _keep(Meta, attr_names)
@@ -302,7 +302,10 @@ simple_s3_file_obj = (meta_src, callback) ->
 
     increase_value = (amount) ->
         amount = 1    unless amount
-        Meta.value.amount += amount
+        if(Meta.value.amount >= 0)
+            Meta.value.amount += amount
+        else
+            Meta.value.amount -= amount
 
 
     clear_past_meta_store = (callback)->

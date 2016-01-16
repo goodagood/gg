@@ -306,6 +306,70 @@ function make_headers_from_meta(meta){
 }
 
 
+var info = require("../file-basic/info.js");
+router.get(/^\/info\/(.+)/, 
+// cel.ensureLoggedIn('/login'), 
+    function(req, res, next){
+      var file_path = req.params[0];
+      if(!file_path) return res.end('err, no file path, 20160113');
+
+      var username; 
+      if (typeof req.user !== 'undefined') username = req.user.username;
+
+      info.render_file_info(file_path, function(err, html){
+          if(err) return res.end('err, 20160113, a');
+
+          res.end(html);
+      });
+});
+
+
+router.get(/^\/add-value\/(.+)/, 
+// cel.ensureLoggedIn('/login'), 
+    function(req, res, next){
+      var file_path = req.params[0];
+      if(!file_path) return res.end('err, no file path, 20160113');
+
+      var username; 
+      if (typeof req.user !== 'undefined') username = req.user.username;
+
+      info.render_file_value(file_path, function(err, html){
+          if(err) return res.end('err, 20160113, a');
+
+          res.end(html);
+      });
+});
+
+
+var file_getter = require("../aws/get-file.js");
+router.post(/^\/add-value\/(.+)/, 
+// cel.ensureLoggedIn('/login'), 
+    function(req, res, next){
+      var file_path = req.params[0];
+      if(!file_path) return res.end('err, no file path, 20160113');
+
+      var username; 
+      if (typeof req.user !== 'undefined') username = req.user.username;
+
+      var value;
+      if(req.body.value) value = parseInt(req.body.value);
+      if(!value)         return res.end('get no value, <a href="/file/add-value/' + file_path +'">try again</a>');
+
+      file_getter.get_1st_file_obj_with_auxpath_by_path(file_path, function(err, fobj){
+          fobj.increase_value(value);
+          fobj.save_file_to_folder().then(function(){
+              p('saved file to folder, 2016 0114 7:24am');
+              if(req.body.return_json) return res.json({sucess:true, value_add:value});
+              return res.redirect(path.join('/file/add-value/', file_path)); // as tmp solution
+          }).catch(function(err){
+              p('failed save file to folder, 2016 0114 7:24am');
+              if(req.body.return_json) return res.json({sucess:false,err:err, value_add:value});
+              return res.redirect(err.toString());
+          });
+      });
+});
+
+
 module.exports = router;
 
 

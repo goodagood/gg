@@ -619,7 +619,8 @@ function drop_files_into_repl(o, dir){
 // dog-02 has id: 46
 //var o = {}; drop_into_repl(o, '46/public'); o.shorts;
 //var o = {}; drop_into_repl(o, 'abc/add-2/img2'); o.shorts;
-var o = {}; drop_into_repl(o, 'abc/test/tindex'); o.shorts;
+//var o = {}; drop_into_repl(o, 'abc/test/tindex'); o.shorts;
+var o = {}; drop_into_repl(o, 'abc/imgvid'); o.shorts;
 
 
 //var o = {}; drop_files_into_repl(o, 'abc/test');

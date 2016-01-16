@@ -5,13 +5,12 @@
 <meta http-equiv="content-type" content="text/html" />
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="description" content="index, goodogood.me goodagood testing" />
-<meta name="keywords" content="goodogood.me goodagood, filesystem, sharing" />
+<meta name="description" content="index, goodogood goodagood testing" />
+<meta name="keywords" content="goodogood goodagood, filesystem, sharing" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="author" content="Andrew">
 
 <title> 
-  <% if(typeof title !== 'undefined' && title){ print(title);}else{ print('goodogood frame a');} %>
   {{ title }}
 </title>
 
@@ -19,12 +18,13 @@
 <link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
 <link rel="stylesheet" href="/static/css/css212.css">
+<link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap-glyphicons.css">
 -->
 
 <link rel="stylesheet" href="/static/css/fa/css/font-awesome.min.css">
-<link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap-glyphicons.css">
 
 <link rel="stylesheet" href="/static/css/reset.css">
+<link rel="stylesheet" href="/static/css/skeleton.css">
 <link rel="stylesheet" href="/static/css/mfirst.css">
 
 
@@ -33,94 +33,77 @@
 
 <style type="text/css">
   {{{in_file_css}}}
+  .shift1em { padding-left: 1em;}
 </style>
 
 </head>
 <body>
 
-  <!-- % if(typeof header !== 'undefined' && header) print(header); % -->
   <header>
-      <div id="header" class="goodogood-header">
-          <h1 class="logo">
-              <span class="username">
-                  <!-- % if(typeof username != 'undefined' && username){print(username);}% -->
-                  {{ username }}
-              </span>
-              <span class="goodogood-logo">
-                  {{ username }}
-                  <!-- % if(typeof username == 'undefined'  || !username){print('<a href="http://goodogood.me/">goodogood</a>');}% -->
-              </span>
-          </h1>
-          <a class="to_nav" href="#primary_nav"> <i class="fa fa-list"></i> Menu </a>
-      </div>
+    <h3 class="logo">
+      goodogood
+    </h3>
+      <span class="username">
+        {{{ username }}}
+      </span>
+    <a class="to_nav" href="#primary_nav"> <i class="fa fa-list"></i> Menu </a>
   </header>
 
-  <!-- % if(typeof navbar !== 'undefined' && navbar) print(navbar); % -->
-  <div class="navbar navbar-default" role="navigation">
+
+  <div class="container">
+      <h3> <i class="fa fa-arrow-right"></i> {{{full_path}}}</h3>
   </div>
 
-  <!-- body  -->
-  <br class="space10px" />
-  <div class="container">
-    <div class="row">
-      <!-- for file list -->
-      <div id="file-list-top"> 
+  <!-- content body  -->
+  <div class="container shift1em">
 
-        <section id="file-info" role="main" class="span12">
-          <p id="cwd"> <span>Current folder =&gt;</span><strong>
-              {{{ cwd_chain }}}
-            <!-- % if(typeof cwd_chain !== 'undefined' && cwd_chain) print(cwd_chain); % -->
-          </strong>
-          </p>
 
-          <div id="file_list" class="tree">
-            <form>
-              <label for="file-unique-checkbox"> Unique file 
-                <input type="checkbox"
-                id="file-unique-checkbox" name="file-unique-checkbox"
-                accessKey="u" {{{unique_is_checked}}}
-                >
-              </label>
-              <input type="submit" value="Set" id="submit-to-set">
-            </form>
-
-            {{{ info_list }}}
+    <h5> <i class="fa fa-money"></i> Current value is: {{{value}}} </h5>
+    <div class="row"><div class="container">
+      <form method="POST" action="/file/add-value/{{{full_path}}}">
+        <div class="row">
+          <div class="two columns">
+            <label for="value" class="u-pull-right"> Add: </label>
           </div>
-          <p> - </p>
-          <div id="json-to-list"> </div>
+          <div class="ten columns">
+            <input type="text" id="value" name="value" accessKey="v"  />
+          </div>
+        </div>
 
-        </section>
+        <div class="row">
+          <div class="two columns">
+            <label for="submit-to-add" > </label>
+          </div>
+          <div class="ten columns">
+            <input type="submit" class="button-primary" value="Add Value" id="submit-to-add" name="submit-to-add" />
+          </div>
+        </div>
+      </form>
+    </div></div>
 
+    <div class="row" id="tool-list">
+      <h3><i class="fa fa-cogs"></i> Tools</h3>
+      <div>
+        {{{ tools }}}
       </div>
+    </div>
+
+    <div class="row">
+      <h3><i class="fa fa-info-circle"></i> Metas</h3>
+      {{{ metas }}}
     </div>
 
     <!-- for buttons, float to left for wider screen, to top for extra small screen -->
-    <div id="tools2" class="clr"> 
+    <div id="tools_buttons" class="translate-this row clr show-right-border">
+      <!--
+      <a id="send_file"  class="btn btn-default"  href="">
+        <span class="glyphicon glyphicon-send"> </span>
+        <span data-i18n="nav.send_file">Send</span></a>
+        -->
 
-      <div id="tools_buttons" class="translate-this clr show-right-border">
-        <a id="send_file"  class="btn btn-default"  href="">
-          <span class="glyphicon glyphicon-send"> </span>
-          <span data-i18n="nav.send_file">Send</span></a>
-
-        <a  class="btn btn-default" href="/upfile/{{{cwd}}}">
-          <span class="glyphicon glyphicon-cloud-upload"> </span>
-          <span data-i18n="nav.upload">Upload</span></a>
-
-        <a  class="btn btn-default"  href="/add-folder/{{{cwd}}}"> 
-          <span class="glyphicon glyphicon-plus"> </span>
-          <span data-i18n="nav.add_folder">Add-folder</span></a>
-
-        <a  class="btn btn-default" href="/msgto/">
-          <span class="glyphicon glyphicon-comment"> </span>
-          <span data-i18n="nav.message">Message</span></a>
-
-        <a  class="btn btn-default"  href="/tools/{{{cwd}}}"> 
-          <span class="glyphicon glyphicon-cog"> </span>
-          <span data-i18n="nav.tools">Tools</span></a>
-      </div>
     </div>
 
-  </div>
+  </div> <!-- end of container --> <!-- content body end -->
 
   <br class="space10px" />
   <nav id="primary_nav">
@@ -150,16 +133,15 @@
       </li>
     </ul>
   </nav>
-  <!-- body end -->
 
-
-
-  <!-- 327 -->
-  {{{footer}}}
-  <!-- % if(typeof footer !== 'undefined' && footer) print(footer); % -->
-  <div class="container">
-  </div>
-
+  <footer>
+    {{{footer}}}
+    <p>
+    goodogood, goodagood, Andrew, &copy; 
+    <a href="/file/md-with-local-files/intro/public/intro.md" class="button"> Background</a>
+    <a class="button" href="/logout"> Logout </a>
+    </p>
+  </footer>
 
 
 <!--
@@ -173,16 +155,16 @@ min version:
 <script src="/static/bower_components/underscore/underscore-min.js"></script>
 <script src="/static/backbone/backbone-min.js"></script>
 
--->
 <script src="/static/js/i18next-1.7.3.js"></script>
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+-->
 
 
 <script src="/static/bower_components/jquery/jquery.js"></script>
-<script src="/static/bower_components/bootstrap/dist/js/bootstrap.js"></script>
 
 <script src="/static/bower_components/underscore/underscore.js"></script>
 <!-- put underscore.js before backbone!! -->
-<script src="/static/backbone/backbone.js"></script>
+<script src="/static/bower_components/backbone/backbone-min.js"></script>
 
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -190,6 +172,8 @@ min version:
 <!--
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+
+<script src="/static/js/fi-pu.js"></script>
 -->
 
 <!--[if lt IE 9]>
@@ -197,7 +181,6 @@ min version:
 <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
 <![endif]-->
 
-<script src="/static/js/fi-pu.js"></script>
 
 <!-- start in file script -->
 <!-- % if(typeof script !== 'undefined' && script) print(script); % -->
@@ -205,6 +188,10 @@ min version:
 <script>
   var puuid = "{{{puuid}}}";
   $( document ).ready(function() {
+
+      $("#tool-list .file-tool").each(function(){
+        $(this).addClass("button-primary").addClass("button").addClass("btn");
+      });
 
     //i18n.init(function(t){
     //  $(".translate-this").i18n();

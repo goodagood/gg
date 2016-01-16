@@ -47,40 +47,53 @@ router.get(/\/get-file-meta-list\/(.+)/, function(req, res){
         p('meta list is array?: ', u.isArray(meta_list));
         res.json({
             meta_list: meta_list,
-            cwd: cwd, username:username, now:now, what: '/a in client.js'});
+            cwd: cwd, username:username, now:now, what: 'let user render their folder'});
     });
 
 });
 
 
-router.post("/post-for-file-meta-list", function(req, res){
-    var get_file_list = require("../aws/get-file-list.js");
-    p('in post for file meta list');
-
-    var cwd      = req.body.cwd;
-    var username = req.body.username; // this not supposed to go product
-    check_id(req);
-
-    if(req.user) username = req.user.username;
-
-    if(!cwd) return res.json({username:username, cwd:cwd, err:'no cwd'});
-    p('i p 4 f m l: ', cwd, username);
-
-    get_file_list.basic_file_meta_list(username, cwd, function(err, meta_list){
-        if(err) return res.json({err:err});
-
-        p('meta list is array?: ', u.isArray(meta_list));
-        res.json({
-            meta_list: meta_list,
-            cwd: cwd, username:username, what: '/post ... in client.js'});
-    });
-
-});
+        //cel.ensureLoggedIn('/login'),
 
 
-function check_id(req){
-    p('check id, req headers');
-    p(req.headers);
+router.post("/post-for-file-meta-list", 
+        check_id,
+        function(req, res){
+
+            var get_file_list = require("../aws/get-file-list.js");
+            p('in post for file meta list');
+
+            var cwd      = req.body.cwd;
+            var username = req.body.username; // this not supposed to go product
+
+            if(req.user) username = req.user.username;
+
+            if(!cwd) return res.json({username:username, cwd:cwd, err:'no cwd'});
+            p('i p 4 f m l: ', cwd, username);
+
+            get_file_list.basic_file_meta_list(username, cwd, function(err, meta_list){
+                if(err) return res.json({err:err});
+
+                p('meta list is array?: ', u.isArray(meta_list));
+                res.json({
+                    meta_list: meta_list,
+                    cwd: cwd, username:username, what: '/post ... in client.js'});
+            });
+
+        });
+
+
+function check_id(req, res, next){
+    //p('check id, req headers');
+    //p(req.headers);
+
+    if (!req.isAuthenticated || !req.isAuthenticated()) {
+        // Because this is call be ajax, we are not going to send error page.
+        //return res.redirect(url);
+        res.locals.check_user_id_maybe_failed = true;
+        p('res.locals.check_user_id_maybe_failed = true');
+    }
+    next();
 }
 
 

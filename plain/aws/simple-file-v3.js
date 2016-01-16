@@ -270,7 +270,11 @@
       if (!amount) {
         amount = 1;
       }
-      return Meta.value.amount += amount;
+      if (Meta.value.amount >= 0) {
+        return Meta.value.amount += amount;
+      } else {
+        return Meta.value.amount -= amount;
+      }
     };
     clear_past_meta_store = function(callback) {
       var index;

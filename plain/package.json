@@ -20,6 +20,7 @@
     "express-session": "^1.7.6",
     "fluent-ffmpeg": "^2.0.1",
     "formidable": "~1.0.15",
+    "gg-util": "git+ssh://git@github.com:goodagood/gg-util.git",
     "gm": "^1.16.0",
     "handlebars": "*",
     "hash-files": "^1.0.0",
