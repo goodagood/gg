@@ -60,6 +60,8 @@ function chk_file_obj(full_path){
         //p(file);
         p(u.keys(file).sort().join(" \t "));
 
+        p(file.get_meta());
+
         stop();
     });
 }
@@ -67,7 +69,8 @@ function chk_file_obj(full_path){
 if(require.main === module){
     //chk_file_objs();
 
-    chk_file_obj(Test_file_2);
+    //chk_file_obj(Test_file_2);
+    chk_file_obj('abc/tadd/test.log');
 }
 
 

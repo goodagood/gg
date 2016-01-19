@@ -243,8 +243,8 @@
     };
     convert_meta_to_ul = function() {
       var attr_names, exclude, _show_meta;
-      attr_names = ['name', 'path', 'owner', 'timestamp', 'size', 'permission'];
-      exclude = ['uuid', 'html', 'storage', 'storages'];
+      attr_names = ['name', 'path', 'owner', 'type', 'timestamp', 'size', 'permission', 'value'];
+      exclude = ['html', 'storage', 'storages'];
       _show_meta = _keep(Meta, attr_names);
       return _build_ul(_show_meta);
     };
@@ -736,13 +736,16 @@
   };
 
   pass_meta_to_task = function(meta, callback) {
-    var job;
+    var job, tkey;
+    tkey = task.task_rec_prefix + meta.uuid;
     job = {
       name: 'new-file-meta',
       task_name: 'new-file-meta',
       username: meta.owner,
       folder: meta.dir,
-      new_meta_s3key: meta.new_meta_s3key
+      new_meta_s3key: meta.new_meta_s3key,
+      filepath: meta.path,
+      task_id: tkey
     };
     return bucket.write_json(meta.new_meta_s3key, meta, function(err, reply) {
       if (err) {

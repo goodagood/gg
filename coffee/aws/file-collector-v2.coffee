@@ -167,6 +167,10 @@ collect_new_file_meta = (file_meta, callback)->
         # looks some file will not save by ' s3file_type.file_obj_from_meta ... '?
         # 2015 0929
         file_obj.save_file_to_folder().then((what)->
+
+            # we are going to insert here to run user's code for file uploading? 2016 0116
+            # user code after uploading
+
             delete_task_tmp_meta  new_file_meta_s3key, redis_task_id, callback
         ).catch(callback)
 
@@ -340,7 +344,7 @@ check_new_file_meta = (job_json, callback) ->
         return err    if err
         #write_down_job_and_meta job_json, meta, "/tmp/s448", (->)
 
-        console.log 'going to collect one: '
+        console.log 'going to collect one: ', job_json, meta
         collect_one_file job_json, meta, (err, what)->
             return console.log('ERR ERR, in "check new file meta":', err) if(err)
             console.log('finished: ', job_json.folder)

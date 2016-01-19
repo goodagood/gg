@@ -300,7 +300,7 @@ make_s3folder = (folder_path) ->
         return callback('no such file: ' + name, null)  unless file_exists(name)
 
         ulist = get_uuids(name)
-        p('ulist 1031: ', ulist)
+        #p('ulist 1031: ', ulist)
 
         if not ulist? or u.isEmpty(ulist)
             err   = "Can not get uuid in folder #{_meta_.path}, in 'get file objs'."

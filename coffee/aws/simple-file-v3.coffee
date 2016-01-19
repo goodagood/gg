@@ -882,13 +882,17 @@ fix_file_meta = (_meta) ->
 
 
 pass_meta_to_task = (meta, callback) ->
+    tkey = task.task_rec_prefix + meta.uuid
     job = {
-        name : 'new-file-meta'
+        name :      'new-file-meta'
         task_name : 'new-file-meta'
 
-        username : meta.owner
-        folder   : meta.dir
+        username :  meta.owner
+        folder   :  meta.dir
         new_meta_s3key : meta.new_meta_s3key
+
+        filepath:   meta.path
+        task_id:    tkey
     }
     #p "meta: ", meta
     #p "job json: ", job
@@ -911,6 +915,10 @@ pass_meta_to_task = (meta, callback) ->
 #
 write_text_file = (owner, dir, filename, text)->
     # promise get reply of passing out the job, it's useless?
+
+    #meta = prepare_meta(file, username, cwd)
+
+    #tkey = task.task_rec_prefix + meta.uuid
 
     file_meta = {
         name : filename

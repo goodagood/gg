@@ -25,7 +25,7 @@ function retrieve_file_by_path_uuid(path_uuid, callback) {
 function get_number_of_file_name(path_, callback){
     // @path_ is full path: user/path/to/file-name.ext
 
-    var dir      = path.dirname(path_);
+    var dir      = path.dirname (path_);
     var basename = path.basename(path_);
 
     return folder_module.retrieve_folder(dir).then(function(folder_obj) {
@@ -33,8 +33,8 @@ function get_number_of_file_name(path_, callback){
         assert(u.isFunction(folder_obj.get_number_of_name));
 
         var number =  folder_obj.get_number_of_name(basename);
-        callback(null, number);
-    });
+        callback(null, number, folder_obj);
+    }).catch(callback);
 }
 
 function file_path_exists(path_, callback){
@@ -108,24 +108,12 @@ function get_1st_file_obj_by_path(file_path, callback){
     if(!file_name) return callback('got no file name, how to get file?');
     return  get_folder_for_file(file_path, function(err,  folder){
         if(err){
-            p('1031 0219am, in get 1st file obj by path, you got this? ', err);
+            //p('1031 0219am, in get 1st file obj by path, you got this? ', err);
             return callback(err);
         }
 
         folder.get_1st_file_obj(file_name, callback);
     });
-
-    ////p('what happens? file path', file_path );
-    //get_file_objs_by_path(file_path, function(err, objs){
-    //    if(err){
-    //        p('0817 1:27, in get 1st file obj by path in get objs, you got this? ', err);
-    //        return callback(err);
-    //    }
-
-    //    if(objs.length < 1) return callback('no file obj found when get 1st file obj by path, 1031');
-
-    //    callback(err, objs[0]);
-    //});
 }
 
 
@@ -169,6 +157,7 @@ function get_file_obj_with_auxpath_by_pathuuid(path_uuid, callback){
 
 
 module.exports.get_number_of_file_name = get_number_of_file_name;
+module.exports.file_path_exists = file_path_exists;
 
 module.exports.retrieve_file_by_path_uuid = retrieve_file_by_path_uuid;
 module.exports.get_file_by_path_uuid      = retrieve_file_by_path_uuid;
