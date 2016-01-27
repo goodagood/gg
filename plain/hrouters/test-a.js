@@ -18,9 +18,11 @@ var p = console.log;
 
 
 router.get("/a", function(req, res){
+    var user = 'oo';
+    if(req.user) user = JSON.stringify(req.user);
     var t   = new Date();
     var now = t.toString();
-    res.render( 'testa', {now:now} );
+    res.render( 'testa', {now: user} );
     //res.send( t.toString() );
 });
 

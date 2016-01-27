@@ -33,7 +33,8 @@ var p = console.log;
 /*
  * Run user's code in the folder, after file uploading into the folder.
  */
-function run_folder_code_after_upload(file){
+function run_folder_code_after_upload(file, callback){
+    callback = callback || function(){};
     if(!u.isFunction(file.get_meta)) return callback(err);
 
     var meta = file.get_meta();
@@ -103,15 +104,19 @@ function load_code(cwd, callback){
 
     var code_file_name = path.join(cwd, User_code_name);
 
-    getter.get_1st_file_obj_by_path(code_file_name, function(err, code_file){
-        if(err) return callback(err);
+    getter.file_path_exists(code_file_name, function(err, yes){
+        if(err)  return callback(err);
+        if(!yes) return callback('no code found in load code, ' + code_file_name);
+        getter.get_1st_file_obj_by_path(code_file_name, function(err, code_file){
+            if(err) return callback(err);
 
-        code_file.read_to_string(callback);
-        //function(err, code_string){
-        //});
+            code_file.read_to_string(callback);
+        });
     });
 }
 
+
+module.exports.run_folder_code_after_upload = run_folder_code_after_upload;
 
 
 // -- fast checkings
@@ -175,10 +180,10 @@ function chk_run(full_path){
 
 
 if(require.main === module){
-    //chk_load('abc/tadd');
+    chk_load('abc/tadd');
     //chk_log();
 
-    chk_run();
+    //chk_run();
 }
 
 

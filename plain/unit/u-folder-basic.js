@@ -581,6 +581,16 @@ function re_render(folder, o){
 }
 
 
+function usage(dir, o){
+    p('how to use:');
+    p(`type: drop_into_repl(o, folder/path) to get a folder, and the 'o'.`);
+    if(o.shorts){
+        p('seems o already been populated');
+        p(u.keys(o));
+        p(`the dir should be: ${o.mfolder.path}`);
+    }
+}
+
 function drop_into_repl(o, dir){
     // drop variable/objects into REPL, o is the object to save variables
     o   = o   || {};
@@ -590,6 +600,8 @@ function drop_into_repl(o, dir){
         o.folder = folder;
         o.mfolder= folder.get_meta();
         o.shorts = u.omit(o.mfolder, 'files', 'html', 'renders', 'file_uuids', 'file_names');
+
+        usage(dir, o);
 
         //o.is     = o.folder.is_name_in_meta_files('26.jpg');
         //p('?: ', o.folder.is_name_in_meta_files('26.jpg'));
@@ -621,7 +633,7 @@ function drop_files_into_repl(o, dir){
 //var o = {}; drop_into_repl(o, 'abc/add-2/img2'); o.shorts;
 //var o = {}; drop_into_repl(o, 'abc/test/tindex'); o.shorts;
 //var o = {}; drop_into_repl(o, 'abc/imgvid'); o.shorts;
-var o = {}; drop_into_repl(o, 'abc/tadd'); o.shorts;
+var o = {}; drop_into_repl(o, 'abc/gg'); o.shorts;
 
 
 //var o = {}; drop_files_into_repl(o, 'abc/test');

@@ -65,7 +65,9 @@ config.new_user_prefix = ".gg.new-user/";
 
 config.raw_files_folder = '.files'; //d?
 config.event_folder = '.gg/event';
-config.message_folder = '.gg/message';
+//config.message_folder = '.gg/message';
+config.message_folder = 'gg/message'; //2016 0126
+
 config.meta_folder = '.gg/.metas'; //d
 config.new_meta_folder = '.gg/.new'; //d
 

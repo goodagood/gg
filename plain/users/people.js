@@ -221,6 +221,7 @@
         } else {
           if (u.isEmpty(a_few)) {
             a_few.push('goodagood');
+            a_few.push('abc');
           }
           return Promise.resolve(a_few);
         }

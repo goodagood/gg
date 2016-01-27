@@ -14,6 +14,7 @@ var handlebars = require("handlebars");
  * Render handlebars template, template file read from @abs_template_path.
  */
 function render_template(abs_template_path, context, callback){
+    context = context || {};
     fs.readFile(abs_template_path, {'encoding':'utf-8'}, function(err, tpl_text){
         if(err) return callback(err, null);
 
@@ -29,6 +30,9 @@ function render_template(abs_template_path, context, callback){
 
 
 function render_template_str(str, context, callback){
+    if(!str) return callback('give me stemple handlebars string');
+
+    context = context || {};
     var template, renderred;
     try {
         template  = handlebars.compile(str);
@@ -38,6 +42,17 @@ function render_template_str(str, context, callback){
     }
     callback(null, renderred);
 }
+
+
+function render_str(str, context){
+    if(!str) return;
+
+    context = context || {};
+    var template  = handlebars.compile(str);
+
+    return template(context);
+}
+
 
 
 // add underscore template , no tested.
@@ -65,6 +80,7 @@ function u_render_file(abs_template_path, context, callback){
 
 module.exports.render_template     = render_template;
 module.exports.render_template_str = render_template_str;
+module.exports.render_str          = render_str;
 
 module.exports.u_render_str  = u_render_str;
 module.exports.u_render_file = u_render_file;

@@ -246,6 +246,8 @@ app.use("/link", wlink);
 var test = require("./hrouters/test-a.js");
 app.use("/test", test);
 
+var code = require("./hrouters/code.js");
+app.use("/code", code);
 
 var client = require("./hrouters/client.js");
 app.use("/client", client);

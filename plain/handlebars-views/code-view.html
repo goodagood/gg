@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="description" content="slow home add user, goodogood, goodagood">
+<meta name="author" content="Andrew">
+<meta http-equiv="expires" content="Fri, 21 Jun 2018 20:24:32 GMT" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="goodogood goodagood" />
+
+<link rel="shortcut icon" href="/static/favicon.ico" />
+
+<link rel="stylesheet" href="/static/css/fa/css/font-awesome.min.css">
+<link rel="stylesheet" href="/static/css/bootstrap-glyphicons.css">
+
+<link rel="stylesheet" href="/static/css/skeleton.css">
+
+<!-- Include syntaxhighlighter required JS files -->
+<script type="text/javascript" src="/static/syntaxhighlighter.3.0.83/scripts/shCore.js"></script>
+ 
+<!--
+    At least one brush, here we choose JS. You need to include a brush for every 
+        language you want to highlight
+-->
+<script type="text/javascript" src="/static/syntaxhighlighter.3.0.83/scripts/shBrushJScript.js"></script>
+ 
+<!-- Include *at least* the core style and default theme 
+<link href="/static/syntaxhighlighter.3.0.83/styles/shThemeDefault.css" rel="stylesheet" type="text/css" />
+-->
+<link href="/static/syntaxhighlighter.3.0.83/styles/shCore.css" rel="stylesheet" type="text/css" />
+<link href="/static/syntaxhighlighter.3.0.83/styles/shThemeDjango.css" rel="stylesheet" type="text/css" />
+ 
+
+<title> view codes {{{file_path}}} </title>
+<!--
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="http://code.jquery.com/jquery.min.js"></script>
+
+<script src="/static/js/jquery.inspect.js"></script>
+
+-->
+
+
+<style type="text/css">
+.margin10px {margin:10px;}
+.max768 {max-width: 768px;}
+.max640 {max-width: 640px;}
+footer {
+    clear: left;
+    color: #000;
+    font-family: 'PT Serif', serif;
+    font-style: italic;
+    text-align: center;
+    font-size: 14px;
+    background-color: #dcdee3;
+
+    margin-top: 10px;
+    padding: 5px;
+
+    border-radius: 5px;
+}
+
+</style>
+</head>
+
+<body>
+
+
+<header>
+  <h1> <span class="logo"> <a href="http://goodogood.me/">goodogood</a> <span></h1>
+  <div>{{{file_path}}} </div>
+</header>
+
+<div class="mycontainer margin10px max640">
+  <pre class="brush: js">
+    {{{codes}}}
+  </pre>
+</div>
+
+<p> {{{comments}}} </p>
+
+<br />
+<footer style="clear:both">
+  <p>
+    goodogood/goodagood, Andrew, &copy; <span id='showlang'> </span>
+  </p>
+</footer>
+
+
+</body>
+
+<script src="/static/bower_components/jquery/jquery.min.js"></script>
+<!--
+-->
+
+<script>
+    $( document ).ready(function() {
+        SyntaxHighlighter.all();
+    });
+</script>
+
+<!-- vim: et ts=2 sw=2
+-->
+</html>

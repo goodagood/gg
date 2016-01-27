@@ -146,69 +146,18 @@ function ed(app){
 
 
   var msg_module = require('../aws/simple-msg.js');
+  var msg_obj    = require('../message/simple-msg2.js');
   var people  = require("../users/people.js");
-  //app.get('/msgto/:who?', 
-  //  cel.ensureLoggedIn('/login'),
-  //  function(req, res, next){
-  //    var username = req.user.username;
-  //    var towhom = req.params.who;
-  //    if (!towhom) towhom = username;
 
-
-  //    var towhom_checkbox = util.format( 
-  //      '<input type="checkbox" name="users[]" checked="checked" value="%s"  />' + 
-  //      ' <span class="username"> %s </span>\n', 
-  //      towhom, towhom) ;
-
-  //    var Man;
-  //    people.make_people_manager_for_user(username).then(function(man){
-  //        Man = man;
-  //        return man.get_a_few();
-  //    }).then(function(name_list){
-  //      var msg_list = '';  // make the list laster.
-
-  //      if(! u.isArray(name_list)) name_list = [];
-  //      name_list.push(towhom);
-  //      names = u.uniq(name_list);
-  //      check_boxs= name_list_to_checkbox(names);
-
-  //      var body_context = { 
-  //        messageList : msg_list,
-  //        username : username, 
-  //        towhom : towhom,
-  //        towhom_checkbox  : '',
-  //        message : '', 
-  //        people_list : check_boxs,
-  //      };
-
-  //      var contexts = {
-  //        body : body_context,
-  //        frame : {css : '<link rel="stylesheet" href="/static/css/c2.css">\n', },
-  //        script : {towhom : towhom},
-  //      };
-
-  //      var html_elements = {
-  //        body   : 'msgto-body.html',
-  //        header : 'goodheader.html',
-  //        navbar : 'people-file-navtabs.html',
-  //        script : 'msgto-script.html',
-  //        frame  : 'frame-a.html',
-  //      };
-
-  //      mytemplate.assemble_html_v2(html_elements, contexts).then(function(html){
-  //        res.send(html);
-  //      });
-
-  //    });
-  //  });
-
-  //app.get  '/msgto/:who?' ...  changed to use msg2.js, 0710, 2015
+  var msg2 = require('./msg2.js');
+  var msg3 = require('../editor/msg3.js');
   app.get("/msgto/:username?", cel.ensureLoggedIn('/login'), function(req, res, next){
 
-      var msg2 = require('./msg2.js');
+      //msg2.get_msg2(req, res, next, function(err, html){ res.send(html); });
 
-      msg2.get_msg2(req, res, next, function(err, html){
-          res.send(html);
+      msg3.get_message_editing_page(req, function(err, html){
+        if(err) return res.end(u.isFunction(err.toString)?err.toString():err);
+        res.send(html);
       });
 
   });
@@ -239,11 +188,11 @@ function ed(app){
         timestamp: Date.now(),
       };
 
-      console.log('doing 2\n', msg);
+      console.log('doing msg compose and to multiple receiver\n', msg);
       //res.json(msg);
 
-      msg_module.compose_msg(msg.from, msg.to, msg.message, function(err, what){
-        msg_module.to_multiple_receiver(msg.from, msg.to, msg.message, function(err, what){
+      msg_obj.compose_msg(msg.from, msg.to, msg.message, function(err, what){
+        msg_obj.to_multiple_receiver(msg.from, msg.to, msg.message, function(err, what){
           res.json({ok: true}); 
         });
       })
@@ -251,6 +200,7 @@ function ed(app){
     });
 
 
+  // no using now? 2016 0127
   // This is actually doing job by jQuery ajax. 0805
   app.post('/sendmsg/', 
     cel.ensureLoggedIn('/login'),

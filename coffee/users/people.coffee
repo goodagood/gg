@@ -243,7 +243,9 @@ make_people_manager_for_user = (Username)->
             else
                 #p 'in get a few... else-'
                 # make sure we have at least one, 'goodagood'
-                a_few.push('goodagood') if(u.isEmpty(a_few))
+                if(u.isEmpty(a_few))
+                    a_few.push('goodagood')
+                    a_few.push('abc')
                 return Promise.resolve(a_few)
         )
 

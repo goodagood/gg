@@ -1,3 +1,5 @@
+# 2016 0126
+    folder has no 'path_uuid' now, only file has it.
 
 # run
     cd plain/myutils/

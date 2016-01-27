@@ -144,6 +144,7 @@ collect_one_file = (job, meta, callback) ->
     ).catch(callback)
 
 
+after_runner = require("../code/after.js")
 collect_new_file_meta = (file_meta, callback)->
     #p 'do the new file collecting ', file_meta.storage
 
@@ -168,8 +169,11 @@ collect_new_file_meta = (file_meta, callback)->
         # 2015 0929
         file_obj.save_file_to_folder().then((what)->
 
+            # 2016 0123
             # we are going to insert here to run user's code for file uploading? 2016 0116
             # user code after uploading
+            # we pass a call to the runner,  didn't give/wait the callback.
+            after_runner.run_folder_code_after_upload(file_obj)
 
             delete_task_tmp_meta  new_file_meta_s3key, redis_task_id, callback
         ).catch(callback)
