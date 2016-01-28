@@ -81,7 +81,7 @@ function route_user(app){
     //res.json({username:username, peoplename:people_name});
   });
 
-  app.get('/people', 
+  app.get('/people-old-20160128', 
       cel.ensureLoggedIn('/login'),
       function(req, res){
 
@@ -133,12 +133,16 @@ function route_user(app){
       });
     });
 
-  // refit to use people-tool, 2016 0128
-  //   get /addpeople/:name
-  //   get /lsman
-  //        lsman suppose to replace /people
+
+  /*
+   * refit to use people-tool, 2016 0128
+   *    get /addpeople/:name
+   *    get /lsman
+   *         lsman suppose to replace /people
+   *   post /add-one-people
+   */
   var pt = require("./users/people-tool.js");
-  app.get('/lsman/:name', function(req, res){
+  app.get('/people', function(req, res){
 
     var username = req.user.username;
     if(!username) return res.send('username ? ');
@@ -161,6 +165,21 @@ function route_user(app){
       if(err) return res.json({err:err});
 
       res.json({username:username, peoplename:people_name});
+    });
+  });
+
+  app.post('/add-one-people', function(req, res){
+
+    var username = req.user.username;
+    var people_name = req.body.whos_name;
+
+    console.log(username, ' add ', people_name);
+
+    pt.add_people(username, people_name, function(err, pmanager){
+      if(err) return res.end('err, ' + err);
+
+      //res.json({username:username, peoplename:people_name});
+      res.redirect("/lsman");
     });
   });
 

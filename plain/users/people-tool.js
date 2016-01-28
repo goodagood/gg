@@ -29,11 +29,13 @@ function add_people(me, who, callback){
 
 var mkul = require("../myutils/mk-ul.js");
 var tpl  = require("../myutils/tpl.js");
-var tpl_file = path.resolve("../handlebars-views/people-list-2016-0128.html");
+
+var tpl_file = path.resolve(path.join(__dirname, "../handlebars-views/people-list-2016-0128.html"));
 
 function render_people_list(username, callback){
     if(!u.isString(username)) return callback('user name must both be string');
-    p('render peopel list for : ', username);
+    //p('render peopel list for : ', username);
+    //p('render peopel list by tpl file : ', tpl_file);
 
     people.get_people_manager_any_way(username, function(err, pman){
         if(err) return callback(err);
@@ -44,7 +46,7 @@ function render_people_list(username, callback){
             //p(context);
             tpl.render_template(tpl_file, context, function(err, html){
                 if(err) return callback(err);
-                p('gont to callback with html: ', html);
+                //p('gont to callback with html: ', html);
                 callback(null, html)
             });
         }).catch(callback);
