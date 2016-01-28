@@ -18,9 +18,17 @@ p    = console.log
 
 # The file changed to 'v1':
 People_file_name   = '.gg.people.v1.json'
-config_folder_name = 'goodagood'
+#config_folder_name = 'goodagood'
+config_folder_name = 'gg' # 2016 0127
+
 #people_file        = path.join(config_folder_name, People_file_name)
 # the path of people file: people_file_path would be path.join(user_name, people_file)
+
+
+# ?
+promise_to_get_user_id = Promise.promisify((username, callback)->
+    user.get_user_id(username, callback)
+)
 
 
 init_people_file = (username, callback)->
@@ -33,14 +41,24 @@ init_people_file = (username, callback)->
         groups  : {},
     }
 
-    config_folder_path = path.join(username, config_folder_name)
-    p('config folder path is: ', config_folder_path)
+    User_id = Folder_path = null
 
-    return folder_module.retrieve_folder(config_folder_path).then( (folder)->
-        #p('retrieved folder: ', typeof folder)
+    return promise_to_get_user_id(username).then((user_id)->
+        #return Promise.reject(err) if(err) # should we promisify the err?
+
+        User_id     = user_id
+        Folder_path = path.join(User_id, config_folder_name)
+
+        p('config folder path is: ', Folder_path)
+        
+        Folder_path
+    ).then(()->
+        return folder_module.retrieve_folder(Folder_path)
+    ).then( (folder)->
+        p('retrieved folder: ', typeof folder)
 
         meta = folder.get_meta()
-        #p('folder meta path: ', meta.path)
+        p('folder meta path: ', meta.path)
         content.people.push(meta.owner.username) if meta.owner? and meta.owner.username?
         content.people.push(meta.owner) if(typeof meta.owner == 'string')
 
@@ -58,8 +76,9 @@ init_people_file = (username, callback)->
 
 make_people_manager_for_user = (Username)->
     Obj = {}
-    Folder_path = path.join(Username, config_folder_name)
-    Folder = null
+    Folder_path = null #path.join(Username, config_folder_name)
+    Folder      = null
+    User_id     = null
 
     Empty_content = {
         current : [],
@@ -70,11 +89,15 @@ make_people_manager_for_user = (Username)->
     }
 
     init_folder = ()->
-        folder_module.retrieve_folder(Folder_path).then(
-            (folder)->
-                Folder = folder
-                return Folder
+        promise_to_get_user_id(Username).then((user_id)->
+            User_id     = user_id
+            Folder_path = path.join(User_id, config_folder_name)
+        ).then(()->
+            return folder_module.retrieve_folder(Folder_path)
+        ).then((folder)->
+            Folder = folder
         )
+
 
     is_file_initialized = (callback)->
         folder_module.retrieve_folder(Folder_path).then( (folder)->
@@ -288,9 +311,39 @@ init_people_manager = (username, callback)->
 promise_to_init_people_manager = Promise.promisify init_people_manager
 
 
+# 2016 0128
+# Currently username should not be duplicated, but we are try to make it happen.
+get_people_manager_any_way = (username, callback)->
+    #user.get_user_id(username, (err, user_id)->
+
+    make_people_manager_for_user(username).then((manager)->
+        manager.is_file_initialized( (err, yes_)->
+            return callback(err) if err
+            return callback(null, manager) if yes_
+
+            p 'In "get people manager any way", start to init people file for ', username
+
+            init_people_file(username, (err, what)->
+                return callback(err) if err
+                return callback(null, manager)
+            )
+        )
+    ).catch(callback)
+
+promise_to_get_people_manager_any_way = Promise.promisify get_people_manager_any_way
+
+
+
+
+
 module.exports.make_people_manager_for_user      = make_people_manager_for_user
 #module.exports.promise_to_get_people_manager     = promise_to_get_people_manager
 module.exports.init_people_file      = init_people_file
+
+module.exports.promise_to_get_user_id = promise_to_get_user_id
+module.exports.get_people_manager_any_way = get_people_manager_any_way
+module.exports.promise_to_get_people_manager_any_way = promise_to_get_people_manager_any_way
+
 
 module.exports.init_people_manager = init_people_manager
 module.exports.promise_to_init_people_manager = promise_to_init_people_manager

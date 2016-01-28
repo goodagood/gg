@@ -7,8 +7,7 @@ expect ">"
 send "var p = console.log;\r"
 expect ">"
 
-#send ".load  ./validate-name.js\r"
-send ".load  ./u-validate-name.js\r"
+send ".load  ./c-people.js\r"
 
 expect "ok start interact:"
 interact

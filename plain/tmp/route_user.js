@@ -133,40 +133,7 @@ function route_user(app){
       });
     });
 
-  // refit to use people-tool, 2016 0128
-  //   get /addpeople/:name
-  //   get /lsman
-  //        lsman suppose to replace /people
-  var pt = require("./users/people-tool.js");
-  app.get('/lsman/:name', function(req, res){
-
-    var username = req.user.username;
-    if(!username) return res.send('username ? ');
-
-    pt.render_people_list(username, function(err, html){
-      //p('HTML: ', html.length);
-      if(err) return res.send('you got err: ' + err);
-      if(!html) return res.send('no html');
-      res.send(html);
-    });
-  });
-
   app.get('/addpeople/:name', function(req, res){
-
-    var username = req.user.username;
-    var people_name = req.params['name'];
-    console.log(username, ' add ', people_name);
-
-    pt.add_people(username, people_name, function(err, pmanager){
-      if(err) return res.json({err:err});
-
-      res.json({username:username, peoplename:people_name});
-    });
-  });
-
-
-  // changed to old, 2016 0128
-  app.get('/addpeople-old/:name', function(req, res){
 
     var username = req.user.username;
     var people_name = req.params['name'];
