@@ -1,3 +1,6 @@
+2016 0131
+    cd ./plain/code; npm install
+
 2016 0116
     Changed to use node.js v4, bcrypt get broken, re-install it then ok.
 

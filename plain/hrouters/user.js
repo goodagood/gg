@@ -27,6 +27,7 @@ router.get("/slow-home", function(req, res){
     var title    = 'to build home slowly, but try to fit id with user name';
 
     if(req.protocol === "http") return res.redirect(to_https.make_https_href(req));
+    if(req.session) req.session["slow_home_visit_milli"] = Date.now().toString();
     res.render('slow-home', {title:title, comments:comments });
 });
 
@@ -40,9 +41,9 @@ router.post('/slow-home', function(req, res, next){
     }
     p('\n\npost /slow-home got user_info: ', user_info);
 
-    // change from init_user_c to _d, 0425:
-    //myuser.init_user_d(user_info, function(err, user_obj){});
-    sh.new_home(user_info, function(err, what){
+    if(!req.login || !req.session) p('we should not continure, 2016 0201');
+
+    return sh.new_home(user_info, function(err, what){
         if (err) {
             p('post /user/slow-home, new home err: ', err);
             return res.redirect(geturl);

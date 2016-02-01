@@ -193,6 +193,8 @@ app.get('/login', function(req, res, next){
   //res.render('login', { user: req.user, message: req.flash('error') });
 
   if(req.protocol === "http") return res.redirect(to_https.make_https_href(req));
+  //put something in session to make sure it's there.
+  if(req.session) req.session["login_visit_milli"] = Date.now().toString();
   lang.render_lang(req, res, next, 'login.html', { user: req.user, message: req.flash('error') });
 });
 
