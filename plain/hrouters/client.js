@@ -16,6 +16,8 @@ var mytemplate = require('../myutils/template.js');
 //var filelist   = require('./file-list-v2.js');
 //var people_ed  = require("../users/people-edit.js");
 
+var get_file_list = require("../aws/get-file-list.js");
+
 var p = console.log;
 
 
@@ -27,7 +29,6 @@ router.get("/a", function(req, res){
 
 
 router.get(/\/get-file-meta-list\/(.+)/, function(req, res){
-    var get_file_list = require("../aws/get-file-list.js");
     p('in get file meta list');
 
     var cwd = req.params[0];
@@ -60,7 +61,7 @@ router.post("/post-for-file-meta-list",
         check_id,
         function(req, res){
 
-            var get_file_list = require("../aws/get-file-list.js");
+            //var get_file_list = require("../aws/get-file-list.js");
             p('in post for file meta list');
 
             var cwd      = req.body.cwd;
@@ -81,6 +82,46 @@ router.post("/post-for-file-meta-list",
             });
 
         });
+
+
+/*
+ * Make new folder by client request, post.
+ * 2016 0215
+ */
+var folder_module = require("../aws/folder-v5.js");
+router.post("/mkdir", function(req, res){
+
+    p('in mkdir post request, 2016 0215 08:59am ');
+
+    var util = require('util');
+    p(`req.body in post mkdir: ${util.inspect(req.body)}`);
+
+    if(!req.body.folder_path) return res.json({err: 'got no path'});
+
+    var folder_path = req.body.folder_path.trim();
+    if(!folder_path) return res.json({err: 'got empty path'});
+
+    var cwd         = path.dirname (folder_path);
+    var folder_name = path.basename(folder_path);
+    p(`the cwd, name is ${cwd} ${folder_name}`);
+
+    folder_module.is_folder_exists(folder_path, function(err, yes){
+        // err means exists!? this need change.
+        //if(err) return res.json({err: err, where: 'is folder exists'});
+        if(yes) return res.json({folder_already_exists: yes});
+
+        p(`to retrieve folder ${cwd}`);
+        folder_module.retrieve_folder(cwd).then( function(current_dir_obj){
+            p(`to add folder ${folder_name}`);
+            return current_dir_obj.add_folder(folder_name);
+        }).then(function(new_folder){
+            return res.json({success: true});
+        }).catch(function(err){
+            return res.json({err: err, where: 'catched'});
+        });
+    });
+
+});
 
 
 function check_id(req, res, next){

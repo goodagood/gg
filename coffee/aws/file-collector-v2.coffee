@@ -117,25 +117,34 @@ p      = console.log
 #        meta.meta_s3key is `new` meta when passed in, it need change.
 #
 collect_one_file = (job, meta, callback) ->
-    #p 'in collect one file,\njob: ', job, '\nmeta: ', meta
+    p 'in collect one file,\njob: ', job, '\nmeta: ', meta
 
     folder_path = meta['dir']
+    if not folder_path
+        p('2016 0209 got no folder path')
+        folder_path = path.dirname(mata.path)
+    if folder_path.endsWith('/') # This KILL me  5 days!!
+        p('2016 0209 endsWith /    path')
+        folder_path = folder_path.substring(0, folder_path.length - 1)
+
     filename    = meta.name
     #username    = meta['owner']
 
+    p('2016 0209, going to retrieve_folder, ', folder_path)
     s3folder.retrieve_folder(folder_path).then((folder_obj)->
+        p "got folder? 2016 0209"
         return callback("not folder object", null)  unless folder_obj
 
         if not folder_obj.file_exists filename
             p 'do the normal job, when file not exists', meta
             return collect_new_file_meta(meta, callback)
 
-        p 'check 2, file id.. by uuid ', u.isFunction(folder_obj.file_identified_by_uuid)
         if(folder_obj.file_identified_by_uuid())
+            p 'check 2, file id.. by uuid ', u.isFunction(folder_obj.file_identified_by_uuid)
             return collect_new_file_meta(meta, callback)
 
-        p '# This would be the default behavior, update file is exists.'
         return update.update_file(meta, (err, what)->
+            p '# This would be the default behavior, update file is exists.'
             return callback(err) if err
             p 'going to rm task data'
             delete_task_tmp_meta(meta.new_meta_s3key, meta.redis_task_id, callback)
@@ -337,7 +346,9 @@ check_new_file_meta = (job_json, callback) ->
     
     # When new file put to s3, and a task published in 'tasks' channel.
     # This check in the meta, and put file data in folder.
-    return    if job_json.name isnt "new-file-meta"
+
+    #!!only comment this return ... in testing, 2016 0205
+    #return  callback('the name isnt: new-file-meta') if job_json.name isnt "new-file-meta"
     console.log "job json: ", job_json, ' in check new file meta' #-
     
     # before, the job_json.meta_s3key is the new meta in .new/user-name...
@@ -345,12 +356,17 @@ check_new_file_meta = (job_json, callback) ->
     bucket.read_json  job_json.new_meta_s3key, (err, meta) ->
         #console.log "read the NEW file meta:" #-
         console.log err, meta, ' read json in check new file meta' #-
-        return err    if err
+        #return err    if err
+        return callback(err)    if err
         #write_down_job_and_meta job_json, meta, "/tmp/s448", (->)
 
         console.log 'going to collect one: ', job_json, meta
         collect_one_file job_json, meta, (err, what)->
-            return console.log('ERR ERR, in "check new file meta":', err) if(err)
+            #return console.log('ERR ERR, in "check new file meta":', err) if(err)
+            if(err)
+                console.log('ERR ERR, in "check new file meta":', err)
+                return callback('ERR ERR, in "check new file meta":' + err.toString())
+
             console.log('finished: ', job_json.folder)
             callback(err, what)
         

@@ -10,7 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="author" content="Andrew">
 
-<title> file list version 3 </title>
+<title> i18next testing,   </title>
 
 
 <link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -42,11 +42,6 @@
     </div>
   </div>
 
-  <div class="container">
-      <p>
-      <span> the word: username </span> Trans to : <span class="trans" data-i18n="en2zh.username"> username </span>
-      </p>
-  </div>
 
   <div class="container">
 
@@ -74,19 +69,29 @@
       </div>
       </section>
     </div>
+    <button id="trans-btn"> Trans </button>
   </div>
+
+  <div class="container" id="test1855">
+      <p>
+      <span> the word: username </span> Trans to : <span class="trans" data-i18n="translation.username"> username </span>
+      </p>
+  </div>
+
 
 
 <!--
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="http://code.jquery.com/jquery.min.js"></script>
--->
-
-
-<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
 <script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="/static/js/i18next-1.7.3.js"></script>
 <script src="/static/js/jquery.inspect.js"></script>
+-->
+
+
+<script src="/static/bower_components/jquery/jquery.min.js"></script>
+<script src="/static/bower_components/i18next/i18next.min.js"></script>
+<script src="/static/bower_components/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.min.js"></script>
 
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -101,34 +106,67 @@
 <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
 <![endif]-->
 
+
 <script>
 $( document ).ready(function() {
 
-    //var transkv = {
-    //  zh:{
-    //    en2zh:{
-    //      password: "密码*",
-    //      "username": "用户名*",  
-    //      "op-referrer": "介绍人",
-    //      "repeat-password":"重复密码*",
-    //      "nameok":"名字能用"
-    //    }
-    //  }
-    //};
-    //i18n.init({resStore:transkv}, function(){
-    //  $("form#add-user-form").i18n();
-    //  //console.log('lang ok?');
-    //});
+    var transkv = {
+      zh:{
+        translation:{
+          "password": "密码",
+          "username": "用户名",  
+          "op-referrer": "介绍人",
+          "repeat-password":"重复密码*",
+          "nameok":"名字能用"
+        }
+      }
+    };
+    i18next.use(i18nextBrowserLanguageDetector)
+    .init({
+        lng: 'zh',
+        resources:transkv
+      },
+      function(){
+        //$(".trans").i18n();
+        $(".trans").each(function(){
+            $(this).html(i18next.t('username'));
+          });
+    });
 
 
-    i18n.init(function(t){
-      $("#totrans1").i18n();
-      });
+    //i18n.init(function(t){
+    //  $("#totrans1").i18n();
+    //  });
 
+  //------------------------ 0212 ------------------
+  $("button#trans-btn").click(function(){
+      console.log('you clicked button');
+      $("#test1855").html(findTTrans("test1855", "zh"));
+  });
 
 });
 </script>
 </body>
+
+<script>
+function findTTrans(tagIId, langCCode){
+  var transTTagIId = tagIId + '-' + langCCode;
+  var transed = $("#" + transTTagIId).html();
+  if(!transed) return null;
+
+  transed = transed.replace(/^\/\*/, '');
+  transed = transed.replace(/\*\/$/, '');
+
+  return transed;
+}
+</script>
+
+<script type="text/template"  id="test1855-zh">/*
+      <p>
+      <span> 单词: username </span> 翻译成: <span class="trans" data-i18n="translation.username"> 用户名 </span>
+      </p>
+*/</script>
+
 <!-- vim: et ts=2 sw=2 tw=150
 -->
 </html>

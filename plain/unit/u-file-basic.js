@@ -797,7 +797,7 @@ function drop_file_into_repl(o, file_path){
 
 
 //var o = {}; drop_a_video_file_into_repl(o);
-var o = {}; drop_file_into_repl(o);
+var o = {}; drop_file_into_repl(o, 'intro/public/intro.md');
 
 
 // a signal to 'expect'

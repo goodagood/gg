@@ -16,6 +16,7 @@ var cel  = require('connect-ensure-login');
 
 // the old config-mj.js:
 var myconfig =  require("./config/config.js");
+var pages    =  require("./config/pages.js");
 
 var port = 9090, port_ssl = 9099;
 
@@ -180,7 +181,11 @@ app.get('/',
 
       // might cause: can not read username of undefined  0615
       //res.render('index', { user: req.user, username: req.user.username });
-      res.redirect('/ls/');
+      if(req.user){
+        res.redirect('/ls/');
+      }else{
+        res.redirect(pages.front);
+      }
       //res.render('index', {  });
 });
 
@@ -188,28 +193,34 @@ app.get('/',
 //  res.render('account', { user: req.user });
 //});
 
-var to_https = require("./myutils/to-https.js");
-app.get('/login', function(req, res, next){
-  //res.render('login', { user: req.user, message: req.flash('error') });
+//var to_https = require("./myutils/to-https.js");
+//app.get('/login', function(req, res, next){
+//  //res.render('login', { user: req.user, message: req.flash('error') });
+//
+//  if(req.protocol === "http") return res.redirect(to_https.make_https_href(req));
+//  //put something in session to make sure it's there.
+//  if(req.session) req.session["login_visit_milli"] = Date.now().toString();
+//  lang.render_lang(req, res, next, 'login.html', { user: req.user, message: req.flash('error') });
+//});
+//
+//
+//// checking login, 0203:
+//app.post('/login',
+//    try_middle,
+//    passport.authenticate('local',
+//      { successReturnToOrRedirect: '/ls/', failureRedirect: '/login' }));
+//  
+//
+//app.get('/logout', function(req, res){
+//  req.logout();
+//  res.redirect('/');
+//});
 
-  if(req.protocol === "http") return res.redirect(to_https.make_https_href(req));
-  //put something in session to make sure it's there.
-  if(req.session) req.session["login_visit_milli"] = Date.now().toString();
-  lang.render_lang(req, res, next, 'login.html', { user: req.user, message: req.flash('error') });
-});
 
+// split auth out, 2016 0201
+var name_pass = require("./users/name-pass.js");
+app.use("/", name_pass);
 
-// checking login, 0203:
-app.post('/login',
-    try_middle,
-    passport.authenticate('local',
-      { successReturnToOrRedirect: '/ls/', failureRedirect: '/login' }));
-  
-
-app.get('/logout', function(req, res){
-  req.logout();
-  res.redirect('/');
-});
 
 // testing put some `path` outside other module
 var user_router = require("./route_user.js");

@@ -8,22 +8,32 @@
  * 2016 0201
  */
 
-// todo with this example
-app.post('/login', function(req, res, next) {
-    passport.authenticate('local', function(err, user, info) {
-        if (err) { return next(err); }
-        if (!user) { return res.redirect('/login'); }
-        req.logIn(user, function(err) {
-            if (err) { return next(err); }
-            return res.redirect('/users/' + user.username);
-        });
-    })(req, res, next);
+var express = require("express");
+var router  = express.Router();
+
+var passport = require('passport');
+
+var to_https = require("../myutils/to-https.js");
+var lang     = require("./lang.js");
+
+var p = console.log;
+
+
+router.get('/login', function(req, res, next){
+  //res.render('login', { user: req.user, message: req.flash('error') });
+
+  if(req.protocol === "http") return res.redirect(to_https.make_https_href(req));
+  //put something in session to make sure it's there.
+  if(req.session) req.session["login_visit_milli"] = Date.now().toString();
+  lang.render_lang(req, res, next, 'login.html', { user: req.user, message: req.flash('error') });
 });
+
+
 
 /*
  * http://passportjs.org/docs
  *
-   In the above example, note that authenticate() is called from within the route
+   In the following /post method, note that authenticate() is called from within the route
    handler, rather than being used as route middleware. This gives the callback
    access to the req and res objects through closure.
 
@@ -36,5 +46,55 @@ app.post('/login', function(req, res, next) {
    application's responsibility to establish a session (by calling req.login())
    and send a response.
  */
+
+// todo with this example
+router.post('/login', function(req, res, next) {
+    passport.authenticate('local', function(err, user, info) {
+        if (err)   { return next(err); }
+        if (!user) { return res.redirect('/login'); }
+        //p('in post login, got user: ', user);
+
+        req.login(user, function(err) { //logIn?
+            if (err) { return next(err); }
+            //return res.redirect('/users/' + user.username);
+
+            //p('going to redirect, in post login');
+            return res.redirect('/ls/');
+        });
+    })(req, res, next);
+});
+
+
+
+//// checking login, 0203:
+//router.post('/login',
+//    try_middle,
+//    passport.authenticate('local',
+//      { successReturnToOrRedirect: '/ls/', failureRedirect: '/login' }));
+  
+
+router.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
+
+
+/* google */
+router.get('/auth-google',
+        passport.authenticate('google', { scope: [ 'https://www.googleapis.com/auth/plus.login',
+            , 'https://www.googleapis.com/auth/plus.profile.emails.read' ] }
+            ));
+
+router.get( '/auth-google-callback', 
+        passport.authenticate( 'google', { 
+            //successRedirect: '/auth/google/success',
+            //failureRedirect: '/auth/google/failure'
+            successRedirect: '/ls',
+            failureRedirect: '/login'
+        }));
+
+
+
+module.exports = router;
 
 

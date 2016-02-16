@@ -37,9 +37,20 @@
 
   collect_one_file = function(job, meta, callback) {
     var filename, folder_path;
+    p('in collect one file,\njob: ', job, '\nmeta: ', meta);
     folder_path = meta['dir'];
+    if (!folder_path) {
+      p('2016 0209 got no folder path');
+      folder_path = path.dirname(mata.path);
+    }
+    if (folder_path.endsWith('/')) {
+      p('2016 0209 endsWith /    path');
+      folder_path = folder_path.substring(0, folder_path.length - 1);
+    }
     filename = meta.name;
+    p('2016 0209, going to retrieve_folder, ', folder_path);
     return s3folder.retrieve_folder(folder_path).then(function(folder_obj) {
+      p("got folder? 2016 0209");
       if (!folder_obj) {
         return callback("not folder object", null);
       }
@@ -47,12 +58,12 @@
         p('do the normal job, when file not exists', meta);
         return collect_new_file_meta(meta, callback);
       }
-      p('check 2, file id.. by uuid ', u.isFunction(folder_obj.file_identified_by_uuid));
       if (folder_obj.file_identified_by_uuid()) {
+        p('check 2, file id.. by uuid ', u.isFunction(folder_obj.file_identified_by_uuid));
         return collect_new_file_meta(meta, callback);
       }
-      p('# This would be the default behavior, update file is exists.');
       return update.update_file(meta, function(err, what) {
+        p('# This would be the default behavior, update file is exists.');
         if (err) {
           return callback(err);
         }
@@ -238,19 +249,17 @@
   };
 
   check_new_file_meta = function(job_json, callback) {
-    if (job_json.name !== "new-file-meta") {
-      return;
-    }
     console.log("job json: ", job_json, ' in check new file meta');
     return bucket.read_json(job_json.new_meta_s3key, function(err, meta) {
       console.log(err, meta, ' read json in check new file meta');
       if (err) {
-        return err;
+        return callback(err);
       }
       console.log('going to collect one: ', job_json, meta);
       return collect_one_file(job_json, meta, function(err, what) {
         if (err) {
-          return console.log('ERR ERR, in "check new file meta":', err);
+          console.log('ERR ERR, in "check new file meta":', err);
+          return callback('ERR ERR, in "check new file meta":' + err.toString());
         }
         console.log('finished: ', job_json.folder);
         return callback(err, what);

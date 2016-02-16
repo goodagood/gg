@@ -68,9 +68,19 @@ function make_salted_hash_for_all(){
 }
 
 
+function user_info(name){
+    name = name || 'intro';
+
+    user.find_by_user_name(name, function(err, info){
+        p(err, info);
+        tutil.stop(5);
+    });
+}
+
 if(require.main === module){
     //check_user_roll();
     //check_home_ids();
+    user_info();
 
-    make_salted_hash_for_all();
+    //make_salted_hash_for_all();
 }

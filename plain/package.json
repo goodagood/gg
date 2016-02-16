@@ -39,6 +39,7 @@
     "npmlog": "*",
     "passport": "~0.2.0",
     "passport-google": "^0.3.0",
+    "passport-google-oauth2": "^0.1.6",
     "passport-local": "~1.0.0",
     "redis": "^0.12.1",
     "request": "^2.56.0",

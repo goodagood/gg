@@ -4,6 +4,8 @@
  */
 
 
+module.exports.front  = '/file/get/intro/public/test0215/y6.0216/i0212y6.html'
+
 module.exports.intro  = '/file/md-with-local-files/intro/public/intro.md';
 module.exports.reason = '/file/md-with-local-files/intro/public/reasons.md';
 module.exports.value  = '/file/md-with-local-files/intro/public/value.md';

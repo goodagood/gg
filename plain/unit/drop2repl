@@ -20,9 +20,9 @@ expect ">"
 #send ".load  ./u-member-2.js\r"
 #send ".load  ./u-msg.js\r"
 #send ".load  ./u-text-file-v1.js\r"
-#send ".load  ./u-file-basic.js\r"
+send ".load  ./u-file-basic.js\r"
 #send ".load  ./u-image.js\r"
-send ".load  ./u-folder-basic.js\r"
+#send ".load  ./u-folder-basic.js\r"
 
 expect "ok start interact:"
 interact

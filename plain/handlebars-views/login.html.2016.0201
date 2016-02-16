@@ -1,51 +1,48 @@
 <!DOCTYPE HTML>
 <html lang="en">
-<!-- As temperory testing for ui styling and login page. 0203, 2015
-     Finally, each page got more and more re-writing.    0201, 2016
--->
+<!-- as temperory testing for ui styling and login page. 0203, 2015  -->
 <head>
 <meta http-equiv="content-type" content="text/html" />
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="description" content="login, goodogood/goodagood" />
-<meta name="keywords" content="goodogood, goodagood, filesystem, sharing" />
+<meta name="description" content="index, goodagood testing" />
+<meta name="keywords" content="goodagood, filesystem, sharing" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="author"   content="Andrew">
+<meta name="author" content="Andrew">
 
 <title> 
 
   {{#if title }}
-    {{ title }}
-  {{else}}
-    login goodogood
+  <p>{{ title }}</p>
   {{/if}}
+  pass testing, 0202
 
 </title>
+  <!--% if(typeof title !== 'undefined' && title){ print(title);}else{ print('test a style from goodagood frame c');} %-->
 
-
-<link rel="stylesheet" href="/static/bower_components/skeleton/css/normalize.css">
-<link rel="stylesheet" href="/static/bower_components/skeleton/css/skeleton.css">
 
 <link rel="stylesheet" href="/static/css/fa/css/font-awesome.min.css">
 <link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap-glyphicons.css">
 
-<link rel="stylesheet" href="/static/css/login.css">
+<link rel="stylesheet" href="/static/css/begin.css">
+
+<!--% if(typeof css !== 'undefined' && css) print(css); %-->
 
 
 <style type="text/css">
-  {{{ in_file_css }}}
+
 </style>
 
 </head>
 <body>
 
-<div id="wrapper" class="container">
+<div id="wrapper">
 
 
   <header>
-    <div> <span class="logo"> <a href="http://goodogood.me/">goodogood</a> <span></div>
+    <h1> <span class="logo"> <a href="http://goodogood.me/">goodogood</a> <span></h1>
 
-    <div id="register"> <a id="register-a" href="/user/slow-home"> <i class="fa fa-user"></i> Register </a> </div>
+    <h2> <a id="register-a" href="/user/slow-home"> <i class="fa fa-user"></i> Register </a> </h2>
   </header>
 
   {{#if user }}
@@ -86,7 +83,7 @@
 
   <div id='try-before-register'>
     <p>
-      <a class="button" href="/try-before-register"> <i class="fa fa-beer"> </i> Try an public test account</a>
+      <a class="btn" href="/try-before-register"> <i class="fa fa-beer"> </i> Try an public test account</a>
       : You will be login as an random user,  to play
       in the system, and get the feel whether it can help.
     </p>

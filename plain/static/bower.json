@@ -22,7 +22,7 @@
     "bootstrap-markdown": "~2.8.0",
     "highlight.js.origin": "~7.0.1",
     "html5shiv": "*",
-    "i18next": "~1.9.0",
+    "i18next": "~2.1.0",
     "jquery": "*",
     "jquery-file-upload": "~9.9.3",
     "jquery-mobile": "~1.4.5",
@@ -31,6 +31,7 @@
     "skeleton": "~2.0.4",
     "underscore": "~1.7.0",
     "wysihtml": "~0.4.17",
-    "handlebars": "~4.0.5"
+    "handlebars": "~4.0.5",
+    "i18next-browser-languagedetector": "~0.0.14"
   }
 }
