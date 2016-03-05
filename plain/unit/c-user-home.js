@@ -78,9 +78,9 @@ function user_info(name){
 }
 
 if(require.main === module){
-    //check_user_roll();
+    check_user_roll();
     //check_home_ids();
-    user_info();
+    //user_info();
 
     //make_salted_hash_for_all();
 }

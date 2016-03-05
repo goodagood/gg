@@ -1,5 +1,5 @@
 /*
- * Uploading without log in, easy to be used with command line.
+ * Uploading without web ui log in, easy to be used with command line.
  *
  * 'multer' is used to deal the file field.
  *

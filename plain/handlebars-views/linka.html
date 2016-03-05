@@ -5,27 +5,34 @@
 <meta http-equiv="content-type" content="text/html" />
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="description" content="index, goodagood testing" />
-<meta name="keywords" content="goodagood, filesystem, sharing" />
+<meta name="description" content="index, goodogood, goodagood testing" />
+<meta name="keywords" content="goodogood, goodagood, filesystem, sharing" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="author" content="Andrew">
 
 <title> 
 
   {{#if title }}
-  <p>{{ title }}</p>
+    {{ title }}
+  {{else}}
+    mark a link as note, 2015 0202, 2016 0221.
   {{/if}}
-  pass testing, 0202
 
 </title>
-  <!--% if(typeof title !== 'undefined' && title){ print(title);}else{ print('test a style from goodagood frame c');} %-->
 
-
-<link rel="stylesheet" href="/static/css/fa/css/font-awesome.min.css">
+<!--
 <link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap-glyphicons.css">
-<link rel="stylesheet" href="/static/css/begin.css">
+<link rel="stylesheet" href="/static/css/fa/css/font-awesome.min.css">
 
-<!--% if(typeof css !== 'undefined' && css) print(css); %-->
+<link rel="stylesheet" href="/static/css/begin.css">
+-->
+
+<link rel="stylesheet" href="/static/bower_components/skeleton/css/normalize.css">
+<link rel="stylesheet" href="/static/bower_components/skeleton/css/skeleton.css">
+<link rel="stylesheet" href="/static/bower_components/font-awesome/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="/static/css/linka.css">
+
 
 
 <style type="text/css">
@@ -35,42 +42,61 @@
 </head>
 <body>
 
-<div id="wrapper">
+<div id="wrapper" class="container">
 
 
-  <header>
-  <h1> <span class="logo"> <a href="http://www.goodagood.com/">goodagood</a> <span></h1>
-  </header>
+  <div id="header">
+    <a href="http://goodogood.me/" class="logo">goodogood</a>
+  </div>
 
 
-  <h1> Put a link </h1>
-  <form action="/link/put-a-link" method="post" id="add-web-link-form">
-    <div class="igroup">
-      <label for="web-link"> 
-        <span class="label-text">the link(*):</span>
-      </label>
-      <input type="text" id="web-link" name="web-link" />
-    </div>
+  <div class="content-body cf">
+    <h3 id="purpose-of-form"> <i class="fa fa-paste"></i>
+      Put a link as note 
+    </h3>
 
-    <div class="igroup" id="description-input">
-      <label for="description" id="description-label"> 
-        <span class="label-text"> Description:</span>
-      </label>
-      <input type="text" id="description" name="description" />
-    </div>
+    <form action="/link/put-a-link" method="post" id="add-web-link-form">
+      <div class="row">
+        <div class="three columns">
+          <label for="web-link"> 
+            <span>The link <i class="fa fa-link"></i> :</span>
+          </label>
+        </div>
+        <div class="nine columns">
+          <input type="text" id="web-link" name="web-link" />
+        </div>
+      </div>
 
-    <input type="hidden" id="cwd" name="cwd" value="{{{cwd}}}" />
+      <div class="row" id="description-input">
+        <div class="three columns">
+          <label for="description" id="description-label"> 
+            <span> Description (*) :</span>
+          </label>
+        </div>
+        <div class="nine columns">
+          <input type="text" id="description" name="description"  />
+        </div>
+      </div>
 
-    <div class="igroup" id="description-input">
-      <label> </label>
-      <input type="submit" value="submit" />
-    </div>
+      <input type="hidden" id="cwd" name="cwd" value="{{{cwd}}}" />
 
-  </form>
-  <p> <i class="fa fa-arrows"></i> CWD: {{{ cwd_chain }}} </p>
+      <div class="row" id="submit-input">
+        <div class="three columns">
+          <label> 
+            <span> </span>
+          </label>
+        </div>
+        <div class="nine columns">
+          <input type="submit" value="submit" />
+        </div>
+      </div>
 
-  <footer>
-    <p> goodagood, Andrew, &copy; <br/>
+    </form>
+    <p> <i class="fa fa-chevron-right"></i> CWD: {{{ cwd_chain }}} </p>
+  </div> <!-- endof content body -->
+
+  <div id="footer">
+    <p> goodogood.me, goodagood, Andrew, &copy; <br/>
     {{#if now }}
     <span class="info">As hint 12 23: {{ now }}</span>
     {{/if}}
@@ -78,7 +104,7 @@
     screen width: <span id="media-query"></span>
 
     </p>
-  </footer>
+  </div>
 
 
 </div> <!-- end of wrapper -->
@@ -87,10 +113,11 @@
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="http://code.jquery.com/jquery.min.js"></script>
 <script src="/static/js/jquery.inspect.js"></script>
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
 -->
 
 
-<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/static/bower_components/jquery/jquery.min.js"></script>
 <!--  <script src="/static/js/i18next-1.7.3.js"></script>  -->
 
 <script>

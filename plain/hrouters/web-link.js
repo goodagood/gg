@@ -78,18 +78,19 @@ function write_link_as_note_file(data, callback){
     var username = data.user.username;
     if(!username) return callback('no username', null);
 
+    // should change to /tec-doc/(data.link) 2016 0222
     var pipe_href = '/i-want-read?' + querystring.stringify({url: data.link});
     var short_link_str = short_string(data.link) || '??short-link-str??';
 
     var text = title + '<br>';
     text    += "\n";
     // link
-    text    += '<a target="_blank" href="' + data.link + '"> '; 
-    text    += 'Link<i class="fa fa-link"></i> : ' + short_link_str +'</a> <br>' ;
+    text    += 'Link <a class="button" target="_blank" href="' + data.link + '"> '; 
+    text    += '<i class="fa fa-link"></i> : ' + short_link_str +'</a> <br>' ;
     text    += "\n";
     // pipe
-    text    += '<a target="_blank" href="' + pipe_href + '"> '; 
-    text    += 'Pipe <i class="fa fa-road"></i>of the link</a> <br>';
+    text    += 'Pipe <a target="_blank" href="' + pipe_href + '"> '; 
+    text    += '<i class="fa fa-clone"></i>of the link</a> <br>';
     text    += "\n";
 
     _meta = u.defaults(data,  {

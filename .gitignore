@@ -4,3 +4,5 @@ bower_components/
 *~
 *.swp
 *.swo
+plain/ucp/.git
+plain/ucp/node_modules/

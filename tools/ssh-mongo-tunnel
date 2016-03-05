@@ -1,0 +1,6 @@
+
+# ssh port forwarding, 
+# access local_port will be tunneled to the remote_port on remote host
+# good for db access, such as mongodb, redis
+
+ssh -L local_port:localhost:remote_port  username@host.ip

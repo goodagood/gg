@@ -181,7 +181,7 @@ app.get('/',
 
       // might cause: can not read username of undefined  0615
       //res.render('index', { user: req.user, username: req.user.username });
-      if(req.user){
+      if(req.user && req.user.username){
         res.redirect('/ls/');
       }else{
         res.redirect(pages.front);

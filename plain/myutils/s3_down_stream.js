@@ -21,6 +21,9 @@ var secrets  =  require("../config/secret-dir.js");
 var aws_conf =  secrets.conf.aws;
 
 
+var request = require("request");
+//var url     = require("url");
+var u       = require("underscore");
 
 
 // refactor the following:
@@ -419,42 +422,40 @@ function s3_down_stream(app){
   });
 
 
-  var request = require("request");
-  var url     = require("url");
-  var u       = require("underscore");
-  app.get("/slave-want-read", function(req, res, next){
-    var href = req.query.url;
-    if(!href) return res.end("<h1>err: no href</h1>");
+  //// tmp solution before, should be deprecated.  2016 0220
+  //app.get("/slave-want-read", function(req, res, next){
+  //  var href = req.query.url;
+  //  if(!href) return res.end("<h1>err: no href</h1>");
 
-    var reg = /^http/i;
-    if(! reg.test(href)) href = 'http://' + href;
+  //  var reg = /^http/i;
+  //  if(! reg.test(href)) href = 'http://' + href;
 
-    request(href, function(err, response, body){
-      if(err) return res.end("<h1>err: got nothing</h1>");
+  //  request(href, function(err, response, body){
+  //    if(err) return res.end("<h1>err: got nothing</h1>");
 
-      if(u.isString(body)){
-        var uobj = url.parse(href);
-        var shorted = u.pick(uobj, 'protocol', 'host', 'port', 'auth');
-        var base = url.format(shorted);
-        console.log('base: ', base);
+  //    if(u.isString(body)){
+  //      var uobj = url.parse(href);
+  //      var shorted = u.pick(uobj, 'protocol', 'host', 'port', 'auth');
+  //      var base = url.format(shorted);
+  //      console.log('base: ', base);
 
-        var headend = /<\/.*head.*>/i;
-        if(headend.test(body)){
-          var base_tag = '<base href="' + base + '" target="_blank"></head>\n';
-          console.log('base tag: ', base_tag);
-          var html = body.replace(headend, base_tag);
-        }
-        res.set("Content-Type", "text/html; charset=UTF-8");
-        res.send(html);
-      }else{
-        return res.end("<h1>err: no text</h1>");
-      }
+  //      var headend = /<\/.*head.*>/i;
+  //      if(headend.test(body)){
+  //        var base_tag = '<base href="' + base + '" target="_blank"></head>\n';
+  //        console.log('base tag: ', base_tag);
+  //        var html = body.replace(headend, base_tag);
+  //      }
+  //      res.set("Content-Type", "text/html; charset=UTF-8");
+  //      res.send(html);
+  //    }else{
+  //      return res.end("<h1>err: no text</h1>");
+  //    }
 
-    });
+  //  });
 
 
-    //request(url).pipe(res);
-  });
+  //  //request(url).pipe(res);
+  //});
 
 
   app.get("/i-want-read", function(req, res, next){
@@ -466,6 +467,23 @@ function s3_down_stream(app){
 
     request(href).pipe(res);
   });
+
+
+  var ucp = require("../ucp/ucp0219y6.js");
+  app.get(/tec-doc\/(.+)/, function(req, res, next){
+    var href = req.params[0];
+    if(!href) return res.end("<h1>err: no href</h1>");
+
+    var reg = /^http/i;
+    if(! reg.test(href)) href = 'http://' + href;
+
+    //p(`in 1984 request for : ${href}, req.url: ${req.url}`);
+
+    ucp.do_request(res, href, '/tec-doc/', function(err, done){
+      // all's finished, res send. @done is string describing what happened.
+    });
+  });
+
 
   //// totest
   //app.get(/^\/folder\/(.+)/, 

@@ -1,7 +1,59 @@
 
+# 2016 0225
+
+`meta` is json string, saved as s3 object.
+This is for aws s3 storage, which is key value object.
+
+## s3 key for folder, it's meta and name space
+
+S3 key of folder meta is equal to folder's path: 
+    
+    .gg.folder.meta/user-id/folder/path
+    .gg.folder.name.space/user-id/folder-uuid
 
 
-0926
+## s3 key for file data, meta and name space.
+
+File data is saved with s3 key:
+
+    .gg.file/user-id/file/path/is/full/name.extension
+
+
+S3 key of file meta *get* path info, it's    
+
+    .gg.file.meta/user-id/file/path/is/full/name.extension
+    .gg.file.name.space/user-id/file-uuid
+
+
+2016 0225
+
+- changed to use full path with file data and meta, add name space
+  for both file and folder, when needed.
+
+- start use user id for a few month, it's plan to let user choose any name ok
+  on web, duplicated name will be ok.
+
+- set up name space for each folder, and do it for file in need.
+
+  > name space is a prefix: user-id/uuid
+  > uuid is rare to conflict
+  > data can be put into the name space as: event, action, log, comment
+
+In name space, we can put things without locking file or folder, if we use
+different name for each action or data.  This reduce need to do locking, for
+folders and files.
+
+There are cons for this data design:
+
+    X-  Each file get full path in their key make:
+        x-  folder moving need take care each file moving
+
+    X-  File name conflicts happens more often
+
+
+
+# 2015 0926
+
   `meta` is json string, saved as s3 object.
   S3 key of folder meta is equal to folder's path: 
     
@@ -298,4 +350,7 @@ User information
         //...
     }
 
-// vim: set et sw=4 ts=4 tw=78
+
+<!--
+    // vim: set et sw=4 ts=4 tw=78 ft=markdown:
+-->

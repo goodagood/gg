@@ -50,6 +50,9 @@ function take_in_user_info(user_info, callback){
 }
 
 
+/*
+ * At least we need 'username' and 'password' as string.
+ */
 function enough_user_info(ui){
     if(ui.username && u.isString(ui.username)){
         if(ui.password && u.isString(ui.password)){
