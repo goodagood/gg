@@ -4,6 +4,7 @@ var flash   = require('connect-flash');
 var express  = require('express');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+
 var cookie_parser = require('cookie-parser');
 var body_parser   = require('body-parser');
 var method_override = require('method-override');
@@ -21,7 +22,7 @@ var pages    =  require("./config/pages.js");
 var port = 9090, port_ssl = 9099;
 
 //var findByUsername = require('./myuser').findByUsername;
-var findByUsername = require('./users/a.js').findByUsername;
+//var findByUsername = require('./users/a.js').findByUsername;
 
 
 var lang = require("./users/lang.js");
@@ -32,62 +33,36 @@ var lang = require("./users/lang.js");
 //   this will be as simple as storing the user ID when serializing, and finding
 //   the user by ID when deserializing.
 passport.serializeUser(function(user, done) {
-  if(typeof user.username !== 'undefined') return done(null, user.username);
+  if(!user.username) return done('username is needed, it should be unique, 20160305-1728');
 
-  // Once got this trouble. if 'id' is not 'username', as 'tmpe' has 'id': 17,
-  // what's going to happen if we put the next first:
-  if(typeof user.id !== 'undefined') return done(null, user.id);
+  // userid serve as key? 2016 0305
+  return done(null, user.username);
 
-  return done('no id, no username', null);
+  // Give up approaches:
+  //   Once: tried to set up user id,  and let username duplicatable.
+  //   as 'tmpe' has 'id': 17,
+  //
+  // commented out 2016 0305
+  // if(typeof user.id !== 'undefined') return done(null, user.id);
+  //return done('no id, no username', null);
 });
 
 
+var muser = require("./users/muser.js");
 passport.deserializeUser(function(username, done) {
-  findByUsername(username, function (err, user) {
+  muser.find_by_user_name(username, function (err, user) {
     done(err, user);
   });
 });
 
 
-//// Use the LocalStrategy within Passport.
-////   Strategies in passport require a `verify` function, which accept
-////   credentials (in this case, a username and password), and invoke a callback
-////   with a user object.  In the real world, this would query a database;
-////   however, in this example we are using a baked-in set of users.
-//passport.use(new LocalStrategy(
-//  function(username, password, done) {
-//    // asynchronous verification, for effect...
-//    process.nextTick(function () {
-//      
-//      // Find the user by username.  If there is no user with the given
-//      // username, or the password is not correct, set the user to `false` to
-//      // indicate failure and set a flash message.  Otherwise, return the
-//      // authenticated `user`.
-//      findByUsername(username, function(err, user) {
-//        if (err) {
-//          console.log('findByUsername err: ', err);
-//          return done(err);
-//        }
-//        if (!user) { return done(null, false, { message: 'Unknown user ' + username }); }
-//        //console.log('in passport thing: password user: ',password, user);
-//        if (user.password != password) {
-//          //console.log('password not equal: ', user.password, password);
-//          return done(null, false, { message: 'Invalid password' });
-//        }else{
-//          return done(null, user);
-//        }
-//      })
-//    });
-//  }
-//));
 
-
-var hash_pass = require("./users/hash-pass.js");
+var m_hash_pass = require("./users/m-hash-pass.js");
 passport.use(
     new LocalStrategy(
       function(username, password, done) {
         process.nextTick(function () {
-          hash_pass.find_and_check(username, password, done);
+          m_hash_pass.find_and_check(username, password, done);
         });
       }
     )

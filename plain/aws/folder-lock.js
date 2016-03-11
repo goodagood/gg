@@ -53,7 +53,7 @@ function lock_path_async(path_, callback){
 
 function get_folder_lock(uuid, path_){
     // uuid is folder uuid
-    // callback get: (LOCKED(true/false) [, function-to-unlock(only when locked))
+    // callback get: (null or err [, function-to-unlock(only when locked))
 
     //var key = Lock_Prefix + path_ + '.' + uuid; // redis key of the lock.
     var key = make_lock_key(path_, uuid);

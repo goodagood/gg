@@ -1,5 +1,25 @@
 
-2015 0923
-    A lot fails during uploading file html. 
-    The linked package 'gg-credentials.bucket' got damaged.  The new bucket
-    can not get its functions.
+# 2016 0305
+
+Finally, after a lot trouble in designs, it looks better to do:
+
+    username IS id, it SHOULD also be name of root dir.
+
+    - When try to use different id for user: 
+      1, how to find user id in database when user offer only name?
+      2, when using hash of salted password, it's hard to use password for
+         any other purpose.
+
+
+
+# 2015 0923
+
+A lot fails during uploading file html. 
+The linked package 'gg-credentials.bucket' got damaged.  The new bucket
+can not get its functions.
+
+
+
+<!--
+     vim: set ft=markdown tw=78:
+-->

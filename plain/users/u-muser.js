@@ -8,13 +8,13 @@ var u = require('underscore');
 var assert = require('assert');
 
 var user = require("./a.js");
-var user_resolved_name = require.resolve("./a.js");
+//var user_resolved_name = require.resolve("./a.js");
 
 var bucket = require("../aws/bucket.js");
-var bucket_resolved_name = require.resolve("../aws/bucket.js");
+//var bucket_resolved_name = require.resolve("../aws/bucket.js");
 
 var folder_module = require("../aws/folder-v5.js");
-var folder_module_resolved_name = require.resolve("../aws/folder-v5.js");
+//var folder_module_resolved_name = require.resolve("../aws/folder-v5.js");
 
 var p = console.log;
 
@@ -32,7 +32,17 @@ exports.unit_works = function(test){
     assert ('ok');
     test.ok(true === true);
     test.done();
-}
+};
+
+exports.exists = function(test){
+    p('check name exists in mongodb');
+    var username = 'abc';
+    muser.name_exists(username, function(err, yes){
+        p(err, yes);
+        test.ok(!err);
+        test.done();
+    });
+};
 
 
 exports.find_by_id = function(test){
@@ -49,19 +59,10 @@ exports.find_by_id = function(test){
 
         test.done();
     });
-}
+};
 
 exports.group = {
     test1 : function(test){
-        // useless:
-        delete muser;
-        delete require.cache[muser_resolved_name];
-        delete user;
-        delete require.cache[user_resolved_name];
-        delete folder_module;
-        delete require.cache[folder_module_resolved_name];
-        delete bucket;
-        delete require.cache[bucket_resolved_name];
         test.done();
     },
 

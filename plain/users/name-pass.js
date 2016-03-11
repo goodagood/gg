@@ -19,15 +19,20 @@ var lang     = require("./lang.js");
 var p = console.log;
 
 
+var msg_in_querystring = require("../myutils/qstr.js");
 router.get('/login', function(req, res, next){
   //res.render('login', { user: req.user, message: req.flash('error') });
 
   if(req.protocol === "http") return res.redirect(to_https.make_https_href(req));
+
   //put something in session to make sure it's there.
   if(req.session) req.session["login_visit_milli"] = Date.now().toString();
-  lang.render_lang(req, res, next, 'login.html', { user: req.user, message: req.flash('error') });
-});
 
+  var msg = msg_in_querystring.list_msgs(req);
+  //if(u.isEmpty(msg)) msg = 'what'; //msg = 'oo, ook';
+  res.render('login.html', { message : msg });
+  //lang.render_lang(req, res, next, 'login.html', { user: req.user, message: msg });
+});
 
 
 /*
@@ -46,13 +51,13 @@ router.get('/login', function(req, res, next){
    application's responsibility to establish a session (by calling req.login())
    and send a response.
  */
-
-// todo with this example
 router.post('/login', function(req, res, next) {
     passport.authenticate('local', function(err, user, info) {
+        p('0, in post login, got err: ', err);
+        p('1, in post login, got user: ', user);
+        p('2, in post login, got info: ', info);
         if (err)   { return next(err); }
-        if (!user) { return res.redirect('/login'); }
-        //p('in post login, got user: ', user);
+        if (!user) { return res.redirect( msg_in_querystring.add_ggmsg('no user found', '/login/')); }
 
         req.login(user, function(err) { //logIn?
             if (err) { return next(err); }
@@ -92,6 +97,7 @@ router.get( '/auth-google-callback',
             successRedirect: '/ls',
             failureRedirect: '/login'
         }));
+
 
 
 

@@ -56,9 +56,11 @@ form div.igroup input{
 form div#text-password-div {
   display:block;
 }
+/*
 form div#normal-password-div {
   display:none;
 }
+*/
 
 /* confine lable ? */
 form label{
@@ -202,6 +204,7 @@ footer {
 
 
   /* show normal passwd input, hide the other */
+  /*
   form div#normal-password-div  {
       display:block;
   }
@@ -215,6 +218,7 @@ footer {
   form div#pass-wd label#normal-pass {
     display:block;
   }
+  */
 
   span#hed-show,
   span#let-show { 

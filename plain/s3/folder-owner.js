@@ -8,6 +8,7 @@ var u = require("underscore");
 var user_module = require("../users/a.js");
 
 
+// not needed any more 2016 0311
 function guess_id(_meta){
     var guess;
 
@@ -24,23 +25,21 @@ function guess_id(_meta){
 
 
 function get_name(_meta) {
-    var guess, rEmptyStr;
-
-    rEmptyStr = /^\s*$/;
 
     // In history, owner might be a string of user name.
     if (_meta.owner != null) {
-        if (u.isString(_meta.owner) && !rEmptyStr.test(_meta.owner)) {
+        if (u.isString(_meta.owner) && (! u.isEmpty(_meta.owner))) {
             return _meta.owner;
         }
+
         if (!u.isEmpty(_meta.owner.name)) {
             return _meta.owner.name;
         }
     }
 
     // guess by folder root, but it changed to be user id.
-    guess = _meta.path.split("/")[0];
-    if (u.isString(guess) && !rEmptyStr.test(guess)) {
+    var guess = _meta.path.split("/")[0];
+    if (u.isString(guess) && (! u.isEmpty(guess))) {
         _meta.owner = guess;
         return _meta.owner;
     }
@@ -49,7 +48,10 @@ function get_name(_meta) {
 module.exports.get_name = get_name;
 
 
+//?
 function check_owner(_meta){
+    if(u.isString(_meta.owner)) return true; // 2016 0311
+   
     if(_meta.owner){
         if(_meta.owner.name){
             if(_meta.owner.id){
@@ -73,6 +75,7 @@ function check_owner(_meta){
 
 
 
+// not needed any more 2016 0311
 function get_root_name(_meta, callback) {
     var guess, owner;
 

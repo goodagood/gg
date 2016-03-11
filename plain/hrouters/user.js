@@ -41,7 +41,7 @@ router.post('/slow-home', function(req, res, next){
     }
     p('\n\npost /slow-home got user_info: ', user_info);
 
-    if(!req.login || !req.session) p('we should not continure, 2016 0201');
+    if(!req.login || !req.session) p('we should not continure, if req has no function of login or session, 0309, 2016 0201');
 
     return sh.new_home(user_info, function(err, what){
         if (err) {

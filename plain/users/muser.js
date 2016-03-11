@@ -5,9 +5,10 @@
 
 var MongoClient = require('mongodb').MongoClient;
 
-var gg_user_db         = 'mongodb://localhost:9017/gg';
-var user_collection    = 'users';
-var user_id_field_name = 'userid';
+var GG_User_Db         = 'mongodb://localhost:9017/gg';
+var User_Collection    = 'users';
+var User_Id_Field      = 'userid';
+var User_Name_Field    = 'username';
 
 var p = console.log;
 
@@ -20,7 +21,7 @@ var GG;
 function getgg(callback){
     if(GG) return callback(null, GG);
 
-    var url = gg_user_db;
+    var url = GG_User_Db;
     MongoClient.connect(url, function(err, db){
         if(err) return callback(err);
 
@@ -42,7 +43,8 @@ function get_user_collection(callback){
     getgg(function(err, ggdb){
         if(err) return callback(err);
 
-        UserCollection = ggdb.collection(user_collection);
+        UserCollection = ggdb.collection(User_Collection);
+        //p('user collection: ', UserCollection);
         callback(null, UserCollection);
     });
 }
@@ -54,10 +56,49 @@ function find_by_user_id(id, callback){
         if(err) return callback(err);
 
         p('going to findOne');
-        //collection.findOne({user_id_field_name: id}, callback);
+        //collection.findOne({User_Id_Field: id}, callback);
         collection.findOne({'userid': id}, callback);
     });
 }
 module.exports.find_by_user_id = find_by_user_id;
 
 
+function find_by_user_name(name, callback){
+    get_user_collection(function(err, collection) {
+        if(err) return callback(err);
+
+        var query = {};
+        query[User_Name_Field] = name;
+        p('in find by user name, going to findOne:', query);
+
+        collection.findOne(query, callback);
+    });
+}
+module.exports.find_by_user_name = find_by_user_name;
+
+
+function name_exists(name, callback){
+    return find_by_user_name(name, function(err, info){
+        p('in name exists: ', err, info);
+        if(err) return callback(err);
+
+        if(!info) return callback(null, false);
+
+        if(info.username){
+            return callback(null, info.username === name);
+        }
+        callback(err, info);
+    });
+}
+module.exports.name_exists = name_exists;
+
+
+
+function insert_user_info(info, callback){
+    get_user_collection(function(err, collection) {
+        if(err) return callback(err);
+
+        collection.insertOne(info, callback);
+    });
+}
+module.exports.insert_user_info = insert_user_info;

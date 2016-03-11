@@ -12,14 +12,23 @@ var uuid = require("node-uuid");
 
 
 //var s3prefix = require("../myutils/json-cfg.js").s3_prefix_configure();
-var user_module = require("../users/a.js");
+//var user_module = require("../users/a.js");
 var fkeys = require("./folder-keys.js");
+
+var p = console.log;
 
 
 //var myutil   = require("../myutils/myutil.js");
 
 /*
- * @folder_path : full path of the folder.
+ * @folder_path : full path of the folder, including the folder name.
+ *
+ * required folder meta:
+ *   path,  owner,  uuid,  meta_s3key,  name_space_prefix
+ *
+ *   repr:  representation of folder  
+ *   repr_as_file (root not need this)
+ *   reprs : {...},
  */
 function new_obj(folder_path, callback){
 
@@ -49,7 +58,7 @@ function new_obj(folder_path, callback){
         read_files, read_in_template, read_recent_file_by_name, read_text,
         render_template, retrieve_saved_meta, save_meta, self_render_as_a_file,
         set_attr, sort_files, sort_files_by_date, try_template, update_file,
-        update_name, update_sub_folder, update_uuid_storage, user_module,
+        update_name, update_sub_folder, update_uuid_storage, 
         uuid_to_delete_file_fun, uuid_to_file_obj, uuid_to_meta, write_meta,
         write_text_file, _add_extra_0929, _add_file_obj_save_folder,
         _add_file_thorough, _add_file_to_redis_list,
@@ -82,10 +91,18 @@ function new_obj(folder_path, callback){
     _folder.get_meta = get_meta;
 
 
+    function set_meta (meta_obj) {
+        _meta = meta_obj;
+        return _folder;
+    }
+
+    _folder.set_meta = set_meta;
+
+
     function calculate_meta_s3key(callback){
         var path_ = _meta.path || folder_path;
 
-        fkeys.make_s3key_for_folder_meta(path_, function(err, s3key){
+        fkeys.make_meta_s3key(path_, function(err, s3key){
             if(err) return callback(err);
 
             _meta.meta_s3key = s3key;
@@ -96,23 +113,61 @@ function new_obj(folder_path, callback){
     _folder.calculate_meta_s3key = calculate_meta_s3key;
 
 
-    function calculate_name_space(){
+    function calculate_name_space_prefix(callback){
         if (typeof _meta.uuid === "undefined") {
-            return false;
+            return callback('uuid undefine');
         }
         if (! _meta.owner ) {
-            return false;
+            return callback('no owner');
         }
-        if (typeof _meta.owner.name !== "string" || typeof _meta.owner.id !== "string") {
-            return false;
+        if (typeof _meta.owner !== "string") {
+            return callback('owner not string');
         }
+        fkeys.make_name_space_s3key(_meta, function(err, s3key){
+            if(err) return callback(err);
+
+            _meta['name_space_prefix'] = s3key;
+            callback(null, s3key);
+        });
     }
 
-    // owner: {name: string, id: string}
+    _folder.calculate_name_space_prefix = calculate_name_space_prefix;
+
+
+    /*
+     * owner: username, string. 
+     * Deprecated: owner: {name: string, id: string}
+     */
     function set_owner(owner){
         _meta.owner = owner;
         return _folder;
     }
+
+    _folder.set_owner = set_owner;
+
+
+    function get_owner(owner){
+        return _meta.owner;
+    }
+
+    _folder.get_owner = get_owner;
+
+
+    function calculate_basic_meta(callback){
+        if(!_meta.["owner"]) throw new Error("no owner when calculate basic meta");
+
+        if(!_meta["path"])   _meta.path = folder_path;
+
+        meta.uuid = uuid.v4();
+        meta["create_milli"] = Date.now();
+
+        calculate_meta_s3key(function(err, s3key){
+            if(err) return callback(err);
+            calculate_name_space_prefix(callback); // the callback get ns prefix
+        });
+    }
+    _folder.calculate_basic_meta = calculate_basic_meta;
+
 
     function user_can_read(username){
         return false;
@@ -135,24 +190,43 @@ function new_obj(folder_path, callback){
     _folder.user_can_do = user_can_do;
 
 
+    function save_meta(callback) {
+      p('in s3/folder.js save meta, ', _meta.meta_s3key, _meta.path);
+      return lock_async(function(lock_err, unlocker) {
+        if (lock_err) {
+          p(lock_err, '--!!-- lock err');
+        }
+        return bucket.write_json(_meta_.meta_s3key, _meta_, function(write_err, write_reply) {
+          return unlocker(function(unlock_err, unlock_reply) {
+            return callback(write_err, write_reply);
+          });
+        });
+      });
+    };
 
 
 
 
     return callback(null, _folder);
 }
+
 module.exports.new_obj = new_obj;
 
 
 
 
-//function make_s3key_for_folder_meta_file(folder_path, callback){
-//    if(!folder_path) return callback('no folder path given');
-//    s3prefix('folder_meta', function(err, folder_meta_prefix){
-//        if(err) return callback(err);
-//
-//        var s3key = path.join(folder_meta_prefix, folder_path);
-//        callback(null, s3key);
-//    });
-//}
-//module.exports.make_s3key_for_folder_meta_file = make_s3key_for_folder_meta_file;
+/*
+ * Create new folder.  2016 0311
+ */
+function new_folder(username, folder_path, callback){
+    new_obj(folder_path, function(err, obj){
+        if(err) return callback(err);
+
+        obj.set_owner(username);
+        obj.calculate_basic_meta(function(err, nsprefix){
+        });
+    });
+}
+
+
+

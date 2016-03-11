@@ -51,46 +51,41 @@
     <div id="register"> <a id="register-a" href="/user/slow-home"> <i class="fa fa-user"></i> Register </a> </div>
   </header>
 
-  <!--
   {{#if user }}
   <p>{{{ user }}}</p>
   {{/if}}
-  -->
+  {{#if message }}
+  <p>{{{ message }}}</p>
+  {{/if}}
 
   <form action="/login" method="post" accept-charset="UTF-8">
     <div class="igroup">
       <label for="username"> 
-        <span class="label-text ggtt" data-ggtt="username">User name:</span>
+        <span class="label-text">User name:</span>
       </label>
       <input type="text" id="username" name="username" />
     </div>
 
     <div class="igroup" id="normal-password-div">
       <label for="password" id="normal-pass"> 
-        <span class="password-label ggtt" data-ggtt="password"> PassWord:</span>
+        <span class="password-label"> Passw0rd:</span>
         <span id="normal-show" class="hint"></span>
       </label>
       <input type="password" id="password" name="password" />
     </div>
 
-    <!--
     <div class="igroup" id="text-password-div">
       <label for="text-password" class="clr" id="show-pass">
         <span class="text-password-label"> Password:</span>
       </label>
       <input type="text" id="text-password" name="text-password" />
     </div>
-    -->
 
     <div class="igroup">
-      <label for="submit" class="ggtt" data-ggtt="login">Login:</label>
+      <label for="submit"></label>
       <input id="submit" name="submit" type="submit" value="Login"/>
     </div>
   </form>
-
-  {{#if message }}
-  <p class="message">{{{ message }}}</p>
-  {{/if}}
 
   <div id='try-before-register'>
     <p>
@@ -133,7 +128,6 @@
 
 <script src="/static/bower_components/jquery/jquery.min.js"></script>
 <script src="/static/bower_components/i18next/i18next.min.js"></script>
-<script src="/static/js/text-trans.js"></script>
 <!--  <script src="/static/js/i18next-1.7.3.js"></script>  -->
 
 <script>
@@ -141,88 +135,58 @@
       //console.log( (this == $ ? 'yes' : 'no') );
       //$.inspect(this, 'window');
 
-      //var width = $(window).width();
-      //console.log('width', width);
+      var width = $(window).width();
+      console.log('width', width);
 
-      //$("#password").keypress(function(e) {
-      //  $("form span.hint")
-      //  .html(String.fromCharCode(e.which))
-      //  .stop()
-      //  .fadeIn(100, function(){
-      //    $(this).fadeOut(2000);        
-      //  });
-
-      //});
-
-      //$("#text-password").keypress(function(e) {
-      //  var value = $("#text-password").val();
-      //  // set the other password:
-      //  $("#password").val(value);
-
-      //  // testing:
-      //  //if( $("#password").val() !== $("#text-password") ) alert('not equal ' + value);
-      //});
-
-
-      //$("div#other-id a").click(function(e){
-      //  e.preventDefault();
-      //});
-
-
-      // do my translate 
-
-      var dictionary = {
-            en: {
-                "login":  "LOGIN",
-                "username":  "User Name",
-                "password":  "Password",
-                "i18key": "hello world",
-                "testi18n": "TEST I18N"
-            },
-
-            zh: {
-                "login":  "登录",
-                "username":  "用户名",
-                "password":  "密码",
-
-                "i18key": "hello world",
-                "testi18n": "测试 i18next "
-            }
-      };
-
-      function trans(key, lang){
-        if(!key) return null;
-        if(!lang) return null;
-
-        if(dictionary[lang]){
-          if(dictionary[lang][key]) return dictionary[lang][key];
-        }
-        return null;
-      }
-
-      //$("#ptesti18n").html(trans("testi18n", 'zh'));
-
-      var userLang = navigator.language || navigator.userLanguage;
-      //console.log('userLang');
-      //console.log(userLang);
-
-      if(/zh/.test(userLang)){
-        $(".ggtt").each(function(){
-            //console.log($(this).html());
-            //console.log($(this).data("ggtt"));
-            //console.log( trans($(this).data("ggtt"), "zh"));
-
-            var key = $(this).data("ggtt");
-            if(key){
-              var translated = trans(key, "zh");
-              if(translated) $(this).html(translated);
-            }
+      $("#password").keypress(function(e) {
+        $("form span.hint")
+        .html(String.fromCharCode(e.which))
+        .stop()
+        .fadeIn(100, function(){
+          $(this).fadeOut(2000);        
         });
-      }
 
-      //$(".ggtt").html(trans($(this).data("ggtt"), "zh"));
+      });
 
-      //console.log('here, 0308');
+      $("#text-password").keypress(function(e) {
+        var value = $("#text-password").val();
+        // set the other password:
+        $("#password").val(value);
+
+        // testing:
+        //if( $("#password").val() !== $("#text-password") ) alert('not equal ' + value);
+      });
+
+
+      $("div#other-id a").click(function(e){
+        e.preventDefault();
+      });
+
+      i18next.init({
+        lng: 'en',
+          resources: {
+              en: {
+                translation: {
+                  "i18key": "hello world",
+                  "testi18n": "TEST I18N"
+                }
+              },
+
+              zh: {
+                translation: {
+                  "i18key": "hello world",
+                  "testi18n": "测试 i18next 这个"
+                }
+              }
+          }
+      }, function(err, t){
+        // initialized and ready to go!
+        const hw = i18next.t('i18key'); // hw = 'hello world'
+        $("#ptesti18n").i18n();
+
+      });
+
+      console.log('here, 0308');
 
     });
 </script>
