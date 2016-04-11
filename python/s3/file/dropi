@@ -1,0 +1,16 @@
+#!/usr/bin/expect
+# vim: set ft=expect
+
+# easy tool by 'expect' to jump to points.
+
+spawn ipython
+expect "]:"
+send "a_start_interact = 'ok-start-interact:)'\r"
+expect "]:"
+
+#send "%run  ./klass.py\r"
+send "%run  ./write_txt.py\r"
+
+send "print a_start_interact\r"
+expect "ok-start-interact:)"
+interact

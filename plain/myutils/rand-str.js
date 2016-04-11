@@ -61,6 +61,8 @@ if(require.main === module){
         show.push(random_char());
         show.push(random9());
         show.push(random_str());
+        show.push(random_str(3));
+        show.push(random_str(3));
     }
     console.log(show.join("  "));
 }

@@ -1,31 +1,51 @@
 
 # 2016 0225
 
-`meta` is json string, saved as s3 object.
+`meta` is json string, saved as s3 object, see file: ./meta
+
 This is for aws s3 storage, which is key value object.
 
-## s3 key for folder, it's meta and name space
+## folder, s3key, name space and meta data
 
 S3 key of folder meta is equal to folder's path: 
     
-    .gg.folder.meta/user-id/folder/path
-    .gg.folder.name.space/user-id/folder-uuid
+    .gg.folder.meta/username/folder/path
+    .gg.folder.name.space/username/folder-uuid
 
 
-## s3 key for file data, meta and name space.
+## file, s3 key for file data, meta and name space.
 
 File data is saved with s3 key:
 
-    .gg.file/user-id/file/path/is/full/name.extension
-
+    .gg.file/username/file/full/path/name.extension
 
 S3 key of file meta *get* path info, it's    
 
-    .gg.file.meta/user-id/file/path/is/full/name.extension
-    .gg.file.name.space/user-id/file-uuid
+    .gg.file.meta/username/file/full/path/name.extension
+    .gg.file.name.space/username/file-uuid
+
+File meta get full path, so if there is file meta, we can get it by full path.
+Representation of file, such as render as html page, web page for file info
+would be in meta, or name space.
+
+We can get cases when a file or folder get owner different from root(home)'s
+owner.  So a function `get_root` will be need.
+
+## Logics
+
+Files have logic relations with folder, adding/deleting of file can be
+performed without locking the folder containing the file.
+
+Folder is a container of it's meta and representation, job can be carried out
+or redone if fails happen.  For example:
+    Adding a new file is adding a json obj to folder name space:
+        folder name space/files/new-file-name (this is key of json)
+    Deleting a file can be logged by writing a json obj to folder name space:
+        folder name space/event/delete/file-name (this is key of json)
 
 
-2016 0225
+
+## Changes from the old way
 
 - changed to use full path with file data and meta, add name space
   for both file and folder, when needed.
@@ -35,7 +55,7 @@ S3 key of file meta *get* path info, it's
 
 - set up name space for each folder, and do it for file in need.
 
-  > name space is a prefix: user-id/uuid
+  > name space is a prefix: username/uuid
   > uuid is rare to conflict
   > data can be put into the name space as: event, action, log, comment
 

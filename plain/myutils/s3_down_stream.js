@@ -422,41 +422,6 @@ function s3_down_stream(app){
   });
 
 
-  //// tmp solution before, should be deprecated.  2016 0220
-  //app.get("/slave-want-read", function(req, res, next){
-  //  var href = req.query.url;
-  //  if(!href) return res.end("<h1>err: no href</h1>");
-
-  //  var reg = /^http/i;
-  //  if(! reg.test(href)) href = 'http://' + href;
-
-  //  request(href, function(err, response, body){
-  //    if(err) return res.end("<h1>err: got nothing</h1>");
-
-  //    if(u.isString(body)){
-  //      var uobj = url.parse(href);
-  //      var shorted = u.pick(uobj, 'protocol', 'host', 'port', 'auth');
-  //      var base = url.format(shorted);
-  //      console.log('base: ', base);
-
-  //      var headend = /<\/.*head.*>/i;
-  //      if(headend.test(body)){
-  //        var base_tag = '<base href="' + base + '" target="_blank"></head>\n';
-  //        console.log('base tag: ', base_tag);
-  //        var html = body.replace(headend, base_tag);
-  //      }
-  //      res.set("Content-Type", "text/html; charset=UTF-8");
-  //      res.send(html);
-  //    }else{
-  //      return res.end("<h1>err: no text</h1>");
-  //    }
-
-  //  });
-
-
-  //  //request(url).pipe(res);
-  //});
-
 
   app.get("/i-want-read", function(req, res, next){
     var href = req.query.url;
@@ -484,38 +449,6 @@ function s3_down_stream(app){
     });
   });
 
-
-  //// totest
-  //app.get(/^\/folder\/(.+)/, 
-  //  cel.ensureLoggedIn('/login'),
-  //  function(req, res, next){
-
-  //    //console.log("url for tryss regex");
-  //    //console.log(req.url);
-  //    //console.log(req.params[0]);
-
-  //    var redis_file_key = req.params[0];
-  //    if (!redis_file_key) {
-  //      res.send("<h1>File name error.</h1>");
-  //      next();
-  //    }
-
-  //    myfile.get_file_info(redis_file_key, function(err, file_info_obj){
-  //      //var key = _check_s3_file_key(file_info_obj);
-
-  //      delete file_info_obj['isFolder'];
-  //      var user_folder_ul = tv.make_ul_list(file_info_obj);
-
-  //      //console.log('obj user: ', file_info_obj);
-  //      res.render('listfolder', { user:req.user, user_folder_ul:user_folder_ul});
-
-  //    });
-
-  //    //console.log( req.params );
-  //    //res.send("user id : " + req.params.id);
-  //    //res.send("user  : " + user);
-  //  });
-}
 
 
 function _check_s3_file_key(info){

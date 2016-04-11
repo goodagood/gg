@@ -101,7 +101,14 @@ function  cmusera(){
 }
 
 if(require.main === module){
-    cmusera();
+    //cmusera();
+
+    function c_find_by_user_name(name){
+        muser.find_by_user_name(name, function(err, info){
+            p('checking find by user name: ', err, info);
+        });
+    }
+    c_find_by_user_name('t0322y6');
 
     setTimeout(process.exit, 30*1000);
 }

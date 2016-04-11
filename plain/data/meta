@@ -1,0 +1,35 @@
+
+# folder meta
+{
+    name, path, uuid, timestamp, permission,
+    owner: user name
+    type:  'folder'
+    meta_s3key, name_space_prefix,
+
+    cache: {
+        files: {
+            file-name: {file-infos}
+            ...
+        }
+        renders: {
+            li: self render, used by parent folder
+            ul: list of files and sub-folders
+        }
+    }
+}
+
+
+# file meta
+{
+    name, path, size, timestamp, uuid, permission,
+    owner: user name
+    type:  'file type'
+    optional => s3key, meta_s3key, name_space_prefix,
+
+    cache: {
+        renders: {
+            li: self render, used by parent folder
+            html: renderred as a web page
+        }
+    }
+}

@@ -1,4 +1,7 @@
 
+var u = require('underscore');
+
+
 var adder = require("./m-add-user.js");
 //var muser = require("./muser.js");
 var name_password = require("../config/sample-password.js");
@@ -39,8 +42,8 @@ module.exports.manual_exit = function(test){
 
 if(require.main === module){
 
-    function new_user(name){
-        name = name || 't0310y6h23m13';
+    function old_new_user(name){
+        name = name || 't0322y6';
         name_password.get_sample_username_password(function(err, name_password_list){
             if(err) return p(1, err);
 
@@ -66,7 +69,32 @@ if(require.main === module){
             });
         });
     }
-    new_user();
+    //old_new_user('t0322y6');
+
+
+    function check_a_new_user(name){
+        name = name || 't0325y6';
+        name_password.get_sample_username_password(function(err, name_password_list){
+            if(err) return p(1, err);
+
+            var test_info = {
+                username : name_password_list[name].username,
+                password : name_password_list[name].password
+            };
+            p('test_info', test_info);
+
+            adder.new_user(test_info.username, test_info.password, function(err, updated){
+                if(err) p('a new user got Err: ', err);
+                assert(!err, "There is an err when adder # check user name can..");
+
+
+                //assert(u.isString(updated.username), "We should have user name");
+                p('updated'); p(updated);
+                
+            });
+        });
+    }
+    check_a_new_user('t0326y6');
 
     setTimeout(process.exit, 15*1000);
 }

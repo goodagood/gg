@@ -14,6 +14,9 @@ var uuid = require("node-uuid");
 //var s3prefix = require("../myutils/json-cfg.js").s3_prefix_configure();
 //var user_module = require("../users/a.js");
 var fkeys = require("./folder-keys.js");
+var flag  = require("../redis-tools/flag.js");
+
+var bucket = require('../aws/bucket.js');
 
 var p = console.log;
 
@@ -32,7 +35,7 @@ var p = console.log;
  */
 function new_obj(folder_path, callback){
 
-    var add_file, add_file_save_folder, add_folder, build_file_list,
+    var add_file_save_folder, add_folder, build_file_list,
         callback_folder_auxiliary_path,
         callback_milli_uuid, check_username, clear_empty_names,
         clear_file_meta, del_uuid_and_name, delete_all_uuid_recursively,
@@ -53,10 +56,10 @@ function new_obj(folder_path, callback){
         promise_to_clear_empty_names, promise_to_delete_file_by_uuid,
         promise_to_delete_name, promise_to_give_obj,
         promise_to_list_files_and_save, promise_to_one_file_obj,
-        promise_to_retrieve_saved_meta, promise_to_save_meta,
+        promise_to_retrieve_saved_meta, 
         promise_to_write_meta, read_file, read_file_12_15, read_file_by_uuid,
         read_files, read_in_template, read_recent_file_by_name, read_text,
-        render_template, retrieve_saved_meta, save_meta, self_render_as_a_file,
+        render_template, self_render_as_a_file,
         set_attr, sort_files, sort_files_by_date, try_template, update_file,
         update_name, update_sub_folder, update_uuid_storage, 
         uuid_to_delete_file_fun, uuid_to_file_obj, uuid_to_meta, write_meta,
@@ -154,19 +157,47 @@ function new_obj(folder_path, callback){
 
 
     function calculate_basic_meta(callback){
-        if(!_meta.["owner"]) throw new Error("no owner when calculate basic meta");
+        if(!_meta["owner"]) _meta["owner"] = folder_path.split('/')[0];
+        //if(!_meta["owner"]) throw new Error("no owner when calculate basic meta");
 
         if(!_meta["path"])   _meta.path = folder_path;
+        if(!_meta["name"])   _meta.name = path.basename(folder_path);
 
-        meta.uuid = uuid.v4();
-        meta["create_milli"] = Date.now();
+        _meta.uuid = uuid.v4();
+        _meta["create_milli"] = Date.now();
+        _meta["type"] = 'folder';
+        //_meta["type"] = myconfig.IamFolder;
 
         calculate_meta_s3key(function(err, s3key){
             if(err) return callback(err);
-            calculate_name_space_prefix(callback); // the callback get ns prefix
+            calculate_name_space_prefix(function(err, nsprefix){
+                if(err) return callback(err);
+                callback(null, _meta);
+            });
         });
     }
     _folder.calculate_basic_meta = calculate_basic_meta;
+
+
+    function is_owner(user_name){
+        if(user_name === _meta.owner) return true;
+        return false;
+    }
+    _folder.is_owner = is_owner;
+
+
+    function get_prefix_for_file_info(){
+        if(!_meta.name_space_prefix) return null;
+        return path.join(_meta.name_space_prefix, 'files');
+    }
+    _folder.get_prefix_for_file_info = get_prefix_for_file_info;
+
+
+    function get_prefix_for_event(){
+        if(!_meta.name_space_prefix) return null;
+        return path.join(_meta.name_space_prefix, 'events');
+    }
+    _folder.get_prefix_for_event = get_prefix_for_event;
 
 
     function user_can_read(username){
@@ -176,35 +207,48 @@ function new_obj(folder_path, callback){
     _folder.user_can_read = user_can_read;
 
 
-    function user_can_write(username){
+
+
+    function user_can_run(username){
         return false;
     }
 
-    _folder.user_can_write = user_can_write;
-
-
-    function user_can_do(username){
-        return false;
-    }
-
-    _folder.user_can_do = user_can_do;
+    _folder.user_can_run = user_can_run;
 
 
     function save_meta(callback) {
       p('in s3/folder.js save meta, ', _meta.meta_s3key, _meta.path);
-      return lock_async(function(lock_err, unlocker) {
-        if (lock_err) {
-          p(lock_err, '--!!-- lock err');
-        }
-        return bucket.write_json(_meta_.meta_s3key, _meta_, function(write_err, write_reply) {
-          return unlocker(function(unlock_err, unlock_reply) {
-            return callback(write_err, write_reply);
+
+      var flag_id = path.join(_meta.name_space_prefix, 'meta-saving');
+      var milli_to_down_flag = 5 * 1000; // milli-seconds
+
+      flag.timed_flag(flag_id, milli_to_down_flag, function(err, flag_tool){
+          if(err) return callback(err);
+
+          bucket.write_json(_meta.meta_s3key, _meta, function(err, s3rep){
+              if(err) return callback(err);
+              flag_tool.down();
+              callback(null, _meta);
           });
-        });
       });
     };
+    _folder.save_meta = save_meta;
 
 
+    //todo, check
+    function retrieve_saved_meta(callback) {
+      if (!_meta.meta_s3key) return callback('no meta s3key');
+
+      return bucket.read_json(_meta.meta_s3key, function(err, meta_) {
+        if (err) {
+          _meta.error = err;
+          return callback(err, null);
+        }
+        _meta = meta_;
+        return callback(null, _meta);
+      });
+    }
+    _folder.retrieve_saved_meta = retrieve_saved_meta;
 
 
     return callback(null, _folder);
@@ -216,17 +260,31 @@ module.exports.new_obj = new_obj;
 
 
 /*
- * Create new folder.  2016 0311
+ * Create new folder, and save.  2016 0311
  */
-function new_folder(username, folder_path, callback){
+function build_folder(username, folder_path, callback){
     new_obj(folder_path, function(err, obj){
         if(err) return callback(err);
 
         obj.set_owner(username);
-        obj.calculate_basic_meta(function(err, nsprefix){
+        obj.calculate_basic_meta(function(err, meta){
+            obj.save_meta(callback);
         });
     });
 }
+module.exports.build_folder = build_folder;
 
 
+function retrieve_folder(folder_path, callback){
+    new_obj(folder_path, function(err, obj){
+        if(err) return callback(err);
 
+        obj.calculate_meta_s3key(function(err, s3key){
+            obj.retrieve_saved_meta(function(err, meta){
+                if(err) return callback(err);
+                callback(null, obj);
+            });
+        });
+    });
+}
+module.exports.retrieve_folder = retrieve_folder;

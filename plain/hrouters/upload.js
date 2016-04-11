@@ -123,12 +123,14 @@ function myupload(app){
    * If get more time, try to use https
    * 2015 1023
    */
-  var supload = require("../uploader/signed-upload.js");
+  //var supload = require("../uploader/signed-upload.js");
+  var dupload = require("../uploader/dupload.js");
   app.post("/signed-upload/", 
       mup.single("file_to_upload"),
       function(req, res){
+          p('-- in signed-upload');
 
-          supload.receive_file(req, function(err, reply_json){
+          dupload.work_request(req, function(err, reply_json){
               if(err) return res.json({err:err});
               res.json(reply_json);
           });

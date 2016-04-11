@@ -1,0 +1,12 @@
+{
+    "front": "/file/get/intro/public/test0215/y6.0216/i0212y6.html",
+    "intro": "/file/md-with-local-files/intro/public/intro.md",
+    "reason": "/file/md-with-local-files/intro/public/reasons.md",
+    "value": "/file/md-with-local-files/intro/public/value.md",
+    "toclaim": "/file/md-with-local-files/intro/public/clean-claim.md",
+    "info_value": "/file/add-value/",
+    "remove_file": "/del/",
+    "view_file": "/viewtxt/",
+    "stream_file": "/ss/",
+    "ucp": "/tec-doc/"
+}

@@ -1,4 +1,8 @@
 
+/*
+ * Deprecated, 2016 0313
+ * use ./s3keys.js instead.
+ */
 
 var path = require("path");
 

@@ -8,7 +8,9 @@
   "scripts": {
     "test": "mocha"
   },
-  "dependencies": {},
+  "dependencies": {
+    "mmmagic": "^0.4.1"
+  },
   "devDependencies": {
     "mocha": "^2.4.5",
     "should": "^8.2.2"

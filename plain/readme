@@ -1,3 +1,15 @@
+2016-0408
+    soft link from node_modules of js root, 
+        node_modules/gg --> ../
+        #ie: gg/plain/node_modules/gg --> gg/plain
+        #so: js codes in gg/plain
+        #can be logically required without a lot ../../..
+
+    our codes can be required by:
+        require("gg/sub-moduel/sub-sub-moduel/file-name")
+        # check plain/s3/c-gg-link.js
+
+
 2015-0516
     listor anyway, folder tool list, folder/file settings.
 
@@ -93,3 +105,60 @@ bower might give wrong with handlebars.js
 0503
 
 Try npm install connect-ensure-login
+
+
+# nodes
+    
+
+avoiding ../../../../../../..
+
+Not everything in an application properly belongs on the public npm and the overhead of setting up a private npm or git repo is still rather large in many cases. Here are some approaches for avoiding the ../../../../../../../ relative paths problem.
+node_modules
+
+People sometimes object to putting application-specific modules into node_modules because it is not obvious how to check in your internal modules without also checking in third-party modules from npm.
+
+The answer is quite simple! If you have a .gitignore file that ignores node_modules:
+
+node_modules
+
+You can just add an exception with ! for each of your internal application modules:
+
+node_modules/*
+!node_modules/foo
+!node_modules/bar
+
+Please note that you can't unignore a subdirectory, if the parent is already ignored. So instead of ignoring node_modules, you have to ignore every directory inside node_modules with the node_modules/* trick, and then you can add your exceptions.
+
+Now anywhere in your application you will be able to require('foo') or require('bar') without having a very large and fragile relative path.
+
+If you have a lot of modules and want to keep them more separate from the third-party modules installed by npm, you can just put them all under a directory in node_modules such as node_modules/app:
+
+node_modules/app/foo
+node_modules/app/bar
+
+Now you will be able to require('app/foo') or require('app/bar') from anywhere in your application.
+
+In your .gitignore, just add an exception for node_modules/app:
+
+node_modules/*
+!node_modules/app
+
+If your application had transforms configured in package.json, you'll need to create a separate package.json with its own transform field in your node_modules/foo or node_modules/app/foo component directory because transforms don't apply across module boundaries. This will make your modules more robust against configuration changes in your application and it will be easier to independently reuse the packages outside of your application.
+symlink
+
+Another handy trick if you are working on an application where you can make symlinks and don't need to support windows is to symlink a lib/ or app/ folder into node_modules. From the project root, do:
+
+ln -s ../lib node_modules/app
+
+and now from anywhere in your project you'll be able to require files in lib/ by doing require('app/foo.js') to get lib/foo.js.
+custom paths
+
+You might see some places talk about using the $NODE_PATH environment variable or opts.paths to add directories for node and browserify to look in to find modules.
+
+Unlike most other platforms, using a shell-style array of path directories with $NODE_PATH is not as favorable in node compared to making effective use of the node_modules directory.
+
+This is because your application is more tightly coupled to a runtime environment configuration so there are more moving parts and your application will only work when your environment is setup correctly.
+
+node and browserify both support but discourage the use of $NODE_PATH.
+
+

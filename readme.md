@@ -1,4 +1,15 @@
 
+# link to /usr/local/bin/node
+
+After move ~/softwares/node../bin/node to /usr/local/bin/
+and removed /usr/bin/node
+it gives error no such file /usr/bin/node
+So, 
+    cd /usr/bin
+    sudo ln -s /usr/local/bin/node
+
+
+#
 
 Work as a web file system, using aws s3 as storage.  It will be better to add
 other web storage as backend.

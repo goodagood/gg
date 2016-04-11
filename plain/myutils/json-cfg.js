@@ -24,6 +24,7 @@ function read_json(full_path, callback){
 module.exports.read_json = read_json;
 
 
+// before 0409 y2016
 function s3_prefix_configure(cfg_file_path){
     cfg_file_path = cfg_file_path || path.normalize(path.join(__dirname, "../config/s3-prefix.json"));
 
@@ -64,6 +65,23 @@ function s3_prefix_configure(cfg_file_path){
 }
 module.exports.s3_prefix_configure = s3_prefix_configure;
 
+
+var _s3_prefixes = null;
+
+function callback_s3_prefixes(callback){
+    var cfg_file_path = path.normalize(path.join(__dirname, "../config/s3-prefix.json"));
+
+    if(_s3_prefixes) return callback(null, _s3_prefixes);
+
+    //else:
+    read_json(cfg_file_path, function(err, obj){
+        if(err) return callback(err);
+
+        _s3_prefixes = obj;
+        callback(null, _s3_prefixes);
+    });
+}
+module.exports.callback_s3_prefixes = callback_s3_prefixes;
 
 
 if(require.main === module){

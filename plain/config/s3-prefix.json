@@ -7,6 +7,7 @@
 
     "folder_meta":        ".gg.folder.meta/",
     "folder_name_space":  ".gg.folder.name.space/",
+
     "file":               ".gg.file/",
     "file_meta":          ".gg.file.meta/",
     "file_name_space":    ".gg.file.name.space/"

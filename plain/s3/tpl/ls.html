@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<!-- running to folder object refactoring, Mar 19, 2016.
+-->
+<head>
+<meta http-equiv="content-type" content="text/html" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="description" content="login, goodogood/goodagood" />
+<meta name="keywords" content="goodogood, goodagood, filesystem, sharing" />
+<meta name="author"   content="Andrew">
+
+<title> 
+
+  {{#if title }}
+    {{ title }}
+  {{else}}
+    Folder listing, Mar19 2016
+  {{/if}}
+
+</title>
+
+<!--
+<link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap-glyphicons.css">
+-->
+
+<link rel="stylesheet" href="/static/bower_components/skeleton/css/normalize.css">
+<link rel="stylesheet" href="/static/bower_components/skeleton/css/skeleton.css">
+
+<link rel="stylesheet" href="/static/css/fa/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="/static/css/s3ls.css">
+
+
+<style type="text/css">
+  {{{ in_file_css }}}
+</style>
+
+</head>
+<body>
+
+<div id="wrapper" class="container">
+
+
+  <header class="row">
+    <div> <span class="logo"> <a href="http://goodogood.me/">goodogood</a> <span></div>
+
+    <div id="register"> <a id="register-a" href="/user/slow-home"> <i class="fa fa-user"></i> Register </a> </div>
+  </header>
+
+  <!--
+  {{#if user }}
+  <p>{{{ user }}}</p>
+  {{/if}}
+  -->
+
+  {{#if message }}
+  <div id="message" class="u-cf">
+    <p class="message u-cf">{{{ message }}}</p>
+  </div>
+  {{/if}}
+
+  <div id="folder-listing" class="u-cf">
+    <div id="cwd"> <i class="fa fa-arrow-right"> </i> {{{cwd}}} </div>
+      {{{ ls_as_ul }}}
+  </div>
+
+
+
+  <!-- disable before deploy
+  <div id="other-id">
+    <a class="btn" href="/auth/google"> <i class="fa fa-google"> </i> google </a>
+    <a class="btn" href="/auth/facebook"> <i class="fa fa-facebook"> </i> facebook </a>
+    <a class="btn" href="/auth/yahoo"> <i class="fa fa-yahoo"> </i> yahoo </a>
+  </div>
+
+
+    <p data-i18n="testi18n" id="ptesti18n">
+      test i18n
+    </p>
+  -->
+
+  <footer>
+    <p>
+      goodogood, goodagood, Andrew, &copy;
+    </p>
+    <p>
+      <a href="/file/get/intro/public/test0215/y6.0216/i0212y6.html" class="button"> Basic info.</a>
+      <a href="/file/md-with-local-files/intro/public/intro.md" class="button"> Background info.</a>
+    </p>
+  </footer>
+
+
+</div> <!-- end of wrapper -->
+
+<!--
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="http://code.jquery.com/jquery.min.js"></script>
+<script src="/static/js/jquery.inspect.js"></script>
+-->
+
+
+<script src="/static/bower_components/jquery/jquery.min.js"></script>
+<script src="/static/bower_components/i18next/i18next.min.js"></script>
+<script src="/static/js/text-trans.js"></script>
+<!--  
+<script src="/static/js/i18next-1.7.3.js"></script> 
+-->
+
+<script>
+$( document ).ready(function() {
+});
+</script>
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+-->
+
+<!--[if lt IE 9]>
+<script src="/static/bower_components/html5shiv/dist/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+<![endif]-->
+
+
+</body>
+<!-- vim: et ts=2 sw=2 tw=150
+-->
+</html>
+
+

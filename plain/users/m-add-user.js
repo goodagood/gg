@@ -48,34 +48,22 @@ function user_name_can_be_used(name, callback){
 }
 module.exports.user_name_can_be_used = user_name_can_be_used;
 
-///*
-// * Change to hash password, 2015 1106
-// * add the: hash pass # hash_password_for_userinfo
-// */
-//function save_user_to_redis(user_info, callback){
-//  var hash_pass = require("./hash-pass.js");
-//  hash_pass.hash_password_for_userinfo(user_info, function(err, user_hash){
-//    if (err) {
-//      p('in save u t r, h p . h p f u : err: ', err, user_info);
-//      return callback(err, null);
-//    }
-//    // The parameter user info has been modified, it's been called user_hash now:
-//    rclient.hmset(user_hash.username, user_hash, function(err, reply){
-//      if (err) {
-//        p('rclient hmset, in save ... to redis, 1106, err:', err);
-//        return callback(err, null);
-//      }
-//      //console.log("in users/a.js, 'save user to redis', hmset, err reply: ",err, reply);
-//
-//      add_name_to_user_roll(user_hash.username, function(err, whatever){
-//        if(err){
-//          p('add name to user roll, 1106, err: ', err);
-//          return callback(err, whatever);
-//        }
-//        //console.log("in users/a.js, 'save user to redis', add name to user roll, whatever: ", whatever);
-//        callback(null, user_hash);
-//      });
-//    });
-//  });
-//}
+
+/*
+ * Add a new user, if name is not ok, it will callback with err message.
+ */
+function new_user(name, password, callback){
+    user_name_can_be_used(name, function(err, yes){
+        if(err)  return callback(err);
+        if(!yes) return callback('Name occupied maybe, user name can NOT be used');
+
+        var info = {
+            username : name,
+            password : password
+        };
+
+        insert_user_info_into_mongodb(info, callback);
+    });
+}
+module.exports.new_user = new_user;
 

@@ -28,4 +28,8 @@ sudo iptables -t nat -I OUTPUT     -p tcp -o lo  --dport 443 -j REDIRECT --to-po
 
 # 2016 0305
 # forward 9017 to mongodb server's localhost:27017
-autossh -L 9017:localhost:27017 ubuntu@10.134.145.167
+#autossh -L 9017:localhost:27017 ubuntu@10.134.145.167
+#autossh -L 9017:localhost:27017 -L 6379:localhost:6379 ubuntu@10.134.161.155
+## how about keep port number? 2016 0411
+autossh -L 27017:localhost:27017 -L 6379:localhost:6379 ubuntu@10.134.161.155
+

@@ -213,7 +213,7 @@ s3_down_stream.s3_down_stream(app);
 
 
 // list files
-var list_files = require("./hrouters/file-list-v2.js");
+var list_files = require("./hrouters/file-list-v3.js");
 list_files.list(app);
 
 // editors
