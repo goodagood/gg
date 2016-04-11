@@ -1,8 +1,8 @@
 from pymongo import MongoClient
 
 #client = MongoClient(port=9017)
-#client = MongoClient(port=27017)
-client = MongoClient()
+client = MongoClient(port=27017)
+#client = MongoClient()
 db = client.gg
 collection = db.users
 
@@ -132,3 +132,10 @@ def get_all_names():
     '''
     users = find_all_user_info()
     return [user['username'] for user in users]
+
+
+
+if __name__ == "__main__":
+    #users = get_id_names();
+    users = find_all_user_info()
+    print users

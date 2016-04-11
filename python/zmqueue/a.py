@@ -9,6 +9,7 @@
 import time
 import json
 import zmq
+import pprint
 
 context = zmq.Context()
 socket = context.socket(zmq.REP)
@@ -28,35 +29,36 @@ def job_pass(info):
 
 def reply(info):
     askfor = info['ask-for']
-    replies = {"default": default_reply,
+    replies = {
+            "default": default_reply,
             "folder.ul": default_reply
             }
-    return replies[askfor](info)
+
+    if askfor in replies:
+        print('got a function to replay')
+        return replies[askfor](info)
+    else:
+        return {'found no function to reply': True}
 
 
 def default_reply(info):
     return {"I.am.not.ready.to.do.it": True}
 
 
-if __name__ == "__main__":
-    from pprint import pprint
-
+def srv_zmq():
     while True:
-        #  Wait for next request from client
-        message = socket.recv()
-        print("Received request: %s" % message)
-        print("typeof msg: %s" %type(message))
+        message = socket.recv_json()
 
-        j = json.loads(message)
+        if(message):
+            j = json.loads(message)
 
-        #pprint("parsed json: ", j)
-        #pprint(j['ask-for'])
-        print(j['ask-for'])
-        #job_pass(j)
+            reply = job_pass(j)
 
-        #  Do some 'work'
-        time.sleep(1)
+            socket.send_json(reply)
 
-        #  Send reply back to client
-        reply = json.dumps({"reply": "World"});
-        socket.send(reply)
+            j = reply = None
+
+
+if __name__ == "__main__":
+    srv_zmq()
+
