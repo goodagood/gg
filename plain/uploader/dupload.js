@@ -43,7 +43,8 @@ var myparse   = require('../aws/parse.js');
 
 var p = console.log;
 
-var transporter = require("../s3/loc-transport.js");
+//var transporter = require("../s3/loc-transport.js");
+var passer = require("plain/uploader/pass-up.js");
 function work_request(req, callback){
     req_chk.check_upload_request(req, function(err, ok, reason_json){
         if(err) return callback(err);
@@ -53,26 +54,15 @@ function work_request(req, callback){
 
         if(ok){
             p('0328 4:57, it is ok');
-            var info = prep_info(req.body);
-            if(!info['target_folder_path'] || !info['user_name']) return callback('not enough info, 0328 4:16am');
+            var username = get_body_field(req.body, 'username');
+            var cwd = get_body_field(req.body, 'cwd');
+            if(!username || !cwd) return callback('not enough info, 0328 4:16am');
 
-            p('ok, run to transport, ', req.file, "\r\nreq body:", req.body, info);
-            return transporter.transport(req.file, info, callback);
+            p('ok, run to transport, ', req.file, "\r\nreq body:", req.body, username, cwd);
+            //return transporter.transport(req.file, info, callback);
 
-            //return callback(null, req.file); // in dev
-            ////must return
-            //return myparse.pass_file(req.file, req.body.username, req.body.cwd,
-            //    function(err, prepared_file_meta){
-            //        if(err) return callback({err:err}, {err:err});
+            return passer.pass_upload_infos([req.file], username, cwd, callback);
 
-            //        var reply_json = {
-            //            testing:true,
-            //            confirm_url:'uuurrrlll',
-            //            prepared_meta: prepared_file_meta
-            //        };
-            //        callback(null, reply_json);
-            //    }
-            //);
         }
 
         if(reason_json) return callback(reason_json);

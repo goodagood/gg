@@ -1,5 +1,7 @@
 
 /*
+ * moved to ./file/obj.js 2016 04
+ *
  * The file object, rewrite from ../aws/simple-file-v3.js(coffee).
  * Should be ok to play with plain utf-8 files.
  *
@@ -17,6 +19,8 @@ var lutil  = require("./local-util.js");
 var ft     = require('../myutils/filetype.js');
 var myconfig = require("../config/config.js");
 
+var p = console.log;
+
 
 function new_obj(file_info, callback) {
     var build_file_info_list, build_util_list, calculate_delete_href, calculate_meta, calculate_s3_stream_href, calculate_view_href, callback_file_auxiliary_path, callback_milli_uuid, clear_past_meta_store, convert_meta_to_ul, delete_s3_storage, file_uuid, get_client_json, get_complex_auxiliary_path, get_file_auxiliary_path, get_meta, get_owner_id, get_saved_meta, guess_owner, increase_value, isError, meta2s3, prepare_html_elements, promise_to_delete_s3_storage, promise_to_save_meta_file, read_file_to_buffer, read_stream, read_to_string, remove_storage, render_html_for_owner, render_html_for_viewer, render_html_repr, retrieve_meta, save_file_to_folder, save_meta_file, set_meta, update_meta, update_storage, update_storage_a, write_s3_storage, _build_ul, _keep;
@@ -32,23 +36,29 @@ function new_obj(file_info, callback) {
     var _file = {};
 
 
+    function make_s3key_and_meta_s3key(callback){
+        s3keys.make_s3keys_for_file_path(_meta.path, function(err, keys){
+            if(err) return callback(err);
+            p('keys: ', keys);
+            _meta.s3key = keys.s3key;
+            _meta.meta_s3key = keys.meta_s3key;
+            callback(null, _meta);
+        });
+    }
+    _file.make_s3key_and_meta_s3key = make_s3key_and_meta_s3key;
+
+
     // doing
     function set_basic_access_keys(callback){
         if (!_meta.uuid) _meta.uuid = uuid.v4();
 
-        s3keys.make_file_s3key(_meta.path, function(err, file_s3key){
+        s3keys.make_s3key_and_meta_s3key(_meta.path, function(err, file_s3key){
             if(err) return callback(err);
-            _meta.file_s3key = file_s3key;
 
-            s3keys.make_file_meta_s3key(_meta.path, function(err, meta_s3key){
+            s3keys.make_file_name_space_prefix(_meta, function(err, ns_key){
                 if(err) return callback(err);
-                _meta.meta_s3key = meta_s3key;
-
-                s3keys.make_file_name_space_s3key(_meta, function(err, ns_key){
-                    if(err) return callback(err);
-                    _meta.name_space_s3key = ns_key;
-                    callback(null, _meta);
-                });
+                _meta.name_space_s3key = ns_key;
+                callback(null, _meta);
             });
         });
     }
@@ -85,7 +95,7 @@ function new_obj(file_info, callback) {
             _meta.owner = lutil.get_root(_meta.path);
         }
 
-        set_basic_access_keys(function(err, m){
+        make_s3key_and_meta_s3key(function(err, m){
             necessaries = {
                 what: myconfig.IamFile,
                 timestamp: Date.now(),
@@ -114,7 +124,7 @@ function new_obj(file_info, callback) {
     _file.set_meta = set_meta;
 
 
-    function get_meta(m) {
+    function get_meta() {
         return _meta;
     }
     _file.get_meta = get_meta;
@@ -653,10 +663,13 @@ module.exports.new_obj = new_obj;
 
 if(require.main === module){
     var p = console.log;
+    p('require main === module');
+    var file_path = 'tmp/public/t.png';
+    var owner = 'tmp';
 
     function c_a(){
-        var file_path = 't0310y6/test0314.text';
-        var owner = 't0310y6';
+        var file_path = 'tmp/public/t.png';
+        var owner = 'tmp';
 
         var info = {
             path: file_path,
@@ -672,6 +685,24 @@ if(require.main === module){
             });
         });
     }
+    //c_a();
 
-    c_a();
+
+    function c_0424(file_path, owner){
+
+        var info = {
+            path: file_path,
+        };
+
+        new_obj(info, function(err, obj){
+            //p(err, obj);
+            obj.make_s3key_and_meta_s3key(function(err, what){
+                //p(2, err, what);
+                p('file meta: ', obj.get_meta());
+
+                setTimeout(process.exit, 2000);
+            });
+        });
+    }
+    c_0424(file_path, owner);
 }

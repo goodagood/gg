@@ -1,4 +1,5 @@
 
+# moved to ./server.py
 
 #
 #   Hello World server in Python
@@ -6,59 +7,71 @@
 #   Expects b"Hello" from client, replies with b"World"
 #
 
+import sys
 import time
 import json
 import zmq
 import pprint
 
-context = zmq.Context()
-socket = context.socket(zmq.REP)
-#socket.bind("tcp://localhost:5555")
-socket.bind("tcp://127.0.0.1:5555")
+import folder_ul
 
 
 
-def job_pass(info):
-    ''
-    if 'ask-for' in info:
-        ''
-        return reply(info)
-    else:
-        return {"nothing-i-hear-nothing-i-can-do": True}
+def serve_zmq():
+    context = zmq.Context()
+    socket = context.socket(zmq.REP)
+    socket.bind("tcp://127.0.0.1:5555")
 
-
-def reply(info):
-    askfor = info['ask-for']
-    replies = {
-            "default": default_reply,
-            "folder.ul": default_reply
-            }
-
-    if askfor in replies:
-        print('got a function to replay')
-        return replies[askfor](info)
-    else:
-        return {'found no function to reply': True}
-
-
-def default_reply(info):
-    return {"I.am.not.ready.to.do.it": True}
-
-
-def srv_zmq():
     while True:
-        message = socket.recv_json()
+        try:
+            #receive_and_serve_message
+            message = socket.recv_json()
 
-        if(message):
-            j = json.loads(message)
+            if(message):
+                j = json.loads(message)
+                reply = serve_and_report(j)
+                socket.send_json(reply)
 
-            reply = job_pass(j)
+                j = reply = None
+        except KeyboardInterrupt:
+            print "closing zmq binding"
+            socket.close()
+            context.destroy()
+            sys.exit()
 
-            socket.send_json(reply)
 
-            j = reply = None
+def serve_and_report(info):
+    ''
+    if 'ask-for' not in info:
+        info['error'] = "no ask-for no done anything"
+        return info
+
+    asked = info['ask-for']
+    services = offer_service_list()
+
+    if asked in services:
+        print('got a function to replay')
+        service = services[asked]
+        return service(info)
+    else:
+        # noop: no operation
+        return services['noop'](info)
+
+
+def offer_service_list():
+    return {
+        "noop": noop_service,
+        "folder.ul": folder_ul.cached_reply
+        }
+
+
+def noop_service(info):
+    info['noop'] = True;
+    info["I.did.nothing.for.asked"] = True
+    return info
+
 
 
 if __name__ == "__main__":
-    srv_zmq()
+    serve_zmq()
 

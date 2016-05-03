@@ -8,6 +8,8 @@ var formidable = require('formidable');
 var mup = require("multer")({dest: "/tmp/"});
 
 var util = require('util');
+var path = require('path');
+var fs = require('fs');
 
 var u = require('underscore');
 
@@ -17,13 +19,10 @@ var bucket = require('../aws/bucket.js');
 
 var myutil = require('../myutils/myutil.js');
 
-var fs = require('fs');
 
 var myconfig =  require("../config/config.js");
 var upload_dir = myconfig.formidable_upload_dir;
 
-var path = require('path');
-var mv = require('mv');
 
 var cel = require('connect-ensure-login');
 
@@ -33,8 +32,8 @@ var folder_module     = require('../aws/folder-v5.js');
 
 var myparse = require('../aws/parse.js');
 
-var log28 = require('../myutils/mylogb.js').double_log('/tmp/log28');
 
+var passer = require("plain/uploader/pass-up.js");
 
 var p     = console.log;
 
@@ -97,14 +96,19 @@ function myupload(app){
           }
 
           // in dev:
-          p('req.files.length'); p(req.files.length);
+          //p('req.files.length'); p(req.files.length);
           //p('util.inspect(req.files)');
           //p(util.inspect(req.files));
           //fs.writeFile('/tmp/uptest', util.inspect(req.files), 'utf-8');
 
-          myparse.process_req_files(req.files, username, cwd, function(err, what){
+          passer.pass_upload_infos(req.files, username, cwd, function(err, results){
+              if(err) return next(err);
+
               res.redirect('/upfile/' + cwd);  // to self
           });
+          //myparse.process_req_files(req.files, username, cwd, function(err, what){
+          //    res.redirect('/upfile/' + cwd);  // to self
+          //});
   });
 
   /*

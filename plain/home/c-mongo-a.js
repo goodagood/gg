@@ -31,8 +31,8 @@ function check_home_ids(){
   });
 }
 
-
-var gg_user_db = 'mongodb://localhost:9017/gg';
+// port forwarded, 2016 0412
+var gg_user_db = 'mongodb://localhost:27017/gg';
 var user_coll  = 'users';
 
 function clone_to_mongo(){

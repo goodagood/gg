@@ -38,7 +38,7 @@ module.exports.make_folder_meta_s3key = make_folder_meta_s3key;
  *      //owner: 'actually the root'
  *   }
  */
-function make_folder_name_space_s3key(folder_info, callback){
+function make_folder_name_space_prefix(folder_info, callback){
 
     if(!folder_info || !folder_info.uuid || !folder_info.path) return callback('no enough folder info given');
     var uuid = folder_info.uuid;
@@ -52,7 +52,7 @@ function make_folder_name_space_s3key(folder_info, callback){
         callback(null, s3key);
     });
 }
-module.exports.make_folder_name_space_s3key = make_folder_name_space_s3key;
+module.exports.make_folder_name_space_prefix = make_folder_name_space_prefix;
 
 
 
@@ -87,7 +87,7 @@ function make_s3keys_for_file_path(file_path, callback){
 
         var keys = {};
         keys.s3key = path.join(prefixes['file'], file_path);
-        keys.meta_s3key = path.join(prefixex['file_meta'], file_path);
+        keys.meta_s3key = path.join(prefixes['file_meta'], file_path);
         callback(null, keys);
     });
 }
@@ -97,7 +97,7 @@ module.exports.make_s3keys_for_file_path = make_s3keys_for_file_path;
 /*
  * @info is file information(meta) must have: {uuid: , path: }
  */
-function make_file_name_space_s3key(info, callback){
+function make_file_name_space_prefix(info, callback){
     if(!info) return callback('no file information given for making file name space s3key');
 
     if(!info || !info.uuid || !info.path) return callback('no enough folder info given');
@@ -112,7 +112,8 @@ function make_file_name_space_s3key(info, callback){
         callback(null, s3key);
     });
 }
-module.exports.make_file_name_space_s3key = make_file_name_space_s3key;
+module.exports.make_file_name_space_prefix = make_file_name_space_prefix;
+
 
 
 // to move to local-util.js

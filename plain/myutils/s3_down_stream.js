@@ -1,5 +1,8 @@
 var path = require('path');
+
 var AWS = require('aws-sdk');  //?
+var mime = require("mime")
+
 var swig= require('swig');  //?
 swig.setDefaults({cache:false});  //?
 
@@ -45,7 +48,133 @@ var log28  = require('./mylogb.js').double_log('/tmp/log28');
 var p = console.log;
 
 
+// 2016 04
+var asker = require("plain/asker/tasks.js");
+
+
+
 function s3_down_stream(app){
+
+
+  // Made tmp fix, 12 27.  Using path_uuid
+  // Changed after python, using file path. 2016 0414
+  //
+  app.get(/^\/viewtxt\/(.*)/, function(req, res, next){
+    var file_path = req.params[0];
+    console.log("In get 'viewtxt', ", file_path );
+
+    var username;
+    if(req.user){
+      if(req.user.username) username = req.user.username;
+    }
+
+    asker.file_text(username, file_path, function(err, txt){
+        if(err) return res.end('err, got no text?');
+        if(!txt) return res.end('not text?');
+        res.render('viewtxt.html', { text : txt , });
+    });
+  });
+
+
+  // param is full file path, 2016 0414
+  var keys = require("plain/s3/s3keys.js");
+  app.get(/^\/dl\/(.+)/, 
+    //cel.ensureLoggedIn('/login'),
+    function(req, res){
+
+      //console.log(req.params[0]);
+
+      var _path = req.params[0];
+      keys.make_file_s3key(_path, function(err, key){
+        if (err)  res.end("<h1>make file s3key error.</h1>");
+        if (!key) res.end("<h1>File name error.</h1>");
+        res.attachment(path.basename(key));
+        _s3_file_read_stream(key).pipe(res);
+      });
+
+  });
+
+  app.get(/^\/get\/(.+)/, 
+    //cel.ensureLoggedIn('/login'),
+    function(req, res){
+      //console.log(req.params[0]);
+      var file_path = req.params[0];
+
+      var username;
+      if(req.user){
+        if(req.user.username) username = req.user.username;
+      }
+
+      asker.file_meta(username, file_path, function(err, meta){
+        if (err)  res.end("<h1>get. ask file meta error.</h1>");
+        if (!meta) res.end("<h1>get. no File meta.</h1>");
+
+        headers = {server: 'goodagood/goodogood server'};
+        headers['Content-Type'] = meta.type || mime.lookup(meta.path);
+        res.writeHead(200, headers);
+
+        _s3_file_read_stream(meta.s3key).pipe(res);
+      });
+  });
+
+
+  //// this make a 'tmp' file but not in /tmp
+  //app.get(/^\/tmp-thumb\/(\d+)\/(\d+)\/(.+)/, 
+  //  //cel.ensureLoggedIn('/login'),
+  //  function(req, res, next){
+  //    console.log(req.params);
+  //    var width  = req.params[0];
+  //    var height = req.params[1];
+  //    var file_path = req.params[2];
+
+  //    var username;
+  //    if(req.user){
+  //      if(req.user.username) username = req.user.username;
+  //    }
+
+  //    width  = parseInt(width);
+  //    height = parseInt(height);
+
+  //    asker.tmp_thumb(username, file_path, width, height, function(err, href){
+  //      if (err)  return next(err);
+  //      if (!href) return next(err);
+
+  //      res.redirect(href);
+  //    });
+  //});
+
+
+  // show img in /tmp glob can be used, for easy development. 2016 0423
+  var tmp_img_srv = require("./tmp-img-srv.js");
+  app.get(/^\/show-tmp-img\/(.+)/, 
+      function(req, res, next){
+        console.log(req.params);
+        var file_name = req.params[0];
+
+        tmp_img_srv.stream(file_name, req, res, next);
+        //res.end('<h1>' + file_name + '</h1>');
+  });
+
+
+  // param is s3key
+  app.get(/^\/s3key\/(.+)/, 
+    //cel.ensureLoggedIn('/login'),
+    function(req, res){
+
+      var key = req.params[0];
+      if (!key) return next("<h1>s3key must be offerred, error.");
+
+      headers = {server: 'goodagood/goodogood server'};
+      headers['Content-Type'] = mime.lookup(key);
+      res.writeHead(200, headers);
+      //res.attachment(path.basename(key));
+
+      bucket.s3_object_read_stream(key).pipe(res);
+  });
+
+
+  // old before 2016 0419
+
   // param is s3key
   app.get(/^\/ss\/(.+)/, 
     //cel.ensureLoggedIn('/login'),
@@ -58,7 +187,7 @@ function s3_down_stream(app){
       var key = req.params[0];
       if (!key) res.end("<h1>File name error.</h1>");
       res.attachment(path.basename(key));
-      _s3_file_read_stream(key).pipe(res);
+      bucket.s3_object_read_stream(key).pipe(res);
   });
 
   /*
@@ -238,21 +367,6 @@ function s3_down_stream(app){
         });
       });
 
-  // Made tmp fix, 12 27.
-  app.get(/^\/viewtxt\/(.*)/, function(req, res, next){
-    var path_uuid = req.params[0];
-    console.log("In get 'viewtxt', ", path_uuid );
-    fm_v5.retrieve_file_by_path_uuid(path_uuid, function(err, file_obj){
-      if(err) return res.send('err 1, in get "/viewtxt/" ' + path_uuid);
-      file_obj.read_to_string(function(err, txt){
-        //log28('get file obj in view text', file_obj.get_meta());
-        //log28('--  text', txt);
-        if(!txt) return res.end('not text?');
-        res.render('viewtxt.html', { text : txt , });
-      });
-
-    });
-  });
 
 
   var mytemplate = require("./template.js");
@@ -449,6 +563,7 @@ function s3_down_stream(app){
     });
   });
 
+}
 
 
 function _check_s3_file_key(info){

@@ -39,7 +39,9 @@ def ul_from_cache(folder):
 
 
 def cache_render_from_ns(folder):
-    ''
+    ''' get info from name space, cache it in meta,
+        then render <ul> and save folder meta.
+    '''
     cache_in_meta(folder)
     ul_from_cache(folder)
     folder.save_meta()

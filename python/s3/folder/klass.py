@@ -133,7 +133,7 @@ class Folder:
         # prepare to add to parent folder
         m = self.pick_up_metas(submeta)
 
-        self.add_file(m)
+        self.add_file_in_ns(m)
         sub.save_meta()
         return sub
 
@@ -150,9 +150,15 @@ class Folder:
 
     def pick_up_metas(self, meta):
         ''' Pick metas in files, sub-folders to save in name space
-            ['name', 'size', 'owner', 'filetype', 'type', 'permission', 'timestamp', 'li'];
+            [ 'filetype', 'li', 'name', 'no_meta_file',
+              'owner',    'permission', 'size',  'timestamp','type', ];
         '''
-        m = dict(name = meta['name'])
+        m = {}
+        if 'name' in meta:
+            m['name'] = meta['name']
+        else:
+            m['name'] = os.path.basename(meta['path'])
+
         if 'size'       in meta: m['size'] = meta['size']
         if 'owner'      in meta: m['owner'] = meta['owner']
         if 'filetype'   in meta: m['filetype'] = meta['filetype']
@@ -160,6 +166,7 @@ class Folder:
         if 'permission' in meta: m['permission'] = meta['permission']
         if 'timestamp'  in meta: m['timestamp'] = meta['timestamp']
         if 'li'         in meta: m['li'] = meta['li']
+        if 'no_meta_file'  in meta: m['no_meta_file'] = meta['no_meta_file']
         return m
 
 
@@ -180,14 +187,14 @@ class Folder:
             return key
 
 
-    def add_file(self, file_meta):
+    def add_file_in_ns(self, file_meta):
         ''' Add files and sub-folders
-        File's meta are added to name space, in 'files' category, so it will
-        has key:
-            name space prefix/files/file-name.extension
+            File's meta are added to name space, in 'files' category, so it will
+            has key:
+                name space prefix/files/file-name.extension
 
-        Not all file information needed to be there, get enough to represent
-        a file or folder would be ok.
+            Not all file information needed to be there, get enough to represent
+            a file or folder would be ok.
         '''
         m = self.pick_up_metas(file_meta)
         jstr = json.dumps(m)
@@ -206,7 +213,7 @@ class Folder:
             We have not lockings here, data might be conflicting for folder
             meta.
         '''
-        self.add_file(file_meta)
+        self.add_file_in_ns(file_meta)
         cache_in.cache_render_from_ns(self)
 
 
@@ -267,15 +274,16 @@ class Folder:
         '''
         '''
         tpl = """
-        <li class="folder-li">
-            <a class="folder as-li" href="/ls/{path}">
-            <span class="name">{name}</span>
+        <li class="folder">
+            <a class="folder" href="/ls/{path}">
+            <span class="name folder">{name}</span>
             </a>
         </li>
         """
         li = tpl.format(name=self.meta['name'], path=self.meta['path'])
 
-        self.get_cache()['renders']['li'] = li
+        self.get_cache()['renders']['li'] = li #d
+        self.meta['li'] = li
         return li
 
 
@@ -283,10 +291,6 @@ def getroot(_path):
     return _path.split('/')[0]
 
 ''' from js
-
-}
-module.exports.intern_file = intern_file;
-
 
 '''
 

@@ -33,6 +33,7 @@
     "wysihtml": "~0.4.17",
     "handlebars": "~4.0.5",
     "i18next-browser-languagedetector": "~0.0.14",
-    "font-awesome": "~4.5.0"
+    "font-awesome": "~4.5.0",
+    "plyr": "~1.6.1"
   }
 }

@@ -2,6 +2,7 @@
 import os
 import json
 import time
+import mimetypes
 
 import path_setting
 
@@ -13,7 +14,7 @@ import s3.crud as crud
 import s3.folder.getter
 
 
-class File:
+class File(object):
     def __init__(self, _path, opts={}):
         if isinstance(opts, dict):
             self.meta = opts
@@ -23,6 +24,7 @@ class File:
         self.meta['path'] = _path
 
 
+    # actually not needed, got the habit from node.js
     def get_meta(self):
         return self.meta
 
@@ -80,6 +82,28 @@ class File:
         return self.meta
 
 
+    def is_meta_in_s3(self):
+        if not 'meta_s3key' in self.meta:
+            self.calculate_keys()
+
+        if crud.key_exists(self.meta['meta_s3key']):
+            return True
+        else:
+            return False
+
+    # name space don't need to be set up, it's a prefix,
+    # just use it with rules.
+    def is_name_space_used(self):
+        if not 'name_space_prefix' in self.meta:
+            self.calculate_prefix_and_keys()
+
+        # 'key exists' check by count object with the key as prefix
+        if crud.key_exists(self.meta['name_space_prefix']):
+            return True
+        else:
+            return False
+
+
     def retrieve_meta(self):
         '''
         '''
@@ -101,6 +125,8 @@ class File:
 
     def read(self):
         ''
+        if not 's3key' in self.meta:
+            self.calculate_keys()
         return crud.get_txt(self.meta['s3key'])
 
     def write(self, text):
@@ -120,8 +146,14 @@ class File:
         file info will be added to: foprefix/files/file-name.extension
         '''
         fo = self.get_folder()
-        fo.add_file(self.meta)
+        fo.add_file_in_ns(self.meta)
         return self
+
+
+    def guess_type(self):
+        # guess type return (mime-type, encoding)
+        self.meta['type'] = mimetypes.guess_type(self.meta['path'])[0]
+        return self.meta['type']
 
 
     def as_li(self):
@@ -133,6 +165,10 @@ class File:
         #</li>
         #"""
         #li = tpl.format(name=self.meta['name'], path=self.meta['path'])
+
+        # fix no name condition
+        if 'name' not in self.meta:
+            self.meta['name'] = os.path.basename(self.meta['path'])
 
         li = util.simple_li(self.meta)
 
@@ -689,7 +725,8 @@ if __name__ == "__main__":
     #fia = File('tmp/s.text')
     #fia.make_up_basic_meta()
     #fia.write('s test of text file, apr.07 2:15pm')
-    fia = retrieve_file('tmp/s.text')
-    fo = fia.get_folder()
 
-    print fia.get_meta()
+    #fia = retrieve_file('tmp/s.text')
+    #fo = fia.get_folder()
+
+    #print fia.get_meta()

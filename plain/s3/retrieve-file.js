@@ -11,7 +11,7 @@ var file_obj = require('./ggfile.js');
  */
 function retrieve_meta(file_path, callback){
     file_obj.new_obj({path: file_path}, function(err, obj){
-        obj.set_basic_access_keys(function(err, meta){
+        obj.set_uuid_and_name_space_prefix(function(err, meta){
             if(err) return callback(err);
             p('in ret.. meta: ', meta);
 
@@ -24,7 +24,7 @@ module.exports.retrieve_meta = retrieve_meta;
 
 function retrieve_file_obj(file_path, callback){
     file_obj.new_obj({path: file_path}, function(err, obj){
-        obj.set_basic_access_keys(function(err, meta){
+        obj.set_uuid_and_name_space_prefix(function(err, meta){
             if(err) return callback(err);
 
             obj.retrieve_meta(function(err, meta){

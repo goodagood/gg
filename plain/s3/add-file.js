@@ -40,7 +40,7 @@ function add_local_file(loc_path, target_folder_path, callback){
         if(err) return callback(err);
         u.defaults(info, linfo);
 
-        ggfile.new_obj(info, function(err, obj){
+        ggfile.new_obj(info.path, function(err, obj){
             //p(err, obj);
             obj.calculate_meta_defaults(function(err, what){
                 var meta = obj.get_meta();

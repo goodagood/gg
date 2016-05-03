@@ -29,39 +29,10 @@ module.exports.list_y6m03 = list_y6m03;
 
 
 
-/*
- * This give un-ordered list, an <ul> tag.
- */
-function ul_for_user(name, folder_obj, callback){
-    if(folder_obj.is_owner(name)){
-        var meta = folder_obj.get_meta();
-        if(meta.cache){
-            if(meta.cache['renders']){
-                if(meta.cache['renders'].ul){
-                        p('going to return: ',  meta.cache['renders'].ul);
-                        //return meta.cache['folder-renders'].html.owner;
-                        return meta.cache['renders'].ul;
-                }
-            }
-        }
-        return `<ul><li>Are you sure there is: meta.cache['renders'].ul</ul></li>`;
-    }else{
-        return `<ul class="file-list" > \r\n
-            <li> Right now, we can list file for owner only.</li> \r\n
-            </ul> \r\n`;
-    }
-}
-module.exports.ul_for_user = ul_for_user;
-
-
-//?
-function get_ul(role, folder){
-    var meta = folder.get_meta();
-
-}
 
 
 var chain = require("../cwd-chain/cwd-chain.js");
+var asker = require("gg/asker/tasks.js");
 
 /*
  * This give webpage
@@ -70,20 +41,16 @@ function ls_for_user(name, folder_path, callback){
     if(!u.isString(name)) return callback('please give valid user name');
     if(!u.isString(folder_path)) return callback('please give valid folder path');
 
-    folder.retrieve_folder(folder_path, function(err, folder_obj){
-        if(err){
-            p('retrieve folder err 0318y6 when ls4user: ', err);
-            return callback(err);
-        }
-
-        // ul is the file list in shape of <ul> tag
-        var ul = ul_for_user(name, folder_obj)
+    // ul is the file list in shape of <ul> tag
+    // doing ...
+    asker.folder_ul(name, folder_path, function(err, ul){
         var path_chain = chain.cwd_chain(folder_path, '/ls');
 
         var context = {ls_as_ul: ul, username: name, cwd: path_chain, title: 'I am testing'};
 
         render_webpage('./tpl/ls.html', context, callback);
         //return callback(null, ul); //indev
+
     });
 }
 module.exports.ls_for_user = ls_for_user;

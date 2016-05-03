@@ -31,6 +31,9 @@ def get_obj(key):
 
 geto = get_obj # tmp compatibilty
 
+def get_body(key):
+    return get_obj(key)["Body"]
+
 def get_txt(key):
     res = get_obj(key)
     return res["Body"].read()
@@ -70,6 +73,11 @@ def save(key, body):
             Key = key,
             Body = body
             )
+
+
+def put_file(key, file_path):
+    with open(file_path) as file:
+        return save(key, file)
 
 
 def list_obj_raw(prefix, num=1000):

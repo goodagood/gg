@@ -63,7 +63,7 @@ module.exports.file_name_space_s3key = function(test){
     var root = s3keys.get_root(file_path);
     test.ok(root === root);
 
-    s3keys.make_file_name_space_s3key(info, function(err, key){
+    s3keys.make_file_name_space_prefix(info, function(err, key){
         test.ok(!err);
         test.ok(!!key);
         test.ok(u.isString(key));
@@ -103,7 +103,7 @@ module.exports.folder_name_space_s3key = function(test){
     var root = s3keys.get_root(folder_path);
     test.ok(root === root);
 
-    s3keys.make_folder_name_space_s3key(info, function(err, key){
+    s3keys.make_folder_name_space_prefix(info, function(err, key){
         test.ok(!err);
         test.ok(!!key);
         test.ok(u.isString(key));

@@ -55,8 +55,9 @@ function transport(nfile, info, callback){
     meta.path = path.join(info.target_folder_path, meta.name);
     meta.owner = info.user_name;
 
-    ggfile.new_obj(meta, function(err, obj){
+    ggfile.new_obj(meta.path, function(err, obj){
         p(err, obj);
+        obj.extend_meta(meta);
         obj.calculate_meta_defaults(function(err, what){
             var meta = obj.get_meta();
             //p('2, info: ', info);  p('3, nfile: ', nfile); 

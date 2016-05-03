@@ -5,7 +5,8 @@
 
 var MongoClient = require('mongodb').MongoClient;
 
-var GG_User_Db         = 'mongodb://localhost:9017/gg';
+// 27017 is actually being forwarded to the target db server
+var GG_User_Db         = 'mongodb://localhost:27017/gg';
 var User_Collection    = 'users';
 var User_Id_Field      = 'userid';
 var User_Name_Field    = 'username';

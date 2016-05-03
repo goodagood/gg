@@ -50,18 +50,21 @@ var s3a = require("../s3/s3-a.js");
 var s3 = s3a.get_s3_obj();
 
 
-// After more testing, should change s3 to s3only:
-// var aws = require('./aws-s3-conf.js');
-// var s3only = aws.get_s3_obj();
-//
-
-
-
-var s3folder = require('./folder.js');
 
 
 var p = console.log;
 
+
+// 2015, 0519; 1031; 2016 0424
+function s3_object_read_stream(key){
+    if (!key) throw new Exception('can you give an s3 key to "s3 object read stream" in bucket.js?');
+
+    //var s3 = new AWS.S3();
+    //var s3 = s3a.get_s3_obj();
+    var params = {Bucket: root_bucket, Key: key};
+
+    return s3.getObject(params).createReadStream();
+}
 
 
 /* 
@@ -1058,22 +1061,15 @@ function test_update_json(){
 
 
 
-// 2015, 0519; 1031;
-function s3_object_read_stream(key){
-    if (!key) throw new Exception('can you give an s3 key to "s3 object read stream" in bucket.js?');
-
-    //var s3 = new AWS.S3();
-    var s3 = s3a.get_s3_obj();
-    var params = {Bucket: root_bucket, Key: key};
-
-    return s3.getObject(params).createReadStream();
-}
-
 
 //module.exports.init_user_home = init_user_home; //d
 
 // 2015 1022
 module.exports.version        = '3, back from gg-credentials';
+
+//2015, 0516
+module.exports.s3_object_read_stream = s3_object_read_stream;
+
 module.exports.put_file_to_s3 = put_file_to_s3;
 module.exports.read_obj       = read_obj;
 module.exports.read_file      = read_file;
@@ -1134,8 +1130,6 @@ module.exports.move_object = move_object;
 module.exports.s3_object_exists = s3_object_exists;
 module.exports.put_object = put_object;
 
-//2015, 0516
-module.exports.s3_object_read_stream = s3_object_read_stream;
 
 
 // -- checkings -- //

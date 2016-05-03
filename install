@@ -1,6 +1,11 @@
 2016 02
     zeromq, ipython and aws-sdk ...
     pyzmq: zmq binding for python
+    subprocess32
+
+    sudo pip install Wand
+    #, 2016 0418, it depend on:
+    sudo apt-get install libmagickwand-dev libmagickcore5-extra
 
 2016 0131
     cd ./plain/code; npm install

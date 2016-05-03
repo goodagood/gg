@@ -12,7 +12,7 @@ def simple_li(file_meta):
     '''
     #print('simple li ', file_meta)
     tpl = """
-    <li class="file-li {kind}">
+    <li class="{kind}">
         <span class="name">{name}</span>
         <span class="size">{size}</span>
         <span class="type">{kind}</span>

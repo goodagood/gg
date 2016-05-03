@@ -32,3 +32,26 @@ def get_s3_prefix():
     s3_prefix_json_config_file = os.path.join(loc_config_dir, "s3-prefix.json")
     return read_json(s3_prefix_json_config_file)
 
+
+
+# json settings for local files
+#Setting_file_for_Local_pathes = "/home/ubuntu/workspace/gg/python/loc/conf.json"
+Setting_file_for_Local_prefix = "/home/ubuntu/workspace/gg/config/loc-prefix.json"
+def get_path_settings_for_local_files():
+    j = read_json(Setting_file_for_Local_prefix)
+
+    j['base'] = os.path.expanduser(j['base_prefix'])
+    j['base'] = os.path.abspath(j['base'])
+
+    meta_prefix = os.path.join(j['base'], j['meta_dir_name'])
+    ns_prefix = os.path.join(j['base'], j['ns_dir_name'])
+
+    j['meta_prefix'] = meta_prefix
+    j['ns_prefix']   = ns_prefix
+    return j
+
+
+def get_prefix_settings_for_local_files():
+    j = read_json(Setting_file_for_Local_prefix)
+    return j
+

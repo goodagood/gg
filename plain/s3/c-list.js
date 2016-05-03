@@ -25,8 +25,21 @@ function c_ul(_path, owner){
 
 
 
+function c_ls_list(_path, owner){
+    // 2016 0412
+    owner = owner || 'abc';
+    _path = _path || 'abc';
+
+    list.ls_for_user(owner, _path, function(err, html){
+        if (err) return p(err);
+        p(html);
+    });
+    setTimeout(process.exit, 5000);
+}
+
 
 if(require.main === module){
 
-    c_ul();
+    //c_ul();
+    c_ls_list();
 }

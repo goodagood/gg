@@ -252,6 +252,12 @@ app.use("/user", user2);
 // for google auth.
 //google.routes(app, passport);
 
+var img = require("./hrouters/img.js");
+app.use("/img", img);
+
+var vid = require("./hrouters/vid.js");
+app.use("/vid", vid);
+
 
 app.listen(port);
 console.log("app listen on port: ", port);

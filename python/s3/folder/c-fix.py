@@ -2,19 +2,23 @@
 # fix from meta s3key
 
 import re
-#import os
+import os
 from pprint import pprint
 
 import path_setting
 
-import users_a as users
+#import users_a as users
+import user.getter
 import getter
 
 import s3.crud
 import s3.keys
 
+import s3.folder.cache_in as cache_in_folder_meta
+
+
 def all_users():
-    names = users.get_all_names()
+    names = user.getter.list_all_names()
     for name in names:
         recursive_fix(name)
 
@@ -67,10 +71,67 @@ def redo_add_subs(folder, pathes):
 
 def add_one_sub(folder, sub_path):
     smeta = getter.folder_meta(sub_path)
-    folder.add_file(smeta)
+    folder.add_file_in_ns(smeta)
 
+
+def fix_tmp_kk():
+    ''' redo tmp/kk
+        set meta type, li
+    '''
+    cwd = 'tmp/kk'
+    pdir= os.path.dirname(cwd)
+
+    fo = getter.folder(cwd)
+    fo.as_li()
+    fo.set_attr('type', 'folder')
+    fo.save_meta()
+
+    pfo = getter.folder(pdir)
+    pfo.add_file_in_ns(fo.get_meta())
+    cache_in_folder_meta.cache_render_from_ns(pfo)
+    return fo, pfo
+
+
+def fix_path(cwd, pobj):
+
+    fo = getter.folder(cwd)
+    fo.as_li()
+    #fo.set_attr('type', 'folder')
+    fo.save_meta()
+
+    pobj.add_file_in_ns(fo.get_meta())
+
+
+def check_sub(_path):
+    print(" -- {path} ".format(path = _path))
+
+    folder = getter.folder(_path)
+    cache  = folder.get_cache()
+    files  = cache['files']
+
+    for name in files.keys():
+        file = files[name]
+        #print(file)
+        if 'type' in file:
+            if file['type'] == 'folder':
+                #print 'folder'
+                sub_path = os.path.join(_path, name)
+                fix_path(sub_path, folder)
+
+    cache_in_folder_meta.cache_render_from_ns(folder)
+
+
+def redo_all_sub():
+    ''' re render sub-folder's li
+        2016 0412
+    '''
+    names = user.getter.list_all_names()
+    #print names
+    for name in names:
+        check_sub(name)
 
 
 if __name__ == "__main__":
     print __name__
     #pa = get_possible_sub_folder_pathes('tmp')
+    #tkk, tmp = fix_tmp_kk()

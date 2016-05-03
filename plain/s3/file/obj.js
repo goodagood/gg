@@ -18,64 +18,50 @@ var path = require("path");
 var uuid = require("node-uuid");
 var u    = require("underscore");
 
-var bucket = require('gg/aws/bucket.js');
+var bucket = require('plain/aws/bucket.js');
 
-var s3keys = require("gg/s3/s3keys.js");
-var lutil  = require("gg/s3/local-util.js");
-var ft     = require('gg/myutils/filetype.js');
-var myconfig = require("gg/config/config.js");
+var s3keys = require("plain/s3/s3keys.js");
+var exists = require("plain/s3/exists.js");
+var lutil  = require("plain/s3/local-util.js");
+var ft     = require('plain/myutils/filetype.js');
+var myconfig = require("plain/config/config.js");
 
+var p = console.log;
 
-function maker(file_info, callback) {
-    var build_file_info_list, build_util_list, calculate_delete_href,
-        calculate_meta, calculate_s3_stream_href, calculate_view_href,
-        callback_file_auxiliary_path, callback_milli_uuid,
-        clear_past_meta_store, convert_meta_to_ul, delete_s3_storage,
-        file_uuid, get_client_json, get_complex_auxiliary_path,
-        get_file_auxiliary_path, get_meta, get_owner_id, get_saved_meta,
-        guess_owner, increase_value, isError, meta2s3, prepare_html_elements,
-        promise_to_delete_s3_storage, promise_to_save_meta_file,
-        read_file_to_buffer, read_stream, read_to_string, remove_storage,
-        render_html_for_owner, render_html_for_viewer, render_html_repr,
-        retrieve_meta, save_file_to_folder, save_meta_file, set_meta,
-        update_meta, update_storage, update_storage_a, write_s3_storage,
-        _build_ul, _keep;
+function new_obj(file_path, callback) {
 
-    function check_file_info(){
-        if(!file_info.path) return false;
-        return true;
-    }
-
-    if(!check_file_info()) return callback('not enough file information feed in, 2016 0313.');
-
-    var _meta = file_info;
+    var _meta = {path: file_path};
     var _file = {};
 
 
-    // doing
-    function set_basic_access_keys(callback){
+    function make_s3key_and_meta_s3key(callback){
+        s3keys.make_s3keys_for_file_path(_meta.path, function(err, keys){
+            if(err) return callback(err);
+            p('keys: ', keys);
+            _meta.s3key = keys.s3key;
+            _meta.meta_s3key = keys.meta_s3key;
+            callback(null, _meta);
+        });
+    }
+    _file.make_s3key_and_meta_s3key = make_s3key_and_meta_s3key;
+
+
+    function set_uuid_and_name_space_prefix(callback){
         if (!_meta.uuid) _meta.uuid = uuid.v4();
 
-        s3keys.make_file_s3key(_meta.path, function(err, file_s3key){
+        s3keys.make_s3key_and_meta_s3key(_meta.path, function(err, file_s3key){
             if(err) return callback(err);
-            _meta.file_s3key = file_s3key;
 
-            s3keys.make_file_meta_s3key(_meta.path, function(err, meta_s3key){
+            s3keys.make_file_name_space_prefix(_meta, function(err, prefix){
                 if(err) return callback(err);
-                _meta.meta_s3key = meta_s3key;
-
-                s3keys.make_file_name_space_s3key(_meta, function(err, ns_key){
-                    if(err) return callback(err);
-                    _meta.name_space_s3key = ns_key;
-                    callback(null, _meta);
-                });
+                _meta.name_space_prefix = prefix;
+                callback(null, _meta);
             });
         });
     }
-    _file.set_basic_access_keys = set_basic_access_keys;
+    _file.set_uuid_and_name_space_prefix = set_uuid_and_name_space_prefix;
 
 
-    // doing
     /*
      * file_s3key
      * meta_s3key : file and meta s3key get full path, they can be accessed
@@ -105,7 +91,7 @@ function maker(file_info, callback) {
             _meta.owner = lutil.get_root(_meta.path);
         }
 
-        set_basic_access_keys(function(err, m){
+        make_s3key_and_meta_s3key(function(err, m){
             necessaries = {
                 what: myconfig.IamFile,
                 timestamp: Date.now(),
@@ -134,6 +120,11 @@ function maker(file_info, callback) {
     _file.set_meta = set_meta;
 
 
+    function extend_meta(m) {
+        return u.extend(_meta, m);
+    }
+    _file.extend_meta = extend_meta;
+
     function get_meta(m) {
         return _meta;
     }
@@ -141,12 +132,14 @@ function maker(file_info, callback) {
 
 
     function retrieve_meta(callback){
-        return bucket.read_json(_meta.meta_s3key, function(err, retrieved_meta_) {
+        if(!_meta.meta_s3key) return callback('has no meta s3key, to retrieve file meta');
+
+        return bucket.read_json(_meta.meta_s3key, function(err, retrieved) {
             if (err) {
                 _meta.error = err;
                 return callback(err, null);
             }
-            _meta = retrieved_meta_;
+            _meta = retrieved;
             return callback(null, _meta);
         });
     }
@@ -171,6 +164,38 @@ function maker(file_info, callback) {
         return false;
     }
     _file.is_owner = is_owner;
+
+
+    function file_exists(callback) {
+        return exists.file_exists(_meta.path, callback);
+    }
+    _file.file_exists = file_exists;
+
+
+    function meta_exists(callback) {
+        if(!_meta.meta_s3key) return callback('err, calculate meta s3key first');
+
+        return exists.key_exists(_meta.meta_s3key, callback);
+    }
+    _file.meta_exists = meta_exists;
+
+
+    function read_to_string (callback) {
+        return bucket.read_to_string(_meta.s3key, callback);
+    }
+    _file.read_to_string = read_to_string;
+
+
+    function read_file_to_buffer (callback) {
+        return bucket.read_data(_meta.s3key, callback);
+    }
+    _file.read_file_to_buffer = read_file_to_buffer;
+
+
+    function read_stream () {
+        return bucket.s3_object_read_stream(_meta.s3key);
+    }
+    _file.read_stream = read_stream;
 
 
     //guess_owner = function() {
@@ -219,18 +244,6 @@ function maker(file_info, callback) {
 
 
 
-    //read_file_to_buffer = function(callback) {
-    //    if (_meta.storage.type !== "s3") {
-    //        return callback('it might NOT be s3 storage', null);
-    //    }
-    //    return bucket.read_data(_meta.storage.key, callback);
-    //};
-    //read_to_string = function(callback) {
-    //    return bucket.read_to_string(_meta.storage.key, callback);
-    //};
-    //read_stream = function() {
-    //    return bucket.s3_object_read_stream(_meta.storage.key);
-    //};
     //write_s3_storage = function(content, callback) {
     //    return bucket.put_object(_meta.storage.key, content, function(err, aws_reply) {
     //        if (err) {
@@ -680,12 +693,13 @@ function maker(file_info, callback) {
 
     return callback(null, _file);
 }
-module.exports.maker = maker;
+module.exports.new_obj = new_obj;
 
 
 
 if(require.main === module){
-    var p = console.log;
+    var file_path = 'tmp/public/t.png';
+    var owner = 'tmp';
 
     function c_a(){
         var file_path = 't0310y6/test0314.text';
@@ -695,7 +709,7 @@ if(require.main === module){
             path: file_path,
         };
 
-        maker(info, function(err, obj){
+        new_obj(info.path, function(err, obj){
             //p(err, obj);
             obj.calculate_meta_defaults(function(err, what){
                 p(2, err, what);
@@ -706,5 +720,24 @@ if(require.main === module){
         });
     }
 
-    c_a();
+    function c_0424(file_path, owner){
+
+        var info = {
+            path: file_path,
+        };
+
+        new_obj(info.path, function(err, obj){
+            //p(err, obj);
+            obj.make_s3key_and_meta_s3key(function(err, what){
+                //p(2, err, what);
+                p('gtet meta: ', obj.get_meta());
+                obj.retrieve_meta(function(err, meta){
+                    p('file meta: ', err, meta);
+                    setTimeout(process.exit, 2000);
+                });
+
+            });
+        });
+    }
+    c_0424(file_path, owner);
 }

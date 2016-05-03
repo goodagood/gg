@@ -16,6 +16,8 @@ var aws_conf =  secrets.conf.aws;
 var aws_keys =  aws_conf.keys;
 var aws_region =  aws_conf.region;
 
+var root_bucket = aws_conf.root_bucket;
+
 
 // set up aws region:
 AWS.config.region = aws_region;
@@ -49,6 +51,9 @@ function get_s3_obj(){
 
 module.exports.aws4s3 = AWS;
 module.exports.get_s3_obj = get_s3_obj;
+
+module.exports.root_bucket = root_bucket;
+
 
 // to use:
 //

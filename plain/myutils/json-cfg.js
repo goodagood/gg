@@ -105,6 +105,14 @@ if(require.main === module){
             p(`folder prefix: ${value}`);
         });
     }
-    s3_prefix_test();
+    //s3_prefix_test();
 
+
+    function get_prefixes(){
+        callback_s3_prefixes(function(err, prefixes){
+            if(err) return p('err in test csp: ',  err);
+            p(prefixes);
+        });
+    }
+    get_prefixes();
 }
