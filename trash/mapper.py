@@ -24,28 +24,26 @@ import s3.crud
 #
 
 class DownMapper(object):
-    ''' Map a remote(oneline) file to local machine.
-
-    For example:
-      local file is:   /base/file/prefix/user-name/public/abc.png,
-      remote file is:                    user-name/public/abc.png.
-
-    self.remote: remote file's path
-    self.rf: remote file obj
-
-    self.local:   local file's path
-    self.lf:   local file obj
-
-    local file gets pathes:
-        self.lm['pathes']
-        p['file'] : base-prefix/gg/remote/path/file-name.extension
-        p['meta'] : base-prefix/meta/remote/path/file-name.extension.json
-        p['name_space'] : base-prefix/ns/remote/path/file-name.extension-ns
-
-    '''
-
     def __init__(self, remote, base_prefix=None):
+        ''' Map a remote(oneline) file to local machine.
 
+        For example:
+          local file is:   /base/file/prefix/user-name/public/abc.png,
+          remote file is:                    user-name/public/abc.png.
+
+        self.remote: remote file's path
+        self.rf: remote file obj
+
+        self.local:   local file's path
+        self.lf:   local file obj
+
+        local file gets pathes:
+            self.lm['pathes']
+            p['file'] : base-prefix/gg/remote/path/file-name.extension
+            p['meta'] : base-prefix/meta/remote/path/file-name.extension.json
+            p['name_space'] : base-prefix/ns/remote/path/file-name.extension-ns
+
+        '''
         self.prefix = prefix.LocalPrefix(base_prefix)
 
         self.remote = remote
@@ -67,12 +65,13 @@ class DownMapper(object):
         return self.rf
 
 
+    #d
     def calculate_prefixes(self):
         # local file's meta
         p = self.lm['pathes'] = {}
 
         p['file'] = self.prefix.get_file_path(self.remote)
-        p['meta'] = self.prefix.get_meta_prefix(self.remote)
+        p['meta'] = self.prefix.get_meta_path(self.remote)
         p['name_space'] = self.prefix.get_ns_prefix(self.remote)
 
 

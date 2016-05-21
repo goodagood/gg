@@ -34,6 +34,7 @@
     "handlebars": "~4.0.5",
     "i18next-browser-languagedetector": "~0.0.14",
     "font-awesome": "~4.5.0",
-    "plyr": "~1.6.1"
+    "plyr": "~1.6.1",
+    "video.js": "~5.10.1"
   }
 }

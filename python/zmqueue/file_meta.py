@@ -9,7 +9,7 @@ def retrieve_or_calculate(info):
     asked  = info['ask-for']
 
     #...
-    fi = s3.file.getter.file(info['path'])
+    fi = s3.file.getter.get_file(info['path'])
     if fi.is_meta_in_s3():
         fi.retrieve_meta()
     else:

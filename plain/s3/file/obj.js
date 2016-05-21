@@ -34,22 +34,22 @@ function new_obj(file_path, callback) {
     var _file = {};
 
 
-    function make_s3key_and_meta_s3key(callback){
+    function cal_s3key_and_meta_s3key(callback){
         s3keys.make_s3keys_for_file_path(_meta.path, function(err, keys){
             if(err) return callback(err);
-            p('keys: ', keys);
+            //p('keys: ', keys);
             _meta.s3key = keys.s3key;
             _meta.meta_s3key = keys.meta_s3key;
             callback(null, _meta);
         });
     }
-    _file.make_s3key_and_meta_s3key = make_s3key_and_meta_s3key;
+    _file.cal_s3key_and_meta_s3key = cal_s3key_and_meta_s3key;
 
 
     function set_uuid_and_name_space_prefix(callback){
         if (!_meta.uuid) _meta.uuid = uuid.v4();
 
-        s3keys.make_s3key_and_meta_s3key(_meta.path, function(err, file_s3key){
+        cal_s3key_and_meta_s3key(function(err, _m){
             if(err) return callback(err);
 
             s3keys.make_file_name_space_prefix(_meta, function(err, prefix){
@@ -91,7 +91,7 @@ function new_obj(file_path, callback) {
             _meta.owner = lutil.get_root(_meta.path);
         }
 
-        make_s3key_and_meta_s3key(function(err, m){
+        cal_s3key_and_meta_s3key(function(err, m){
             necessaries = {
                 what: myconfig.IamFile,
                 timestamp: Date.now(),
@@ -728,7 +728,7 @@ if(require.main === module){
 
         new_obj(info.path, function(err, obj){
             //p(err, obj);
-            obj.make_s3key_and_meta_s3key(function(err, what){
+            obj.cal_s3key_and_meta_s3key(function(err, what){
                 //p(2, err, what);
                 p('gtet meta: ', obj.get_meta());
                 obj.retrieve_meta(function(err, meta){

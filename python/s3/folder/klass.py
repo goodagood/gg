@@ -150,8 +150,13 @@ class Folder:
 
     def pick_up_metas(self, meta):
         ''' Pick metas in files, sub-folders to save in name space
-            [ 'filetype', 'li', 'name', 'no_meta_file',
-              'owner',    'permission', 'size',  'timestamp','type', ];
+            [ 'filetype', 'li', 'name', 'posters', 'no_meta_file',
+              'owner',    'permission', 'size',  'timestamp','type',
+              'poster', 'thumb'];
+
+            poster: the s3key of the poster in 0.0 seconds
+            thumb:  the s3key of the thumbnail for poster at 0.0secs,
+                    h160 for video, h80 for image file.
         '''
         m = {}
         if 'name' in meta:
@@ -166,6 +171,9 @@ class Folder:
         if 'permission' in meta: m['permission'] = meta['permission']
         if 'timestamp'  in meta: m['timestamp'] = meta['timestamp']
         if 'li'         in meta: m['li'] = meta['li']
+        if 'thumb'      in meta: m['thumb'] = meta['thumb']
+        if 'poster'     in meta: m['poster'] = meta['poster']
+        if 'posters'    in meta: m['posters'] = meta['posters']
         if 'no_meta_file'  in meta: m['no_meta_file'] = meta['no_meta_file']
         return m
 
@@ -247,10 +255,13 @@ class Folder:
 
     def grep_file_info(self, pattern):
         ''' user regexp to get file infos
-        pattern should be string, raw string is common, such as: r'^reg begin'
-        doing 0406
+
+        pattern can be string, raw string is common, such as: r'^reg begin'
         '''
-        cp = re.compile(pattern)
+        cp = pattern
+        if type(pattern) is str:
+            cp = re.compile(pattern)
+
         namekeys = zip(
                 self.get_names_of_ns_files(),
                 self.get_keys_of_ns_files())

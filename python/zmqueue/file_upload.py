@@ -23,13 +23,13 @@ def loc_to_s3(info):
     "file_info_jstr" : file information json string,
         {
             username:
-            cwd:
             fieldname: 'ofiles',
             originalname: 'h5.html',
             encoding: '7bit',
             mimetype: 'text/html',
-            destination: '/dir/name/where/file/should/be/uploaded',
-            filename: 'f2a4e5f36bc5604193f5cfee38d7213f',
+            cwd:
+            destination: '/dir/name/where/file/should/be/uploaded', # cwd
+            filename: 'f2a4e5f36bc5604193f5cfee38d7213f', # tmp file name
             path: '/tmp/f2a4e5f36bc5604193f5cfee38d7213f',
             size: 1121
         }
@@ -43,7 +43,7 @@ def loc_to_s3(info):
     file_name = ufile['originalname']
     file_path = os.path.join(ufile['cwd'], file_name);
 
-    fi = s3.file.getter.file(file_path)
+    fi = s3.file.getter.get_file(file_path)
 
     fi.calculate_prefix_and_keys()
     if ufile['mimetype']:

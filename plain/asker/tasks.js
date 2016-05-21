@@ -72,6 +72,7 @@ function  file_meta(who, fipath, callback){
 module.exports.file_meta = file_meta;
 
 
+//d?
 function tmp_thumb(who, fipath, w, h, callback){
     var info = JSON.stringify( {
         "who": who,
@@ -105,6 +106,25 @@ function file_upload(file_info_json_stringified, callback){
     });
 }
 module.exports.file_upload = file_upload;
+
+
+
+function meta_list(who, fopath, callback){
+    var info = JSON.stringify( {
+        "who": who,
+        "ask-for": 'meta.list',
+        "path": fopath,
+        "patstr": '.+',
+        "timeout": 3000
+    });
+
+    localhost5555.ask(info, function(err, reply){
+        if(err) return callback(err);
+        var ul = get_ask_for(reply);
+        callback(null, ul);
+    });
+}
+module.exports.meta_list =meta_list;
 
 
 function check_0411(name, what){
@@ -147,7 +167,25 @@ function check_meta(user_name, _path){
 }
 
 if(require.main === module){
+    var u = require("underscore");
+
+    // 0510
+    function check_meta_list(user_name, _path){
+        user_name  = user_name || 'tmp';
+        _path = _path || 'tmp/public';
+
+        meta_list(user_name, _path, function(err, rep){
+            if(err) return p('ask for file meta: ', err);
+
+            p(u.keys(rep));
+            setTimeout(process.exit, 5000);
+        });
+    }
+
+
     //check_0411('tmp', 'tmp/public');
     //check_text('tmp', 'tmp/public/a.txt');
-    check_meta('tmp', 'tmp/public/a.txt');
+    //check_meta('tmp', 'tmp/public/a.txt');
+
+    check_meta_list();
 }

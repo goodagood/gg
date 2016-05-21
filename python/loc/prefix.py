@@ -7,6 +7,14 @@ import config_dir as cdir
 
 class LocalPrefix():
     def __init__(self, base_path=None):
+        '''
+        Path means full path, if it's file's, it includes file extension.
+
+        Mirror file is the file that mirror the target file.
+
+        target file is the online file, the path is full path includes file
+        name and extension.
+        '''
         self.prefix = cdir.get_prefix_settings_for_local_files()
 
         self.modify_base(base_path = base_path)
@@ -28,26 +36,31 @@ class LocalPrefix():
         return j
 
 
-    def get_file_path(self, file_target_path):
-        p1 = os.path.join(self.prefix['file_prefix'], file_target_path)
+    def get_file_path(self, target_file_path):
+        p1 = os.path.join(self.prefix['file_prefix'], target_file_path)
         return p1
 
+    # to replace: get file path
+    def get_mirror_file_path(self, target_file_path):
+        p1 = os.path.join(self.prefix['file_prefix'], target_file_path)
+        return p1
 
-    def get_meta_prefix(self, file_target_path):
-        p1 = os.path.join(self.prefix['meta_prefix'], file_target_path)
+    # changed from get_meta_prefix --> get_meta_path
+    def get_meta_path(self, target_file_path):
+        p1 = os.path.join(self.prefix['meta_prefix'], target_file_path)
         p2 = p1 + '.json'
         return p2
 
 
-    def get_ns_prefix(self, file_target_path):
-        p1 = os.path.join(self.prefix['ns_prefix'], file_target_path)
+    def get_ns_prefix(self, target_file_path):
+        p1 = os.path.join(self.prefix['ns_prefix'], target_file_path)
         p2 = p1 + '-ns'
         return p2
 
 if __name__ == "__main__":
     from pprint import pprint
 
-    loc_file = '/tmp/tt1.mp4'
+    local_file = '/tmp/tt1.mp4'
     target_file = 'tmp/public/tt1.mp4'
 
     p = LocalPrefix()

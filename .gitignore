@@ -7,3 +7,6 @@ bower_components/
 *.pyc
 plain/ucp/.git
 plain/ucp/node_modules/
+plain/static/Gallery
+plain/static/tmp/vid
+plain/static/tmp/vid2

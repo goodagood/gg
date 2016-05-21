@@ -20,7 +20,14 @@ def make_poster(vid_file_path, start_time_str, out_img_path):
             '-vframes', '1',
             out_img_path
             ]
-    sp.call(command)
+    #sp.call(command)
+
+    yes = sp.Popen(['yes'], stdout=sp.PIPE)
+
+    result = sp.Popen(command, stdin=yes.stdout)
+    yes.stdout.close()
+    result.communicate()
+    # test, 2016 0506
 
 
 

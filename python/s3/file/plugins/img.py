@@ -1,15 +1,23 @@
 
 import os
 from wand.image import Image
+import mimetypes
 
 import s3.crud
 import s3.file.klass
-import s3.file.getter
 import util.mis
 
 
 Tmp_static_img_dir = '/home/ubuntu/workspace/gg/plain/static/tmp/img'
 Tmp_static_img_url = '/static/tmp/img/'
+
+
+def file_name_ok(file_name):
+    mime = mimetypes.guess_type(file_name)[0]
+    if not mime:
+        return False
+
+    return mime.lower().find('image') >= 0
 
 
 class File(s3.file.klass.File):
@@ -106,11 +114,9 @@ def get_image(file_path):
 
 
 if __name__ == "__main__":
-    import s3.file.getter
 
     file_path = "tmp/public/t1.png"
 
-    #fi = s3.file.getter.file_with_meta(file_path)
     #fi = File(file_path)
 
     def c0419a(file_path = file_path):

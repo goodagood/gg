@@ -23,14 +23,16 @@
 #     }
 
 import os
+import mimetypes
 
-import loc.file
+import loc.mirror
 import util.mis as util
 import s3.crud
 import s3.file.getter
 import imgvid.thumb
 
-class File(loc.file.File):
+class File(loc.mirror.File):
+    version = "mirror-of-image-file.2016.0508"
     def __init__(self, _path, info=None):
         ''' If want target path set: info['target'] = 'online file path'
         '''
@@ -147,7 +149,7 @@ class File(loc.file.File):
         ''' Download the target image so it can be processed locally.
         '''
         if 'tmp_files' in self.meta:
-            loc_file = self.meta['tmp_files']['img']
+            local_file = self.meta['tmp_files']['img']
 
             pass
 
@@ -156,9 +158,16 @@ class File(loc.file.File):
                 s3key = tfm.meta['s3key']
                 #...
                 body = s3.crud.get_body(s3key)
-                with open(loc_file, 'w') as file:
+                with open(local_file, 'w') as file:
                     file.write(body)
 
+
+def file_name_ok(file_name):
+    mime = mimetypes.guess_type(file_name)[0]
+    if not mime:
+        return False
+
+    return mime.lower().find('image') >= 0
 
 
 if __name__ == "__main__":

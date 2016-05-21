@@ -8,6 +8,7 @@ import boto3
 
 import sys
 import os
+
 # add parent dir to sys.path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
@@ -52,12 +53,27 @@ def rm(key):
             )
 
 
+def rm_all(key):
+    ''' Get the object, with the key
+    '''
+    return client.delete_objects(
+            Bucket = root_bucket,
+            Delete = {
+                'Objects':[{
+                    'Key' : key
+                    }
+                    ]
+                }
+            )
+
+
 def key_exists(key):
 
     s3 = boto3.resource('s3')
     bucket = s3.Bucket(root_bucket)
     objs = list(bucket.objects.filter(Prefix=key))
-    if len(objs) > 0 and objs[0].key == key:
+    #if len(objs) > 0 and objs[0].key == key
+    if len(objs) > 0:
             #print("Exists!")
             return True
     else:

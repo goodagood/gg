@@ -344,6 +344,37 @@ router.get(/^\/run(.+)/, function(req, res, next){
 });
 
 
+var asker = require("plain/asker/tasks.js");
+router.get(/^\/post-thumb\/(.+)/, function(req, res){
+    // show thumb and poster of video file path, easy developement.
+    var file_path = req.params[0]
+
+    var t   = new Date();
+    var now = t.toString();
+
+    var username;
+    if(req.user){
+        if(req.user.username) username = req.user.username;
+    }
+
+    asker.file_meta(username, file_path, function(err, meta){
+        p(meta)
+
+        var post_key, thumb_key;
+        if(meta.posters) post_key = meta.posters['0.0'].key;
+        if(meta.posters){
+            if(meta.posters['0.0'].thumbnails) thumb_key = meta.posters['0.0'].thumbnails.h80;
+        }
+        var post_href  = '/s3key/' + post_key;
+        var thumb_href = '/s3key/' + thumb_key;
+        var thumb_tag = `<img src="${thumb_href}" class="thumb">`
+        var post_tag  = `<img src="${post_href}" class="poster">`
+        var context = {now: now, imgposter: post_tag, imgthumb: thumb_tag, file_path: file_path};
+        res.render( 'post-thumb', context );
+    });
+    //res.send( t.toString() );
+});
+
 
 
 module.exports = router;

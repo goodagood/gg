@@ -51,11 +51,12 @@ def cache_render_from_ns(folder):
 if __name__ == "__main__":
     ''' checkings
     '''
-    import getter
+    import s3.folder.getter
 
-    #tmp = getter.folder('tmp')
-    #cache_in_meta(tmp)
-    #tmp.save_meta()
-    #pprint(metastmp)
+    #tp = s3.folder.getter.folder('tmp/public')
+    #cache_render_from_ns(tp)
 
-    #abc = getter.folder('abc')
+    #abc = s3.folder.getter.folder('abc')
+
+    gg = s3.folder.getter.folder('tmp/gg')
+    cache_render_from_ns(gg)

@@ -202,7 +202,8 @@ var user_router = require("./route_user.js");
 user_router.route_user(app);
 
 
-// upload files, /upload
+// upload files, /upload,  //old
+// 2016 0516, to be replaced by /upload/...
 var upload_files_router = require("./hrouters/upload.js");
 upload_files_router.myupload(app);
 
@@ -257,6 +258,10 @@ app.use("/img", img);
 
 var vid = require("./hrouters/vid.js");
 app.use("/vid", vid);
+
+var upload_y6 = require("./hrouters/up.y6.0516.js");
+app.use("/upload", upload_y6);
+
 
 
 app.listen(port);

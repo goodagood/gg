@@ -1,0 +1,16 @@
+{
+  "name": "uploader",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dupload.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "busboy": "^0.2.13",
+    "stream-meter": "^1.0.3"
+  }
+}

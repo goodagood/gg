@@ -263,58 +263,6 @@ function myupload(app){
     });
 }
 
-//function parse_upload(req){
-//  // parse a file upload
-//  var form = new formidable.IncomingForm();
-//
-//  form.on('fileBegin', function (name, file) {
-//    //mylog.info("on fileBegin : " + name );
-//    //mylog.info("name : " + util.inspect(name));
-//    //mylog.info("file : " + util.inspect(file));
-//  }).on('field', function (name, value) {
-//    //mylog.info("on field"); // test
-//    //mylog.info("name : " + util.inspect(name));
-//    //mylog.info("value : " + util.inspect(value));
-//    //if (name === 'redirect') {
-//    //    redirect = value;
-//    //}
-//  }).on('file', function (name, file) {
-//    //mylog.info("on file"); // test
-//    //mylog.info("name : " + util.inspect(name));
-//    //mylog.info(" -- file : " + util.inspect(file));
-//  }).on('aborted', function () {
-//    //mylog.info("on aborted");
-//  }).on('error', function (e) {
-//    mylog.info("on error");
-//    mylog.info(e);
-//  }).on('progress', function (bytesReceived, bytesExpected) {
-//    //mylog.info("on progress");
-//    //mylog.info( " [ " + bytesReceived + "/" + bytesExpected + " ]");
-//  }).on('end', function(){
-//    //console.log(" event: end ");
-//  });
-//
-//  form.parse(req, function(err, fields, files) {
-//    //mylog.info("\nform parse begin, show the form: \n");
-//    //mylog.info( Date() );
-//    //mylog.warn(util.inspect(form));
-//
-//    //console.log(files);
-//    for (var f in files){
-//      //console.log(files[f].name);
-//      //console.log(files[f].path);
-//      //
-//
-//      user_path.check_path_move_home(req.user.username, files[f]);
-//      //console.log("myuser add file key,  -- parse file");
-//     
-//      //myuser.add_file_key(req.user.username, files[f]);
-//
-//      //console.log(" files[f]: ");  // use the square parenthe..
-//      //console.log(files[f]);
-//    }
-//  });
-//}
 
 
 function parse_and_s3stream(req, cwd){
@@ -619,28 +567,6 @@ FileInfo.prototype.safeName = function () {
     //    this.name = this.name.replace(nameCountRegexp, nameCountFunc);
     //}
 };
-
-// no need
-//FileInfo.prototype.initUrls = function (req) {
-//    if (!this.error) {
-//        var that = this;
-//        var baseUrl =  'http:' + '//' ;
-//        if (req.headers) {
-//          baseUrl += req.headers.host + options.uploadUrl;
-//        }else{
-//          baseUrl += 'localhost:' + myport.toString() + options.uploadUrl;
-//        }
-//        this.url = this.deleteUrl = baseUrl + encodeURIComponent(this.name);
-//        Object.keys(options.imageVersions).forEach(function (version) {
-//            //if (_existsSync(
-//            if (fs.existsSync( options.uploadDir + '/' + version + '/' + that.name)) {
-//                that[version + 'Url'] = baseUrl + version + '/' + encodeURIComponent(that.name);
-//            }
-//        });
-//    }
-//};
-
-
 
 
 

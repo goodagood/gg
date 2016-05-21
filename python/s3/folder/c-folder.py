@@ -2,7 +2,7 @@
 import os
 
 import klass
-import getter
+import s3.folder.getter
 import adder
 
 import cache_in as cache
@@ -23,7 +23,7 @@ def chka(owner='tmp', subname='kk'):
 
 def start_cache(_path='tmp'):
     print('start name ', _path)
-    folder = getter.folder(_path)
+    folder = s3.folder.getter.folder(_path)
     folder.set_attr('type', 'folder')
     cache_fix(_path)
     folder.retrieve_meta()
@@ -46,7 +46,7 @@ def start_cache(_path='tmp'):
 def cache_fix(_path):
 
     print('cache fix, ', _path)
-    folder = getter.folder(_path)
+    folder = s3.folder.getter.folder(_path)
     meta = folder.get_meta()
 
     #!if 'cache' not in meta:
@@ -70,7 +70,7 @@ def cache_fix(_path):
 
 
 def add_up_li(_path):
-    folder = getter.folder(_path)
+    folder = s3.folder.getter.folder(_path)
     cache = folder.get_cache()
     files = cache['files']
     ul = '<ul class="file-list folder">'
@@ -131,7 +131,7 @@ def not_marked_folder():
 
 def check_files_for_a_path(_path, collecting):
     print('check for ', _path)
-    folder = getter.folder(_path)
+    folder = s3.folder.getter.folder(_path)
     cache  = folder.get_cache()
     files  = cache['files']
     for i in files:
@@ -151,13 +151,24 @@ def get_ul(folder):
         add_up_li(meta['path'])
         #...
 
+
+import json
+def write_folder_meta(cwd='tmp/public', lfile='/tmp/fmeta'):
+    folder = s3.folder.getter.folder(cwd)
+    folder.meta
+    with open(lfile, 'w') as tmp:
+        tmp.write(json.dumps(folder.meta, indent=4))
+
 if __name__ == "__main__":
     print('__name__ == "__main__"')
     #tmp, kk = chka()
-    #f = getter.folder('tmp')
+    #f = s3.folder.getter.folder('tmp')
     #cache.collect_file_metas(f)
 
     #tmp = start_cache('t0310y6')
     #attemp01()
 
     #add_up_li("tmp")
+
+    #fo = s3.folder.getter.folder('tmp/public')
+    write_folder_meta()

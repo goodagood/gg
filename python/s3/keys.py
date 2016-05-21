@@ -5,7 +5,6 @@
 import os
 
 
-import tools # ./tools.py take care sys.path appending
 import config_dir
 _prefixes = config_dir.get_s3_prefix()
 

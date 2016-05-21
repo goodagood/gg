@@ -17,6 +17,7 @@ import file_meta
 import file_text
 import tmp_thumb
 import file_upload
+import meta_list
 
 
 
@@ -53,7 +54,7 @@ def serve_and_reply(info):
     services = offer_service_list()
 
     if asked in services:
-        print('got a function to replay')
+        print( asked, 'got a function to replay')
         service = services[asked]
         return service(info)
     else:
@@ -65,6 +66,7 @@ def offer_service_list():
     return {
         "noop": noop_service,
         "folder.ul": folder_ul.cached_reply,
+        "meta.list": meta_list.file_metas_in_folder_cache,
         "file.meta": file_meta.retrieve_or_calculate,
         "file.text": file_text.read,
         "file.upload": file_upload.loc_to_s3,
