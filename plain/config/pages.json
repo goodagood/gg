@@ -7,6 +7,7 @@
     "img/whp": "/img/whp/128/64/path/to/pic.jpg",
     "img/whk": "/img/whk/128/64/s3key/to/pic.jpg",
     "viewtext": "/viewtext/path/to/text-file.extension",
+    "file.meta": "/file/meta/path/to/file.extension",
     "before 2016 0425": "-----------------------------------------"
     "front": "/file/get/intro/public/test0215/y6.0216/i0212y6.html",
     "intro": "/file/md-with-local-files/intro/public/intro.md",

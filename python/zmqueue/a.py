@@ -34,7 +34,7 @@ def serve_zmq():
 
                 j = reply = None
         except KeyboardInterrupt:
-            print "closing zmq binding"
+            print("closing zmq binding")
             socket.close()
             context.destroy()
             sys.exit()

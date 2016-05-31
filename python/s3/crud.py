@@ -32,17 +32,28 @@ def get_obj(key):
 
 geto = get_obj # tmp compatibilty
 
+
 def get_body(key):
     return get_obj(key)["Body"]
 
+
 def get_txt(key):
     res = get_obj(key)
-    return res["Body"].read()
+    readed = res["Body"].read()
+
+    # when upgrading to py v3, read() return bytes, got to decode,
+    # and try to keep compatible. 2016 0530
+    if hasattr(readed, 'decode'):
+        readed = readed.decode('utf-8')
+
+    return readed
+
 
 def get_json(key):
-    res = get_obj(key)
-    j   = json.loads(res["Body"].read())
+    txt = get_txt(key)
+    j   = json.loads(txt)
     return j
+
 
 def rm(key):
     ''' Get the object, with the key
@@ -112,3 +123,22 @@ def list_obj(prefix, num=1000):
         return raw['Contents']
     else:
         return []
+
+
+
+if __name__ == "__main__":
+    print('__name__ == "__main__"')
+    import s3.keys
+
+    cwd = 'tmp/public'
+    s3key = s3.keys.folder_meta(cwd)
+    print(s3key)
+    print(key_exists(s3key))
+    try:
+        o = get_obj(s3key)
+        j = get_json(s3key)
+    except Exception as e:
+        print(e)
+
+
+

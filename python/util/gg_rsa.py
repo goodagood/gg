@@ -29,7 +29,7 @@ def get_pub_key(username):
     fpath = username + '/gg/gg.public.key'
     f = s3.file.klass.File(fpath)
     pkcs = f.read()
-    print('readed: ', pkcs)
+    print(('readed: ', pkcs))
     pub = rsa.PublicKey.load_pkcs1(pkcs)
     return pub
 

@@ -3,8 +3,9 @@ import s3.file.klass as klass
 
 #import load_plugins
 
-import s3.file.plugins.img as pimg
-import s3.file.plugins.vid as pvid
+import s3.file.plugins.img  as pimg
+import s3.file.plugins.vid  as pvid
+import s3.file.plugins.json as pjson
 
 
 def poorswitch(_path):
@@ -12,6 +13,8 @@ def poorswitch(_path):
         return pimg.File(_path)
     if pvid.file_name_ok(_path):
         return pvid.File(_path)
+    if pjson.file_name_ok(_path):
+        return pjson.File(_path)
 
     #else:
     return klass.File(_path)
@@ -62,10 +65,11 @@ def file_with_meta(_path):
 if __name__ == "__main__":
 
     from pprint import pprint
+
     #f = get_file('tmp/public/a.txt')
     #print(f.read())
-    #f = get_file('tmp/public/tt1.mp4')
-    f = get_file('tmp/public/cat-food.mp4')
+    f = get_file('tmp/public/tt1.mp4')
+    #f = get_file('tmp/public/cat-food.mp4')
     if hasattr(f, 'version'):
         print(f.version)
 

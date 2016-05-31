@@ -38,9 +38,10 @@ body {margin: 1em 1em;}
 <h1> Upload single file </h1>
 <p> To: {{{cwd_chain}}} </p>
 <div id="bare_single">
-  <form method="POST" action="/upload/up" enctype="multipart/form-data">
+  <form method="POST" action="/upload/up/" enctype="multipart/form-data">
     <input type="file" name="one_file"><br />
     <input type="hidden" name="cwd" value="{{{cwd}}}">
+    <input type="hidden" name="return" value="/upload/bare-single/{{{cwd}}}">
     <input type="submit">
   </form>
 </div>

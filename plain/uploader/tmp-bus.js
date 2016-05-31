@@ -23,7 +23,7 @@ function setup(cfg){
         if(!u.isFunction(callback)) callback = function(){};
 
         var busboy = new Busboy({ headers: req.headers });
-        req.busboy = {'files':[], 'fields':{}};
+        req.busboy = {'files':[], 'fields':{}, 'field_infos':{}};
 
         // each 'file' event will add 1
         var job_counter = 1;
@@ -65,7 +65,8 @@ function setup(cfg){
         });
         busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated) {
             console.log('Field [' + fieldname + ']: value: ' + inspect(val));
-            req.busboy.fields[fieldname] ={
+            req.busboy.fields[fieldname] = val;
+            req.busboy.field_infos[fieldname] = {
                 fieldname: fieldname,
                 value:  val,
                 fieldnameTruncated:  fieldnameTruncated,

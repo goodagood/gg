@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+
+<!--
+  video.js player
+  2016 0510
+-->
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="description" content="webpage show video file, goodogood, goodagood">
+<meta name="author" content="Andrew">
+<meta http-equiv="expires" content="Fri, 21 Jun 2019 20:24:32 GMT" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="goodogood goodagood video file" />
+
+<link rel="shortcut icon" href="/static/favicon.ico" />
+
+<!--
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/static/css/fa/css/font-awesome.min.css">
+-->
+<link rel="stylesheet" href="/static/css/normalize.css">
+<link rel="stylesheet" href="/static/css/skeleton.css">
+
+
+<title> goodogood.me Uploading, bare single </title>
+
+<style>
+body {margin: 1em 1em;}
+.container {max-width: 960px;}
+</style>
+
+</head>
+<body><div class="container">
+
+
+<h1> Upload single file </h1>
+<p> To: {{{cwd_chain}}} </p>
+<div id="bare_single">
+  <form method="POST" action="/upload/up/" multiple="multiple" enctype="multipart/form-data">
+    <input type="file" name="one_file"><br />
+    <input type="hidden" name="cwd" value="{{{cwd}}}">
+    <input type="hidden" name="return" value="/upload/bare-single/{{{cwd}}}">
+    <input type="submit">
+  </form>
+</div>
+
+<p>
+  A interface, bare and simple, for single file uploading. 
+  There are no <i>JavaScript</i> support needed.
+  2016, May 16.
+</p>
+<hr />
+<p id="end"> goodogood.me, 2016 </p>
+
+<!--
+-->
+
+</div></body>
+<!-- vim: et ts=2 sw=2
+-->
+</html>

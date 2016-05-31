@@ -4,16 +4,18 @@ import os
 import json
 import re
 
-import path_setting
+#import path_setting
 
 import config_dir
-import getter
-import cache_in
+
+#import getter # recursive module loading?
+#import cache_in
 
 import util.mis as myutil
 import s3.asker as asker
 import s3.keys as keys
 import s3.crud as crud
+
 
 class Folder:
     def __init__(self, _path, opts={}):
@@ -138,15 +140,16 @@ class Folder:
         return sub
 
 
-    # not tested
-    def safe_sub_folder(self, name):
-        ''' Get the sub folder by name, or create it.
-        '''
-        if self.name_exists(name):
-            _path = os.path.join(self.meta['path'], name)
-            return getter.folder(_path)
-        else:
-            return self.new_sub_folder(name)
+    ## not tested
+    # getter recursive load this file
+    #def safe_sub_folder(self, name):
+    #    ''' Get the sub folder by name, or create it.
+    #    '''
+    #    if self.name_exists(name):
+    #        _path = os.path.join(self.meta['path'], name)
+    #        return getter.folder(_path)
+    #    else:
+    #        return self.new_sub_folder(name)
 
     def pick_up_metas(self, meta):
         ''' Pick metas in files, sub-folders to save in name space
@@ -214,15 +217,15 @@ class Folder:
         return self
 
 
-    def add_render_file(self, file_meta):
-        ''' Add a file, cache it's info to meta, render folder listing, then
-            save folder meta.
+    #def add_render_file(self, file_meta):
+    #    ''' Add a file, cache it's info to meta, render folder listing, then
+    #        save folder meta.
 
-            We have not lockings here, data might be conflicting for folder
-            meta.
-        '''
-        self.add_file_in_ns(file_meta)
-        cache_in.cache_render_from_ns(self)
+    #        We have not lockings here, data might be conflicting for folder
+    #        meta.
+    #    '''
+    #    self.add_file_in_ns(file_meta)
+    #    cache_in.cache_render_from_ns(self)
 
 
     def get_keys_of_ns_files(self):

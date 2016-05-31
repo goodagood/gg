@@ -225,9 +225,14 @@ def test_a():
     copy_file_tmp(file_metas[1])
 
 
+def fo_path_crud_text(cwd):
+    ''' folder path: cwd
+    '''
+
+
 if __name__ == "__main__":
     print('__name__ == "__main__"')
-    #print(root_bucket)
+    print(root_bucket)
     #test_a()
 
 

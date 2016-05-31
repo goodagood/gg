@@ -35,6 +35,7 @@ function get_ask_for(info){
     if(info[info['ask-for']]) return info[info['ask-for']];
     return null;
 }
+module.exports.get_ask_for = get_ask_for;
 
 
 function file_text(who, fipath, callback){
@@ -65,8 +66,8 @@ function  file_meta(who, fipath, callback){
 
     localhost5555.ask(info, function(err, reply){
         if(err) return callback(err);
-        var ul = get_ask_for(reply);
-        callback(null, ul);
+        var answer = get_ask_for(reply);
+        callback(null, answer);
     });
 }
 module.exports.file_meta = file_meta;

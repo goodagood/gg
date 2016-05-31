@@ -26,7 +26,7 @@ function  ask(info, callback){
     if(u.isNumber(info.timeout)){
         //p('set time out to ', info.timeout);
         timeout_mark = setTimeout(function(){
-            //p('time out');
+            p('time out');
             requester.close();
         }, info.timeout);
     }
@@ -44,8 +44,13 @@ function  ask(info, callback){
 
     requester.connect("tcp://localhost:5555");
 
-    var strdata = JSON.stringify(info);
-    requester.send(strdata);
+    try{
+        var strdata = JSON.stringify(info);
+        //p('str data to send request: ', strdata);
+        requester.send(strdata);
+    }catch(err){
+        callback(err);
+    }
 }
 module.exports.ask = ask;
 
@@ -62,7 +67,20 @@ function check_0410(){
         p(err, rep);
     });
 }
+function check_0526(){
+    ask(JSON.stringify({
+        "who": 'any one',
+        "ask-for": 'two_n_two',
+        "path":'tmp/public',
+        "timeout":3000
+    }),
+    function(err, rep){
+        p('any?');
+        p(err, rep);
+    });
+}
 
 if(require.main === module){
-    check_0410();
+    //check_0410();
+    check_0526();
 }

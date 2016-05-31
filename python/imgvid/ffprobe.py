@@ -9,7 +9,8 @@
 # man ffprobe # for more information about ffprobe
 #
 
-import subprocess32 as sp
+#import subprocess32 as sp
+import subprocess as sp
 import json
 
 

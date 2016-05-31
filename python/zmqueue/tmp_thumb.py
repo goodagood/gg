@@ -24,4 +24,4 @@ if __name__ == "__main__":
             "timeout": 3000
             }
 
-    print put_tmp_thumb(info)
+    print(put_tmp_thumb(info))

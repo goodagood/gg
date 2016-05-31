@@ -1,6 +1,6 @@
 
-import path_setting
-import li
+from . import path_setting
+from . import li
 
 import s3.file.klass
 
@@ -14,7 +14,7 @@ def name_part(file_path = 'tmp/s.text'):
         meta = f.retrieve_meta()
 
     np = li.make_name_part(meta)
-    print np
+    print(np)
 
 
 def fill(file_path = 'tmp/s.text'):
@@ -27,7 +27,7 @@ def fill(file_path = 'tmp/s.text'):
         meta = f.retrieve_meta()
 
     litag = li.fill_li_tag(meta)
-    print litag
+    print(litag)
 
 
 if __name__ == "__main__":

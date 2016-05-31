@@ -3,13 +3,13 @@
 
 
 import keys
-import crud
+import s3.crud
 
 def folder_exists(_path):
     '''
     '''
     meta_s3key = keys.folder_meta(_path)
-    return crud.key_exists(meta_s3key)
+    return s3.crud.key_exists(meta_s3key)
 
 
 

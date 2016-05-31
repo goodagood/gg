@@ -168,28 +168,6 @@ app.get('/',
 //  res.render('account', { user: req.user });
 //});
 
-//var to_https = require("./myutils/to-https.js");
-//app.get('/login', function(req, res, next){
-//  //res.render('login', { user: req.user, message: req.flash('error') });
-//
-//  if(req.protocol === "http") return res.redirect(to_https.make_https_href(req));
-//  //put something in session to make sure it's there.
-//  if(req.session) req.session["login_visit_milli"] = Date.now().toString();
-//  lang.render_lang(req, res, next, 'login.html', { user: req.user, message: req.flash('error') });
-//});
-//
-//
-//// checking login, 0203:
-//app.post('/login',
-//    try_middle,
-//    passport.authenticate('local',
-//      { successReturnToOrRedirect: '/ls/', failureRedirect: '/login' }));
-//  
-//
-//app.get('/logout', function(req, res){
-//  req.logout();
-//  res.redirect('/');
-//});
 
 
 // split auth out, 2016 0201

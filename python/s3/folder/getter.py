@@ -4,7 +4,7 @@
 import os
 import json
 
-import klass
+import s3.folder.klass as klass
 
 
 
@@ -44,4 +44,9 @@ if __name__ == "__main__":
     #pprint(folder_meta('tmp'))
 
     #tp = folder('tmp/public')
-    list_files('tmp/public', '^h')
+
+    #ms = list_files('tmp/public', '^h') #?
+
+    f = klass.Folder('tmp/public')
+    f.calculate_meta_s3key()
+    print(f.meta)

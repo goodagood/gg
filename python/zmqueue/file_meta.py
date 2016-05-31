@@ -13,8 +13,8 @@ def retrieve_or_calculate(info):
     if fi.is_meta_in_s3():
         fi.retrieve_meta()
     else:
-        #print 'calculate'
-        fi.calculate_prefix_and_keys()
+        #print('calculate')
+        fi.make_up_basic_meta()
     fi.guess_type()
 
     # we are not checking if it has text.
@@ -31,4 +31,4 @@ if __name__ == "__main__":
             "timeout": 3000
             }
 
-    print retrieve_or_calculate(info)
+    print(retrieve_or_calculate(info))

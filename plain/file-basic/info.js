@@ -12,45 +12,53 @@ var file_getter = require("../aws/get-file.js");
 
 //var fileinfo = require("../myutils/fileinfo-a.js");
 
+var asker = require("plain/asker/tasks.js");
 var p = console.log;
 
 
 var render = require("../page/render.js");
-function render_file_info(file_path, callback){
-    file_getter.get_1st_file_obj_with_auxpath_by_path(file_path, function(err, fobj){
+function render_file_info(username, file_path, callback){
+    asker.file_meta(username, file_path, function(err, meta){
         if(err) return callback(err);
 
-        var meta = fobj.get_meta();
+        render_meta(meta, callback);
+    });
+}
+
+
+/*
+ * fixing, 2016 0525
+ */
+function render_meta(meta, callback){
+        var _path = meta.path; 
 
         var checked, context;
         if (meta.unique) {
             checked = 'checked';
         }
         context = {
-           info_list: fobj.build_file_info_list(),
-           full_path: file_path,
+           file_meta: JSON.stringify(meta, null, 4),
+           full_path: _path,
            //cwd_chain: path_chain(dir),
            //username: username,
            //puuid: puuid,
            //unique_is_checked: checked
         };
 
-        render.fill_handlebars('hbs/file-info.html', context, callback)
-        //? return res.render('fi-pu', context);
+        //p('context file u meta: ', context.file_meta);
 
-
-        //render_meta(callback);
-    });
+        render.fill_handlebars('hbs/file-info.html', context, callback);
 }
 
 
 // 2016 0114
 var file_tools = require("./tool.js");
-function render_file_value(file_path, callback){
-    file_getter.get_1st_file_obj_with_auxpath_by_path(file_path, function(err, fobj){
+function render_file_value(username, file_path, callback){
+    asker.file_meta(username, file_path, function(err, meta){
+    //file_getter.get_1st_file_obj_with_auxpath_by_path(file_path, function(err, fobj){})
         if(err) return callback(err);
 
-        var meta = fobj.get_meta();
+        //var meta = fobj.get_meta();
 
         var checked, context;
         if (meta.unique) {
@@ -127,11 +135,12 @@ function c_get_info(file_path){
 
 
 
-function c_render_file_info(file_path){
-    file_path = file_path || 'abc/add-2/a.html';
+function c_render_file_info(username, file_path){
+    file_path = file_path || 'tmp/public/a.py';
+    username  = username  || 'tmp';
 
     //file_getter.get_1st_file_obj_with_auxpath_by_path(file_path, callback);
-    render_file_info(file_path, function(err, what){
+    render_file_info(username, file_path, function(err, what){
         p(err, what);
         out(1);
     });

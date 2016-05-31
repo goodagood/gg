@@ -58,7 +58,7 @@ class File(s3.file.klass.File):
         _res['poster0img'] = img
 
         thumb_href = None
-        tkeys = ps0['thumbnails'].keys()
+        tkeys = list(ps0['thumbnails'].keys())
         thumb0 = ps0['thumbnails'][tkeys[0]]
         thumb0key = thumb0['key']
         _res['thumb0key'] = thumb0key
@@ -104,7 +104,7 @@ class File(s3.file.klass.File):
 
 
     def set_poster0_in_meta(self, width=None, height=80):
-        print(self.meta)
+        print((self.meta))
         s3key = self.poster0_s3key()
         if s3.crud.key_exists(s3key):
             if 'posters' not in self.meta:
@@ -113,7 +113,7 @@ class File(s3.file.klass.File):
             p0 = self.meta['posters']['0.0']
             p0['key'] = s3key
             p0['seconds'] = 0.0
-        print(self.meta)
+        print((self.meta))
 
 
     def set_thumb0_in_meta(self, width=None, height=80):

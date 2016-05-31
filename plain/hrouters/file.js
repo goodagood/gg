@@ -324,6 +324,27 @@ router.get(/^\/info\/(.+)/,
 });
 
 
+/*
+ * Give file meta, or tools maybe, 
+ * after structure changed, redoing, 2016 0525
+ */
+router.get(/^\/meta\/(.+)/, 
+// cel.ensureLoggedIn('/login'), 
+    function(req, res, next){
+      var file_path = req.params[0];
+      if(!file_path) return res.end('err, no file path, 20160113');
+
+      var username; 
+      if (typeof req.user !== 'undefined') username = req.user.username;
+
+      info.render_file_info(username, file_path, function(err, html){
+          if(err) return res.end('err, 20160113, a');
+
+          res.end(html);
+      });
+});
+
+
 router.get(/^\/add-value\/(.+)/, 
 // cel.ensureLoggedIn('/login'), 
     function(req, res, next){
@@ -333,7 +354,7 @@ router.get(/^\/add-value\/(.+)/,
       var username; 
       if (typeof req.user !== 'undefined') username = req.user.username;
 
-      info.render_file_value(file_path, function(err, html){
+      info.render_file_value(username, file_path, function(err, html){
           if(err) return res.end('err, 20160113, a');
 
           res.end(html);

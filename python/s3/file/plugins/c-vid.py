@@ -1,5 +1,5 @@
 
-import vid
+from . import vid
 
 import loc.file
 
@@ -8,7 +8,7 @@ import loc.file
 if __name__ == "__main__":
     vidfile = '/tmp/tt1.mp4'
     lf = loc.file.File(vidfile)
-    print lf.meta
+    print(lf.meta)
 
     online_vidfile = 'tmp/public/tt1.mp4'
     vf = vid.File(online_vidfile)

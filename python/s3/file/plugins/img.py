@@ -92,7 +92,7 @@ class File(s3.file.klass.File):
 
     def as_li(self):
         sli = super(File, self).as_li()
-        print sli
+        print(sli)
 
 
 def get_image(file_path):

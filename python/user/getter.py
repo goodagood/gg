@@ -1,6 +1,6 @@
 #// todo 2016 0412
 
-import path_setting
+#import path_setting
 import dbs.mongo
 
 #client = MongoClient(port=27017)
@@ -30,4 +30,4 @@ def list_all_names():
 if __name__ == "__main__":
     ''
     #list_users()
-    #print list_all_names()
+    print(list_all_names())

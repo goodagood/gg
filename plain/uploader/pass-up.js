@@ -40,17 +40,29 @@ function pass_upload_infos(reqfiles, username, cwd, callback){
 module.exports.pass_upload_infos = pass_upload_infos;
 
 
-function pass_upload_info(reqfile, username, cwd, callback){
-    if(!reqfile['path']) return callback('can not get info[path] from data');
+/*
+ * Parameter: cached, the file info get by previous phases. 
+ *   When pass to backend via zmq, it must include:
+ *     path, username, cwd
+ *     where: cwd is the online folder path to put the file.
+ *            path is the local file uploaded from client
+ *
+ *   It might include:
+ *     milli, signature
+ *     Where milli is the string of milli-seconds when file uploading.
+ *     When 'milli' appears, signature must appear.
+ */
+function pass_upload_info(cached, username, cwd, callback){
+    if(!cached['path']) return callback('can not get info[path] from data');
 
-    reqfile['username'] = username;
-    reqfile['cwd'] = cwd;
+    cached['username'] = username;
+    cached['cwd'] = cwd;
 
-    var info           = JSON.stringify(reqfile);
+    var info           = JSON.stringify(cached);
     p('before pass to asker file upload, ', info);
 
     //write to a tmp file is extra action.
-    //var info_file_name = reqfile['path'] + '.info.json';
+    //var info_file_name = cached['path'] + '.info.json';
     //fs.writeFile(info_file_name, info, function(err){});
 
     asker.file_upload(info, callback);

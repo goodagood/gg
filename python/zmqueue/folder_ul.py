@@ -1,6 +1,9 @@
 
 import path_setting
-import s3.folder.getter as getter
+
+#import s3.folder.getter as getter
+from s3.folder import  getter
+
 
 def cached_reply(info):
     if 'path' not in info:

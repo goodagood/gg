@@ -47,7 +47,7 @@
     "request": "^2.56.0",
     "require-all": "^1.1.0",
     "serve-favicon": "~2.0.1",
-    "sqlite3": ">= 2.1.0",
+    "sqlite3": "^3.1.4",
     "swig": "~1.4.2",
     "underscore": "^1.8.3",
     "ursa": "^0.9.1",

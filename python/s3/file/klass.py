@@ -4,14 +4,17 @@ import json
 import time
 import mimetypes
 
-import path_setting
+#import path_setting
 
-import config_dir
+#import config_dir
 import util.mis as util
 import s3.keys  as keys
 
 import s3.crud as crud
 import s3.folder.getter
+
+#import permission.per as per
+from ggpermission import per
 
 
 class File(object):
@@ -20,15 +23,29 @@ class File(object):
         self.meta = {'path' : _path}
 
 
-    # actually not needed, got the habit from node.js
     def get_meta(self):
-        return self.meta
+        meta = self.meta
+        if hasattr(self, 'per'):
+            meta['permission'] = self.per.get_settings()
+        if hasattr(self, 'meta_per'):
+            meta['meta_permission'] = self.meta_per.get_settings()
+        if hasattr(self, 'tools'):
+            meta['tools'] = self.tools
+        return meta
+
 
     def set_meta(self, meta):
         self.meta = meta
 
     def set_attr(self, name, value):
         self.meta[name] = value
+
+
+    def add_value(self, amount):
+        if hasattr(self.meta, 'value'):
+            self.meta['value'] += amount
+        else:
+            self.meta['value'] = amount
 
     def get_attr(self, name):
         if 'name' in self.meta:
@@ -73,7 +90,8 @@ class File(object):
     def save_meta(self):
         '''Haven't done locking
         '''
-        jstr = json.dumps(self.meta)
+        meta = self.get_meta()
+        jstr = json.dumps(meta)
         crud.save(self.meta['meta_s3key'], jstr)
         return self.meta
 
@@ -189,24 +207,54 @@ class File(object):
             raise Exception('no name space prefix in self.met')
 
 
+    def set_permission(self):
+        self.per      = per.Permission(self.meta['owner'])
+        self.meta_per = per.Permission(self.meta['owner'])
+
+
+    def list_tools(self):
+        if hasattr(self.meta, 'name'):
+            name = self.meta['name']
+        else:
+            name = os.path.basename(self.meta['path'])
+
+        href = "/viewtxt/%s"%self.meta['path']
+
+        click = """
+        <a class="first-action" href="{href}">
+            view {name}
+        </a>
+        """.format(href=href, name=name)
+
+        mhref = "/file/meta/%s"%self.meta['path']
+        file_meta = """
+        <a class="file-meta" href="{href}">
+            meta of {name}
+        </a>
+        """.format(href=mhref, name=name)
+
+        dhref = "/dl/%s"%self.meta['path']
+        download = """
+        <a class="download" href="{href}">
+            download {name}
+        </a>
+        """.format(href=dhref, name=name)
+
+        self.tools = [click, file_meta, download]
+
+
 # Utility functions
-def retrieve_file(_path):
-    f = File(_path)
-    f.retrieve_meta()
-    return f
 
 
 
 if __name__ == "__main__":
     ''
-    #fi = retrieve_file('tmp/t.text')
 
     # another
-    #fia = File('tmp/s.text')
+    fia = File('tmp/s.text')
+    print(fia.read())
     #fia.make_up_basic_meta()
     #fia.write('s test of text file, apr.07 2:15pm')
 
-    #fia = retrieve_file('tmp/s.text')
-    #fo = fia.get_folder()
 
     #print fia.get_meta()

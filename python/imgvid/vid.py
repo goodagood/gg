@@ -3,7 +3,8 @@
 # Use ffmpeg via subprocess to do video things
 #
 
-import subprocess32 as sp
+#import subprocess32 as sp
+import subprocess as sp
 
 
 # extract image

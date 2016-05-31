@@ -162,7 +162,7 @@ def write_folder_meta(cwd='tmp/public', lfile='/tmp/fmeta'):
 if __name__ == "__main__":
     print('__name__ == "__main__"')
     #tmp, kk = chka()
-    #f = s3.folder.getter.folder('tmp')
+    f = s3.folder.getter.folder('tmp/public')
     #cache.collect_file_metas(f)
 
     #tmp = start_cache('t0310y6')
@@ -171,4 +171,4 @@ if __name__ == "__main__":
     #add_up_li("tmp")
 
     #fo = s3.folder.getter.folder('tmp/public')
-    write_folder_meta()
+    #write_folder_meta()

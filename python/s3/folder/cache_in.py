@@ -1,7 +1,7 @@
 
 from pprint import pprint
 
-import klass
+import s3.folder.klass as klass
 import s3.crud as crud
 import util.mis as util
 

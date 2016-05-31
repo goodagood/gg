@@ -1,6 +1,7 @@
 
 import os
-import subprocess32 as sp
+#import subprocess32 as sp
+import subprocess as sp
 
 
 # extract image

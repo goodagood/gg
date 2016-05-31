@@ -91,8 +91,8 @@ def make_name_part(meta):
 
 ## some test and fiddles
 def foo(*args, **kwargs):
-    print args
-    print kwargs
+    print(args)
+    print(kwargs)
 
 
 if __name__ == "__main__":

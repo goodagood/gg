@@ -27,6 +27,9 @@
 <link rel="stylesheet" href="/static/css/skeleton.css">
 <link rel="stylesheet" href="/static/css/mfirst.css">
 
+<link rel="stylesheet" href="/static/bower_components/google-code-prettify/src/prettify.css">
+<link rel="stylesheet" href="/static/bower_components/google-code-prettify/styles/sunburst.css">
+
 
 <!-- % if(typeof css !== 'undefined' && css) print(css); % -->
 {{{css}}}
@@ -36,7 +39,7 @@
 </style>
 
 </head>
-<body>
+<body onload="prettyPrint()">
 
   <!-- % if(typeof header !== 'undefined' && header) print(header); % -->
   <header>
@@ -70,17 +73,13 @@
           </p>
 
           <div id="file_list" class="tree">
-            <form>
-              <label for="file-unique-checkbox"> Unique file 
-                <input type="checkbox"
-                id="file-unique-checkbox" name="file-unique-checkbox"
-                accessKey="u" {{{unique_is_checked}}}
-                >
-              </label>
-              <input type="submit" value="Set" id="submit-to-set">
-            </form>
 
-            {{{ info_list }}}
+            <h1> info list (version 2016 0526) </h1>
+            <pre class="prettyprint lang-javascript">
+
+              {{{ file_meta }}}
+            </pre>
+
           </div>
           <p> - </p>
           <div id="json-to-list"> </div>
@@ -174,12 +173,15 @@ min version:
 
 
 <script src="/static/bower_components/jquery/jquery.js"></script>
+
+<!-- put underscore.js before backbone!!
 <script src="/static/bower_components/bootstrap/dist/js/bootstrap.js"></script>
 
 <script src="/static/bower_components/underscore/underscore.js"></script>
-<!-- put underscore.js before backbone!! -->
 <script src="/static/backbone/backbone.js"></script>
+-->
 
+<script src="/static/bower_components/google-code-prettify/src/prettify.js"></script>
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -193,210 +195,19 @@ min version:
 <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
 <![endif]-->
 
-<script src="/static/js/fi-pu.js"></script>
 
 <!-- start in file script -->
 <!-- % if(typeof script !== 'undefined' && script) print(script); % -->
 
 <script>
-  var puuid = "{{{puuid}}}";
-  $( document ).ready(function() {
-
-    //i18n.init(function(t){
-    //  $(".translate-this").i18n();
-    //});
-    
-    var folder_path = "{{{cwd}}}";
-    //window.gg_data_holder = {{{serielized_file_list_data}}};
-    //var folder_path = "<% if(typeof cwd !== 'undefined' && cwd) print(cwd); %>";
-
-    //$("#file_list li ").click(function(e){
-    //  //console.log(this.toString());
-
-    //  var file_id = $(this).find("input:checkbox").attr('value');
-    //  console.log(file_id);
-
-    //  var url = 'http://54.178.88.149:9090/test/add-file-value/';
-    //  var ajax_data = {file_id:file_id, type: 'click', };
-    //  var param = {url:url, type:'POST', data: ajax_data, dataType:'json'};
-
-    //  $.ajax(param)
-    //  .done(function(a,b, c){
-    //    //$("div#file_list input:checkbox").attr("checked", false);
-    //    console.log('ajax done: ', a,b,c);
-    //    })
-    //  .fail(function(a,b,c){
-    //    console.log('ajax fail: ', a,b,c);
-    //  });
-
-    //});
-
-
-    // VVVVVVVVVVVVVVVVVVVVVVV
-    // implement sending later
-    //var people_list = [];
-    //$("div#current_people  input:checkbox").change(function(e){
-    //  //$.inspect(e);
-
-    //  var name = $(this).val();
-    //  if(_.isEmpty(name)){ return false; }
-
-    //  if($(this).is(':checked')){
-    //    people_list = _.union(people_list, [name,]);
-    //  }else{
-    //    people_list = _.without(people_list, name);
-    //  }
-    //  //alert(people_list);
-    //});
-
-    //$("div#tools_buttons a#send_file").hide();
-    //$("div#current_people").hide();
-
-    //function init_people_list(){
-    //  people_list = [];
-    //  $("div#current_people input:checkbox").each(function(){
-    //    people_list.push($(this).val());
-    //  });
-    //}
-
-    //var src_list = [];
-    //$("div#file_list input:checkbox").change(function(e){
-    //  //$.inspect(e);
-
-    //  var name = $(this).val();
-    //  if(_.isEmpty(name)){
-    //    //alert('empty name');
-    //    return false;
-    //  }
-
-    //  if($(this).is(':checked')){
-    //    src_list = _.union(src_list, [name,]);
-    //  }else{
-    //    src_list = _.without(src_list, name);
-    //  }
-    //  //alert(src_list);
-
-    //  if(src_list.length == 1){ 
-    //    $("div#current_people").show(500);
-    //    $("div#current_people input:checkbox").attr("checked", "checked");
-    //    init_people_list();
-    //    $("div#tools_buttons a#send_file").show(500); //show the send menu.
-    //    $("div#tools_buttons a#send_file").addClass('btn-primary'); //show the send menu.
-    //  }
-    //  if(src_list.length == 0){ 
-    //    people_list = [];  // variable defined outside
-    //    $("div#current_people").hide(500);
-    //    $("div#tools_buttons a#send_file" ).hide(1000); //hide the send menu.
-    //  }
-    //});
-
-    //$("a#send_file").click(function(event){
-    //  //alert(e);
-    //  //alert(src_list);
-    //  //alert(people_list);
-    //  //alert('some thing');
-    //  event.preventDefault();
-    //  if(src_list.length <= 0 || people_list <= 0){
-    //    return false;
-    //  }
-    //  var file_list_str   = JSON.stringify(src_list);
-    //  var people_list_str = JSON.stringify(people_list);
-    //  //alert(file_list_str, people_list_str);
-
-    //  var url = 'http://54.178.88.149:9090/send-file/';
-    //  var ajax_data = {file_list_str:file_list_str, people_list_str : people_list_str, };
-    //  var param = {url:url, type:'POST', data: ajax_data, dataType:'json'};
-
-    //  $.ajax(param).done(function(){
-    //    $("div#file_list input:checkbox").attr("checked", false);
-    //  });
-    //});
-    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    // end of implement sending later
-
-
-    //$.inspect(this);
-
-    //alert('end of the script'); // Means browser parsed here.
+  $(document).ready(function() {
+      console.log('end');
   });
 </script>
 
 
 
-<!--% if(typeof template !== 'undefined' && template) print(template); %-->
-<!-- For muji listing client -->
 
-<!-- omit 'li' tag?
-    <span class="thumb">
-        <img src="/ss/.gg.file/abc/imgvid/0cef0507-ea52-4cd9-95a8-d7a037d1e341.thumbnail" 
-        alt="gc-550-4.jpg"  />
-    </span>
-    <div class="selector"><label class="file-selector">
-        <input type="checkbox" name="filepath[]" value="abc/imgvid/0cef0507-ea52-4cd9-95a8-d7a037d1e341" />
-        <span class="filename">gc-550-4.jpg</span>
-        <span class="filename">gc-550-4.jpg</span>
-    </div>
-    <div class="download">
-        <a href="/ss/.gg.file/abc/imgvid/0cef0507-ea52-4cd9-95a8-d7a037d1e341">
-            <i class="fa fa-cloud-download"></i> Download</a>
-    </div>
-    <div class="what">
-        <span class="delete">
-            <a href="/del/abc/imgvid/0cef0507-ea52-4cd9-95a8-d7a037d1e341">
-                <span class="glyphicon glyphicon-remove"></span>Delete
-            </a>
-        </span>
-        <span class="value"> 0
-            <i class="fa fa-cog"></i>
-        </span>
-    </div>
--->
-<script type="text/template" id="file-template">
-    <span class="thumb">
-      <!-- <a href="image viewer"> ... </a> -->
-      <img src="/ss/<%= thumb_key %>" width="<%= thumb_width %>" height="<%= thumb_height %>"
-      alt="<%= name %>"  />
-    </span>
-    <div class="selector"><label class="file-selector">
-      <input type="checkbox" name="filepath[]" value="<%= path_uuid %>" />
-      <span class="filename"><%= name %></span>
-    </div>
-    <div class="download">
-      <a href="/ss/<%= file_key %>"> <i class="fa fa-cloud-download"></i> Download</a>
-    </div>
-    <div class="del">
-      <span class="delete">
-          <a href="/del/<%= path_uuid %>">
-              <span class="glyphicon glyphicon-remove"></span>Delete
-          </a>
-      </span>
-    </div>
-    <div class="value">
-      <span class="value"><%= value %> 
-          <i class="fa fa-cog"></i>
-      </span>
-    </div>
-</script>
-
-
-
-<script type="text/template" id="item-template-old">
-  <div class="view">
-    <input class="toggle" type="checkbox" <%= done ? 'checked="checked"' : '' %> />
-    <label><%- title %></label>
-    <a class="destroy">
-      <span class="glyphicon glyphicon-remove-circle"></span>
-    </a>
-  </div>
-  <input class="edit" type="text" value="<%- title %>" />
-</script>
-
-<script type="text/template" id="stats-template">
-  <% if (done) { %>
-    <a id="clear-completed">Clear <%= done %> completed <%= done == 1 ? 'item' : 'items' %></a>
-  <% } %>
-  <div class="todo-count"><b><%= remaining %></b> <%= remaining == 1 ? 'item' : 'items' %> left</div>
-</script>
 <!-- end of template -->
 
 

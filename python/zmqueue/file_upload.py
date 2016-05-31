@@ -91,4 +91,4 @@ if __name__ == "__main__":
             "timeout": 3000
         }
 
-    print loc_to_s3(msg)
+    print(loc_to_s3(msg))

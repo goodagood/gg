@@ -25,7 +25,7 @@ default_folder_permission = {
             "write":   False,
             "execute": False
         },
-        "inherit": Ture
+        "inherit": True
     }
 
 
@@ -55,7 +55,7 @@ default_file_permission = {
             "write":   False,
             "execute": False
         },
-        "inherit": Ture
+        "inherit": True
     }
 
 
