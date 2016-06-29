@@ -1,0 +1,25 @@
+{
+  "name": "front_pages_for_a_folder_in_goodogood_me",
+  "homepage": "https://github.com/goodagood/gg.intro.git",
+  "authors": [
+    "andrew <bin1510@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "venders",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.2.0",
+    "skeleton": "~2.0.4",
+    "google-code-prettify": "~1.0.4",
+    "font-awesome": "fontawesome#~4.5.0"
+  }
+}

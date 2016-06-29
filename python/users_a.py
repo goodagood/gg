@@ -1,3 +1,7 @@
+# copied to ./user/
+# 2016 0618
+
+
 from pymongo import MongoClient
 
 #client = MongoClient(port=9017)

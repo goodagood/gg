@@ -27,6 +27,13 @@ router.get("/a", function(req, res){
     res.json( {now:now, what: '/a in client.js'} );
 });
 
+router.post("/a", function(req, res){
+    p('post /a: ', req.body);
+    var t   = new Date();
+    var now = t.toString();
+    res.json( {now:now, what: '/a in client.js'} );
+});
+
 
 router.get(/\/get-file-meta-list\/(.+)/, function(req, res){
     p('in get file meta list');
@@ -78,7 +85,8 @@ router.post("/post-for-file-meta-list",
                 p('meta list is array?: ', u.isArray(meta_list));
                 res.json({
                     meta_list: meta_list,
-                    cwd: cwd, username:username, what: '/post ... in client.js'});
+                    cwd: cwd,
+                    what: '/post ... in client.js'});
             });
 
         });

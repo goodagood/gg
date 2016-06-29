@@ -13,8 +13,7 @@ import s3.keys  as keys
 import s3.crud as crud
 import s3.folder.getter
 
-#import permission.per as per
-from ggpermission import per
+import ggroot.permission.per as Perm
 
 
 class File(object):
@@ -23,12 +22,20 @@ class File(object):
         self.meta = {'path' : _path}
 
 
-    def get_meta(self):
+    def collect_meta(self):
         meta = self.meta
-        if hasattr(self, 'per'):
-            meta['permission'] = self.per.get_settings()
-        if hasattr(self, 'meta_per'):
-            meta['meta_permission'] = self.meta_per.get_settings()
+
+        ##d use control instead
+        #if hasattr(self, 'per'):
+        #    meta['permission'] = self.per.get_settings()
+
+        if hasattr(self, 'control'):
+            meta['permission'] = self.control.get_settings()
+
+        ##d
+        #if hasattr(self, 'meta_per'):
+        #    meta['meta_permission'] = self.meta_per.get_settings()
+
         if hasattr(self, 'tools'):
             meta['tools'] = self.tools
         return meta
@@ -54,7 +61,9 @@ class File(object):
             return None
 
     def make_up_basic_meta(self):
-        ''' Here we make up meta for file, but a file can have no meta.
+        '''
+        Here we make up meta for file, but a file can have no meta.
+        This will not override data if it exists
         '''
         if 'path' not in self.meta:
             raise Exception('Folder must have PATH')
@@ -64,6 +73,7 @@ class File(object):
         # if there is no owner, we set root, this is a little bit weird.
         if 'owner' not in self.meta:
             self.meta['root'] = util.getroot(self.meta['path'])
+            self.meta['owner'] = self.meta['root']
 
         if 'meta_s3key' not in self.meta:
             self.calculate_prefix_and_keys()
@@ -90,7 +100,8 @@ class File(object):
     def save_meta(self):
         '''Haven't done locking
         '''
-        meta = self.get_meta()
+        meta = self.collect_meta()
+
         jstr = json.dumps(meta)
         crud.save(self.meta['meta_s3key'], jstr)
         return self.meta
@@ -131,6 +142,11 @@ class File(object):
             return None
 
         self.meta = crud.get_json(self.meta['meta_s3key'])
+
+        # set acl (permission) control?
+        if 'permission' in self.meta:
+            self.control_permission(self.meta['permission'])
+
         return self.meta
 
 
@@ -207,9 +223,38 @@ class File(object):
             raise Exception('no name space prefix in self.met')
 
 
+    #d
     def set_permission(self):
-        self.per      = per.Permission(self.meta['owner'])
-        self.meta_per = per.Permission(self.meta['owner'])
+        self.per      = Perm.Permission(self.meta['owner'])
+        self.meta_per = Perm.Permission(self.meta['owner'])
+
+
+    def _only_owner_control(self):
+        if 'owner' in self.meta:
+            ow = self.meta['owner']
+        elif hasattr(self, 'owner'):
+            ow = self.owner
+        else:
+            raise Exception('no owner in file meta or self')
+
+        self.control = Perm.Permission(ow)
+
+        # if owner is not root
+        root = util.getroot(self.meta['path'])
+        if root != ow:
+            self.control.add_readers(root)
+            self.control.add_writers(root)
+
+
+    # file can have no permission data, even data,
+    # in case it can follow folder's control
+    def control_permission(self, cfg=None):
+        if type(cfg) is dict:
+            self.control = Perm.Permission(cfg)
+        elif cfg is None:
+            self._only_owner_control()
+        else:
+            raise Exception('how to set control for file?')
 
 
     def list_tools(self):
@@ -257,4 +302,4 @@ if __name__ == "__main__":
     #fia.write('s test of text file, apr.07 2:15pm')
 
 
-    #print fia.get_meta()
+    #print fia.collect_meta()

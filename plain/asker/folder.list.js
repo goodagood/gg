@@ -16,7 +16,7 @@ var p = console.log;
 function  folder_list(who, cwd, callback){
     var info = JSON.stringify( {
         "who": who,
-        "ask-for": 'folder_list',
+        "ask-for": 'folder_list', // this is underscore
         "path": cwd,
         "timeout": 3000
     });

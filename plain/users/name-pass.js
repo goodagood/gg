@@ -51,32 +51,40 @@ router.get('/login', function(req, res, next){
    application's responsibility to establish a session (by calling req.login())
    and send a response.
  */
-router.post('/login', function(req, res, next) {
-    passport.authenticate('local', function(err, user, info) {
-        p('0, in post login, got err: ', err);
-        p('1, in post login, got user: ', user);
-        p('2, in post login, got info: ', info);
-        if (err)   { return next(err); }
-        if (!user) { return res.redirect( msg_in_querystring.add_ggmsg('no user found', '/login/')); }
+router.post('/login',
 
-        req.login(user, function(err) { //logIn?
-            if (err) { return next(err); }
-            //return res.redirect('/users/' + user.username);
+        // in middle, process the inputs
+        function(req, res, next){
+            if(req.body){
+                var tpw, pw;
+                if('password' in req.body) pw = req.body.password.trim();
+                if('text-password' in req.body) tpw = req.body['text-password'].trim();
+                if(pw === '' && tpw !== '') req.body['password'] = tpw;
+            }
+            next();
+        },
 
-            //p('going to redirect, in post login');
-            return res.redirect('/ls/');
+        function(req, res, next) {
+            passport.authenticate('local', function(err, user, info) {
+                p('0, in post login, got err: ', err);
+                p('1, in post login, got user: ', user);
+                p('2, in post login, got info: ', info);
+                if (err)   { return next(err); }
+                if (!user) { return res.redirect( msg_in_querystring.add_ggmsg('no user found', '/login/')); }
+
+
+                req.login(user, function(err) { //logIn?
+                    if (err) { return next(err); }
+                    //return res.redirect('/users/' + user.username);
+
+                    //p('going to redirect, in post login');
+                    return res.redirect('/ls/');
+                });
+            })(req, res, next);
         });
-    })(req, res, next);
-});
 
 
 
-//// checking login, 0203:
-//router.post('/login',
-//    try_middle,
-//    passport.authenticate('local',
-//      { successReturnToOrRedirect: '/ls/', failureRedirect: '/login' }));
-  
 
 router.get('/logout', function(req, res){
   req.logout();

@@ -110,7 +110,8 @@ def put_file(key, file_path):
 def list_obj_raw(prefix, num=1000):
     ''' List the object, with the prefix
     '''
-    return client.list_objects(Bucket = root_bucket,
+    return client.list_objects(
+            Bucket = root_bucket,
             Prefix = prefix,
             MaxKeys=num)
 

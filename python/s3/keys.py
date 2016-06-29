@@ -16,6 +16,10 @@ def folder_meta(_path):
 
 
 def name_space(prefix, _path, _uuid):
+    '''
+    In theory, uuid should be enough to saving name clash, put a root before
+    it to make things more clear.
+    '''
     root = getroot(_path)
     s3key = os.path.join(
             prefix,

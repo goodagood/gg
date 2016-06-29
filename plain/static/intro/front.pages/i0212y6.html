@@ -1,0 +1,760 @@
+
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport"    content="width=device-width, initial-scale=1">
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+
+<!--
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+-->
+<link rel="stylesheet" href="venders/skeleton/css/normalize.css">
+<link rel="stylesheet" href="venders/skeleton/css/skeleton.css">
+
+<link rel="stylesheet" href="venders/font-awesome/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="css/col3.css">
+
+<title> intro of goodogood.me </title>
+
+<!--
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="http://code.jquery.com/jquery.min.js"></script>
+
+<script src="http//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+<script src="http//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
+-->
+
+<!--
+aspect ratio  |  multiply width by
+==================================
+     1:1      |         1
+     1:3      |         3
+     4:3      |        0.75
+     16:9     |       0.5625
+
+     16:9 80/45 40/22.5
+     ff1133, aaff11, 11ffdd, 6611ff
+
+     3.5 x 2
+     The standard dimensions for a printed business card are 3.5 x 2 inches.
+     That's the finished card size. Many printed designs include bleed. The
+     "bleed area" is an extra 1/8 inch of space for design elements or
+     backgrounds that extend beyond the finished size of your piece.
+-->
+
+<style>
+.header {
+  font-family: Menlo, 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', Monaco, Consolas, monospace;
+  margin-top: 6rem;
+  text-align: center; }
+
+/*
+    display:inline-block;
+*/
+
+section.header div form#lang-selector label {
+    margin: 0.5rem 1rem;
+    float:left;
+}
+
+/*
+
+  position:absolute;
+ */
+div#lang-radio {
+  position:fixed;
+  right: 2rem;
+  bottom: 1rem;
+  z-index: 1;
+  opacity: 0.5;
+}
+
+.init-fa {
+  margin-right: 2rem;
+  font-size: 2rem;
+  color: silver;
+}
+
+.button { 
+  width:10rem;
+  color: orange;
+  padding: 0 0.5em;
+  text-transform: none;
+}
+
+#footer {
+  text-align: center;
+  margin: 3rem auto;
+}
+
+.descr {
+  font-family: Times, 'DejaVu Sans Mono', Monaco, Consolas, monospace;
+}
+.value-props {
+  margin-top: 4rem;
+  margin-bottom: 4rem; }
+.value-prop {
+  margin-top: 1rem; }
+.value-img {
+  display: block;
+  text-align: center;
+  margin: 2.5rem auto 0; }
+</style>
+</head>
+<body>
+
+<div class="container">
+<section class="header">
+  <h2 class="title">goodogood.me</h2>
+
+  <h4 class="title descr trans" id="hdesa">
+    A file interface keeping values.
+  </h4>
+  <script type="text/template" id="hdesa-zh">/*
+    给予价值的：在线文件系统
+  */</script>
+
+  <div class="cf trans" id="login-buttons">
+    <a class="button" href="/login"><i class="fa fa-user"> </i> Login</a>
+    <a class="button" href="/try-before-register"><i class="fa fa-hand-o-up"> </i> TryIt</a>
+    <a class="button" href="/user/slow-home"><i class="fa fa-user-plus"> </i> SignUp</a>
+  </div>
+  <script type="text/template" id="login-buttons-zh">/*
+    <a class="button" href="/login"><i class="fa fa-user"> </i> 登录</a>
+    <a class="button" href="/try-before-register"><i class="fa fa-hand-o-up"> </i> 试用</a>
+    <a class="button" href="/user/slow-home"><i class="fa fa-user-plus"> </i> 注册</a>
+  */</script>
+
+
+  <div id="lang-radio">
+      <form id="lang-selector">
+          <label> <input type="radio" name="lang" value="zh"> 中文 </label>
+          <label> <input type="radio" name="lang" value="en" data-default='yes' checked> English </label>
+      </form> 
+  </div>
+</section>
+</div>
+<br/>
+
+<!-- ===================================== start of block listing, 1,2,3 cols responsive -->
+<div class="wrapper cf"> 
+
+    <div class="block" id="BNo1">
+        <div class="inblock trans" id="t-pa">
+            <h6>
+              <i class="fa fa-laptop init-fa"></i> 
+              I am a stupid engineer
+            </h6>
+
+            <p>
+            I am doing
+            <b>stupid</b>
+            <i>engineerings</i>.
+
+
+            What I am doing is to setup a *file system*, then, use it as `interface`
+            between myself and the internet. 
+            <a href="goodogood.me">goodogood.me</a>
+            is the stupid
+            file system, it's online and gives all file a *value* attribute.
+            </p>
+        </div>
+        <script type="text/template" id="t-pa-zh">/*
+            <h6>
+              <i class="fa fa-laptop init-fa"></i> 
+                做为愚蠢的工程师 
+            </h6>
+
+            <p>
+            我在做
+            <b>愚蠢</b>的
+            <i>工程项目</i>.
+
+
+            就是一个文件系统，用做接口，在我和网络之间做为<b>“接口”</b>。 
+            <a href="goodogood.me">goodogood.me</a>
+            并且系统中每个文件都可以有<b>价值属性</b>。
+            </p>
+        */</script>
+    </div>
+
+    <div class="block" id="BNo2">
+        <div class="inblock trans" id="t-pb" >
+            <h6>
+              <i class="fa fa-thumbs-o-up init-fa"></i> 
+                To save shoulders
+            </h6>
+            Every one need use *less* web UI.
+
+            Long time using of it leads to
+            <b>shoulder and back pains</b>,
+            it can <i>demage muscles, bones and nerves</i>, during it's
+            numerous small and tedious movements among mouse, keyboard and touch screen. You can 
+            use a file system to kill job more faster.
+        </div>
+        <script type="text/template" id="t-pb-zh">/*
+            <h6>
+              <i class="fa fa-thumbs-o-up init-fa"></i> 
+                这是为了保护肩膀
+            </h6>
+            网络用户界面使得人们固定在触摸屏，鼠标和键盘之间，
+
+            简单而且有效的引起肩膀和背部劳损。
+            为了避免这样的痛苦，您可以使用文件和相应工具，经过历史验证的工程原则和相应工具，
+            使工作可以更有效的完成，从而保护肩膀。
+        */</script>
+    </div>
+
+    <div class="block" id="BNo3">
+        <div class="inblock trans" id="t-b3">
+            <h6>
+              <i class="fa fa-cog init-fa"></i> 
+                To value all files
+            </h6>
+
+            File should be able to get a price tag, like all the other commodities in market.
+            One work on his file should not be prevented to claim value for it.
+
+            Value is one of the mysterious things no one can truelly understand in our
+            mortal world. Just do it anyway.
+
+        </div>
+        <script type="text/template" id="t-b3-zh">/*
+            <h6>
+              <i class="fa fa-cog init-fa"></i> 
+             为了价值的存在
+            </h6>
+
+            <p>
+              价值存在于人类的行为和理解中。 一切行为，如果是人类的，都最终会带有价值标签。
+              因此将价值属性设定给每一个文件，在我们的文件系统中。
+            </p>
+        */</script>
+    </div>
+
+    <div class="block" id="BNo4">
+        <div class="inblock trans" id="tb4">
+            <h6>
+              <i class="fa fa-code init-fa"></i> 
+                To value codes
+            </h6>
+            Start from ten cents a byte, 0.10$/Byte, or how much your software codes should value?
+
+            We got a lot of free codes to use. Should we think it's value as "0", because
+            it's free?
+
+            A gentleman share his food to others, it's his kindness and the food is free.
+            But the food keep it's value, it isn't down to "0", even you can get
+            it freely.  
+        </div>
+        <script type="text/template" id="tb4-zh">/*
+            <h6>
+              <i class="fa fa-code init-fa"></i> 
+              为了估值<b>代码</b>
+            </h6>
+            <p>
+              书写代码需要劳动，和烤红薯需要劳动一样，开源代码同样可以拥有价值。我们
+              希望以一字节一元做为参考价，
+              如果您为[goodogood](https://github.com/goodagood/gg.git)写了代码，可以并且请记录
+              相应价值在系统中，用JSON格式。
+            </p>
+        */</script>
+    </div>
+
+    <div class="block" id="BNo5">
+        <div class="inblock trans" id="tb5">
+            <h6>
+            <i class="fa fa-minus-circle init-fa"></i> 
+                To clear negatives
+            </h6>
+            If we collect it, we can clean it.
+            The negative value means it's opposite to the positive value.  For positive value, a
+            buyer might pay out cashes to get the value from it's holder.  For negative
+            value, it should be reversed, the value holder should pay out in some way, to
+            the value claimers.
+        </div>
+        <script type="text/template" id="tb5-zh">/*
+            <h6>
+              <i class="fa fa-minus-circle init-fa"></i> 
+              为了清除<b>负</b>价值
+            </h6>
+            <p>
+              有正的，就有负的。有无数令人难受的行为，可以计为负价值行为。
+              用图像和视频文件收集这些负价值行为， 从而可以净化掉它们， 从而可以净化社会。
+              并且可能让收集者获得大量现金收益。
+            </p>
+        */</script>
+    </div>
+    <div class="block" id="BNo6">
+        <div class="inblock trans" id="tb6">
+            <h6>
+            <i class="fa fa-usd init-fa"></i> 
+                To make you rich
+            </h6>
+            Once value start accumulation, we split it by golden ratio, and make sure 20 get 80
+            and 80 get 20.  Always, it's good to split away a golden ratio, and pass it through
+            the system layers.
+        </div>
+        <script type="text/template" id="tb6-zh">/*
+            <h6>
+              <i class="fa fa-jpy init-fa"></i>
+              为了给你发财的机会
+            </h6>
+            <p>
+              显然，这会提供各种财富积累的机会。
+              价值积累自然可能转变为价格积累。
+              而且价值系统可以用于平衡劳动和分配。
+            </p>
+        */</script>
+    </div>
+
+    <div class="block" id="BNo7">
+        <div class="inblock trans" id="tb7">
+            <h6>
+              <i class="fa fa-flash init-fa"></i> 
+              The crashing system 
+            </h6>
+            The system can crash often, during to it's growing speed 
+            and the man/monthes requirements to maintain and developing it.
+            It's good to be used as a temperory file system. 
+        </div>
+        <script type="text/template" id="tb7-zh">/*
+            <h6>
+              <i class="fa fa-flash init-fa"></i> 
+              崩溃和发展
+            </h6>
+            <p>
+              系统开发中，就是不断有崩溃的可能。
+              这很有趣，软件的特点之一是变形的能力，
+              在很多变化的过程中，就有崩溃。
+              因此请先用做临时文件系统。
+              
+            </p>
+        */</script>
+    </div>
+    <div class="block" id="BNo8">
+        <div class="inblock trans" id="tb8">
+            <h6>
+              <i class="fa fa-fire init-fa"></i> 
+              Open source with value
+            </h6>
+            It's [open source](https://github.com/goodagood/gg.git), 
+            <b>GPL licensed</b>.  
+            Beside the source repository, 
+            User could start to do hackings inside their folder.
+            For designers and developers, js css html images, ... all
+            file can be served from each folder, node.js codes can run from folder, it's easy enough.  
+        </div>
+        <script type="text/template" id="tb8-zh">/*
+            <h6>
+              <i class="fa fa-fire init-fa"></i>
+              开源的价值
+            </h6>
+            <p>
+              开源可以使其它人更方便的享有知识，您知道我们为开源代码的参考价是1元1字节，
+              前台或者后台，JS或者JAVA，HTML或者CSS。
+              并且可以不断增值
+              ...
+            </p>
+        */</script>
+    </div>
+
+    <div class="block" id="BNo9">
+        <div class="inblock trans" id="tb9">
+            <h6>
+              <i class="fa fa-bicycle init-fa"></i> 
+              The sportsman like
+            </h6>
+            For those who'd like to run and shoot with fast athelet movings,
+            you are welcomed to run into streets, shooting those negative valued
+            behaviors, and claim value for it.
+            
+        </div>
+        <script type="text/template" id="tb9-zh">/*
+            <h6>
+              <i class="fa fa-bicycle init-fa"></i> 
+              负价值清理者
+            </h6>
+            <p>
+              你们可以直接行动，在街头收集负价值行为，
+              报出令人开心的价钱， 100元一张相片， 200元每秒视频，希望你们
+              报出更好的价钱， 并且让它不断的涨价，直到可以清除负价值行为。
+              
+              
+            </p>
+        */</script>
+    </div>
+    <div class="block" id="BNo10">
+        <div class="inblock trans" id="tb10">
+            <h6>
+              <i class="fa fa-cubes init-fa"></i> 
+              The managers
+            </h6>
+            Who want manage things, can also get plenty from the system.
+            We are going to split it by golden ratio before value turn into cash,
+            managment efforts can get over 38% percent of the value.
+        </div>
+        <script type="text/template" id="tb10-zh">/*
+            <h6>
+              <i class="fa fa-cubes init-fa"></i>
+              管理者
+            </h6>
+            <p>
+              有管理倾向的人们，你们有福了。
+              不论价值如何高， 我们将其黄金分割，约32个百分数向上传递。
+              因此管理者分享32个百分数中的一部分，层层叠加...
+            </p>
+        */</script>
+    </div>
+
+    <div class="block" id="BNo11">
+        <div class="inblock trans" id="tb11">
+            <h6>
+              <i class="fa fa-wrench init-fa"></i> 
+              The cognition concepts
+            </h6>
+            Files and folders is by far one of the better tools to follow human
+            cognitions, it follows categories and concepts. 
+            They are by far one of the best interfaces to our life and jobs ...
+            
+        </div>
+        <script type="text/template" id="tb11-zh">/*
+            <h6>
+              <i class="fa fa-wrench init-fa"></i> 
+              符合认知能力
+            </h6>
+            <p>
+              认知能力是人类的关键能力， 概念和分类是其中基本的因素，
+              而文件和目录是一种接近人类认知习惯的工具，
+              并且是经历漫长进化的技术，在电脑和软件上应用也非常自然。
+              
+              
+            </p>
+        */</script>
+    </div>
+    <div class="block" id="BNo12">
+        <div class="inblock trans" id="tb12">
+            <h6>
+              <i class="fa fa-share-alt init-fa"></i> 
+              Sharing the good
+            </h6>
+            File system can support better sharings, especially for professionals.
+            If chances permit it, I can show you we can carry out most kind of
+            tasks by a shared file system.  It can be communication tools,
+            it can be entertainments, it can be labor sharing, and more.
+        </div>
+        <script type="text/template" id="tb12-zh">/*
+            <h6>
+              <i class="fa fa-share-alt init-fa"></i>
+              更好分享
+            </h6>
+            <p>
+              文件系统是支持分享的更好工具， 
+              很奇怪主流商业网络公司没有将文件系统做为人机界面的主要因素，
+              除了技术原因，一个不容忽视的原因是它们不希望用户控制自己的文件，它们
+              希望占有和控制用户的数据，然而直接使用文件可以做到的超过多数人的想像...
+            </p>
+        */</script>
+    </div>
+
+
+</div>
+<!-- ======== end of block listing, 1,2,3 cols responsive ========= -->
+
+<div class="container cf" id="footer">
+    goodogood.me, goodagood &copy; 2016-2018
+</div>
+
+<!--
+<script src="./aloha.min.js"></script>
+
+<script>aloha.dom.query('.editable', document).forEach(aloha);</script>
+-->
+
+<script src="./venders/jquery/dist/jquery.js"></script>
+<script>
+function findTrans(tid, langCod){
+    var commented = $("#" + tid + "-" + langCod).html();
+    if(!commented) return null;
+
+    var withoutComments = commented.replace(/^\/\*/, '');
+        withoutComments = withoutComments.replace(/\*\/$/, '');
+
+    return withoutComments;
+}
+
+function alltrans(){
+    $(".trans").each(function(idx){
+        var tagid = $(this).attr("id");
+        console.log('going to find translation for #', tagid);
+        $("#" + tagid).html(findTrans(tagid, "zh"));
+    });
+}
+
+function makeTransClosure(defaultLang){
+    defaultLang = defaultLang || 'en';
+    var  origin = {};
+
+    function getOrigin(){
+        return origin;
+    }
+    function getDefaultLang(){
+        return defaultLang;
+    }
+
+    function trans(tid, lCod){
+        if(!origin[tid]){
+            origin[tid] = $("#"+tid).html();
+        }
+        $("#"+tid).html(findTrans(tid, lCod));
+    }
+
+    function return2origin(tid){
+        if(origin[tid]){
+            $("#"+tid).html(origin[tid]);
+        }
+    }
+
+    function doAllTrans(lCod){
+        $(".trans").each(function(idx){
+            var tagid = $(this).attr("id");
+            console.log('going to find translation for #', tagid);
+
+            if(tagid){
+                //$("#" + tagid).html(findTrans(tagid, lCod));
+                if(lCod === defaultLang){
+                    console.log('yes, return to origin');
+                    return2origin(tagid);
+                }else{
+                    trans(tagid, lCod);
+                }
+            }
+        });
+    }
+    
+
+    return {
+
+        getOrigin: getOrigin,
+
+        trans : trans,
+
+        return2origin: return2origin,
+
+        doAllTrans: doAllTrans
+    }
+}
+
+var ootrans = makeTransClosure('en');
+</script>
+<script>
+var oo={};
+$(document).ready(function(){
+    var translator = makeTransClosure('en');
+
+    $("form#lang-selector").change(function(e){
+        //console.log(Object.keys(e));
+        //console.log($(e.target));
+        oo.e = e;
+
+        var el=$(e.target);
+        var lCode = el.attr("value");
+        console.log(el.attr("value"));
+        if(lCode){
+            translator.doAllTrans(lCode);
+        }
+    });
+
+    
+    // set it if 'zh' (chinese) is default language in browser.
+    var language = window.navigator.userLanguage || window.navigator.language;
+    if(language){
+      if(language.search('zh') >= 0){
+            translator.doAllTrans('zh');
+            $('div#lang-radio input[value="zh"]').prop('checked', true);
+      }
+    }
+
+});
+</script>
+
+</body>
+</html>
+<!--
+  color match? 
+  255 33 33 - 127 127 127
+  ff2509, ff7866, c01600; opposite: 07d63e, 008f26, 5be27e
+-->
+<!-- 
+    Language    ISO Code
+    Abkhazian   ab
+    Afar        aa
+    Afrikaans   af
+    Albanian    sq
+    Amharic     am
+    Arabic      ar
+    Aragonese   an
+    Armenian    hy
+    Assamese    as
+    Aymara  ay
+    Azerbaijani az
+    Bashkir     ba
+    Basque      eu
+    Bengali (Bangla)  bn
+    Bhutani     dz
+    Bihari      bh
+    Bislama     bi
+    Breton      br
+    Bulgarian   bg
+    Burmese     my
+    Byelorussian (Belarusian)   be
+    Cambodian   km
+    Catalan     ca
+    Cherokee     
+    Chewa    
+    Chinese     zh
+    Chinese (Simplified)    zh-Hans
+    Chinese (Traditional)   zh-Hant
+    Corsican    co
+    Croatian    hr
+    Czech       cs
+    Danish      da
+    Divehi   
+    Dutch       nl
+    Edo      
+    English     en
+    Esperanto   eo
+    Estonian    et
+    Faeroese    fo
+    Farsi       fa
+    Fiji        fj
+    Finnish     fi
+    Flemish      
+    French      fr
+    Frisian     fy
+    Fulfulde     
+    Galician    gl
+    Gaelic (Scottish)   gd
+    Gaelic (Manx)   gv
+    Georgian    ka
+    German      de
+    Greek       el
+    Greenlandic     kl
+    Guarani     gn
+    Gujarati    gu
+    Haitian Creole  ht
+    Hausa       ha
+    Hawaiian     
+    Hebrew      he, iw
+    Hindi       hi
+    Hungarian   hu
+    Ibibio   
+    Icelandic   is
+    Ido         io
+    Igbo     
+    Indonesian  id, in
+    Interlingua     ia
+    Interlingue     ie
+    Inuktitut   iu
+    Inupiak     ik
+    Irish       ga
+    Italian     it
+    Japanese    ja
+    Javanese    jv
+    Kannada     kn
+    Kanuri   
+    Kashmiri    ks
+    Kazakh      kk
+    Kinyarwanda (Ruanda)    rw
+    Kirghiz     ky
+    Kirundi (Rundi)     rn
+    Konkani      
+    Korean      ko
+    Kurdish     ku
+    Laothian    lo
+    Latin       la
+    Latvian (Lettish)   lv
+    Limburgish ( Limburger)     li
+    Lingala     ln
+    Lithuanian  lt
+    Macedonian  mk
+    Malagasy    mg
+    Malay       ms
+    Malayalam   ml
+    Maltese     mt
+    Maori       mi
+    Marathi     mr
+    Moldavian   mo
+    Mongolian   mn
+    Nauru       na
+    Nepali      ne
+    Norwegian   no
+    Occitan     oc
+    Oriya       or
+    Oromo (Afaan Oromo)     om
+    Papiamentu   
+    Pashto (Pushto)     ps
+    Polish      pl
+    Portuguese  pt
+    Punjabi     pa
+    Quechua     qu
+    Rhaeto-Romance  rm
+    Romanian    ro
+    Russian     ru
+    Sami (Lappish)   
+    Samoan      sm
+    Sangro      sg
+    Sanskrit    sa
+    Serbian     sr
+    Serbo-Croatian  sh
+    Sesotho     st
+    Setswana    tn
+    Shona       sn
+    Sichuan Yi  ii
+    Sindhi      sd
+    Sinhalese   si
+    Siswati     ss
+    Slovak      sk
+    Slovenian   sl
+    Somali      so
+    Spanish     es
+    Sundanese   su
+    Swahili (Kiswahili)     sw
+    Swedish  sv
+    Syriac   
+    Tagalog tl
+    Tajik   tg
+    Tamazight    
+    Tamil   ta
+    Tatar   tt
+    Telugu  te
+    Thai    th
+    Tibetan  bo
+    Tigrinya ti
+    Tonga    to
+    Tsonga   ts
+    Turkish  tr
+    Turkmen  tk
+    Twi      tw
+    Uighur   ug
+    Ukrainian   uk
+    Urdu      ur
+    Uzbek     uz
+    Venda    
+    Vietnamese  vi
+    Volapük     vo
+    Wallon    wa
+    Welsh     cy
+    Wolof     wo
+    Xhosa     xh
+    Yi   
+    Yiddish  yi, ji
+    Yoruba   yo
+    Zulu     zu
+-->
+<!-- vim: et ts=2 sw=2
+-->

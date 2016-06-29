@@ -1,4 +1,9 @@
+
+#
 # 2016 0401
+#
+# 2016 0622, make sure folder always control permission.
+#
 
 import os
 import json
@@ -16,9 +21,13 @@ import s3.asker as asker
 import s3.keys as keys
 import s3.crud as crud
 
+import ggroot.permission.per as Perm
+
 
 class Folder:
     def __init__(self, _path, opts={}):
+        # no permission control here, maybe we can avoid it first.
+
         if opts:
             self.meta = opts
         else:
@@ -29,7 +38,9 @@ class Folder:
         self._prefixes = config_dir.get_s3_prefix()
 
 
+    # duplicated with 'collect meta'?
     def get_meta(self):
+        self.meta['permission'] = self.control.get_settings()
         return self.meta
 
     def set_meta(self, meta):
@@ -55,7 +66,7 @@ class Folder:
 
 
     def make_up_basic_meta(self):
-        '''
+        ''' An usable meta must be set
         '''
         if 'path' not in self.meta:
             raise Exception('Folder must have PATH')
@@ -64,14 +75,18 @@ class Folder:
         if 'type' not in self.meta:
             self.meta['type'] = 'folder'
 
-        # if there is no owner, we set root, this is a little bit weird.
+        # if there is no owner, we set it to root,
+        # this is a little bit weird.
         if 'owner' not in self.meta:
             self.meta['root'] = getroot(self.meta['path'])
+            self.meta['owner'] = self.meta['root']
 
         if 'meta_s3key' not in self.meta:
             self.calculate_meta_s3key()
         if 'name_space_prefix' not in self.meta:
             self.calculate_name_space_prefix()
+
+        self.control_permission()
 
 
     def calculate_prefix_and_keys(self):
@@ -96,30 +111,92 @@ class Folder:
         '''
         if 'uuid' not in self.meta:
             self.meta["uuid"] = myutil.getuuid()
+            self.uuid = self.meta["uuid"]
 
         self.meta['name_space_prefix'] = keys.folder_name_space(
                 self.meta['path'], self.meta['uuid'])
+
+        self.nsprefix = self.meta['name_space_prefix']  # flat out data
         return self.meta['name_space_prefix']
+
+
+    # name space don't need to be set up, it's a prefix,
+    # just use it with rules.
+    def is_name_space_used(self):
+        if not 'name_space_prefix' in self.meta:
+            self.calculate_name_space_prefix()
+
+        # 'key exists' check by count object with the key as prefix
+        if crud.key_exists(self.meta['name_space_prefix']):
+            return True
+        else:
+            return False
+
+
+    def collect_meta(self):
+        '''
+        After flatting data to self, it need to collect data before saving.
+        '''
+        if hasattr(self, 'control'):
+            self.meta['permission'] = self.control.get_settings()
 
 
     def save_meta(self):
         '''Haven't done locking
         '''
+        self.collect_meta()
+
         jstr = json.dumps(self.meta)
         crud.save(self.meta['meta_s3key'], jstr)
         return self.meta
 
+
     def retrieve_meta(self):
-        '''Haven't done locking
+        '''
+        We can always be able to retrieve folder meta after it is exists.
         '''
         if not 'meta_s3key' in self.meta:
             self.calculate_meta_s3key()
 
         self.meta = crud.get_json(self.meta['meta_s3key'])
+
+        if('permission' in self.meta):
+            self.control_permission(self.meta['permission'])
         return self.meta
 
 
+    def control_permission(self, cfg=None):
+        ''
+        if type(cfg) is dict:
+            self.control = Perm.Permission(cfg)
+        elif cfg is None:
+            self._only_owner_control()
+        else:
+            raise Exception('how to set control')
 
+
+    def _only_owner_control(self):
+        '''
+        Set owner, but 'root' will get read/write also.  The name got from
+        history
+        '''
+        if 'owner' in self.meta:
+            ow = self.meta['owner']
+        elif hasattr(self, 'owner'):
+            ow = self.owner
+        else:
+            raise Exception('no owner in folder')
+
+        self.control = Perm.Permission(ow)
+        # if owner is not root
+        root = util.getroot(self.meta['path'])
+        if root != ow:
+            self.control.add_reader(root)
+            self.control.add_writer(root)
+
+
+
+    #? here?
     def new_sub_folder(self, name, opts=None):
         _path = os.path.join(self.meta['path'], name)
 
@@ -284,6 +361,11 @@ class Folder:
         else:
             return self.meta['cache']
 
+
+    def cached_file_metas(self):
+        return self.get_cache()['files']
+
+
     def as_li(self):
         '''
         '''
@@ -299,6 +381,14 @@ class Folder:
         self.get_cache()['renders']['li'] = li #d
         self.meta['li'] = li
         return li
+
+
+    def get_parent_folder(self):
+        ''' Get the folder containing this folder.
+        '''
+        cwd = os.path.dirname(self.meta['path'])
+        return s3.folder.getter.folder(cwd)
+
 
 
 def getroot(_path):

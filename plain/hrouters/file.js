@@ -23,6 +23,8 @@ var cwdc = require("../cwd-chain/cwd-chain.js");
 var get_file = require("../aws/get-file.js");
 
 
+var info = require("../file-basic/info.js");
+
 
 //var css        = require('../aws/css-file.js');
 //var mytemplate = require('../myutils/template.js');
@@ -306,7 +308,6 @@ function make_headers_from_meta(meta){
 }
 
 
-var info = require("../file-basic/info.js");
 router.get(/^\/info\/(.+)/, 
 // cel.ensureLoggedIn('/login'), 
     function(req, res, next){
@@ -327,12 +328,11 @@ router.get(/^\/info\/(.+)/,
 /*
  * Give file meta, or tools maybe, 
  * after structure changed, redoing, 2016 0525
+ * redo, 2016 0629
  */
-router.get(/^\/meta\/(.+)/, 
-// cel.ensureLoggedIn('/login'), 
-    function(req, res, next){
+router.get(/^\/meta\/(.+)/, function(req, res, next){
       var file_path = req.params[0];
-      if(!file_path) return res.end('err, no file path, 20160113');
+      if(!file_path) return res.end('err, no file path, 20160113, /file/meta/...');
 
       var username; 
       if (typeof req.user !== 'undefined') username = req.user.username;

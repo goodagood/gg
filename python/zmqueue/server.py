@@ -31,7 +31,7 @@ def serve_zmq():
             print('message:', message)
 
             if(message):
-                j = json.loads(message)
+                j = parse_msg(message)
                 reply = serve_and_reply(j)
                 socket.send_json(reply)
 
@@ -41,6 +41,26 @@ def serve_zmq():
             socket.close()
             context.destroy()
             sys.exit()
+        except Exception as e:
+            print(e)
+            print('-- error handling is YOUR job, I keep running ...')
+
+
+def parse_msg(msg):
+    if(type(msg) is dict):
+        return msg
+
+    if(type(msg) is str):
+        try:
+            j = json.loads(msg)
+        except:
+            print('load json WRONG, something might be wrong')
+            j = {} #?
+        return j
+
+    print('the msg is not JSON or str, something might be wrong')
+    return msg
+
 
 
 def serve_and_reply(info):
@@ -54,10 +74,10 @@ def serve_and_reply(info):
     try:
         py_response(info)
         if 'py.failed' not in info:
-            print('return after py response', info)
+            #print('return after py response', info)
             return info # only return when ok, continue if not.
     except (Exception) as e:
-        if 'py.failed' not in info:
+        if 'py.failed' in info:
             del info['py.failed']
 
     # continue the old way

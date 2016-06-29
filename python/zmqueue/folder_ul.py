@@ -1,5 +1,5 @@
 
-import path_setting
+import path_setting #d
 
 #import s3.folder.getter as getter
 from s3.folder import  getter

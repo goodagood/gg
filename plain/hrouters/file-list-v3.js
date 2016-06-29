@@ -77,6 +77,24 @@ list = function(app) {
         //});
     });
 
+
+    app.get(/^\/ls63\/(.*)/, function(req, res, next) {
+        var cwd = req.params[0];
+
+        var username;
+        if(req.user) username = req.user.username;
+
+        if (typeof cwd === "undefined" || !cwd) {
+            cwd = username;
+        }
+
+        s3listor.folder_list_with_permission(username, cwd, function(err, html){
+            if(!err) return res.send(html);
+            next(err);
+        });
+        //res.send('<h1>mar 18, 2016</h1>');
+    });
+
     app.get(/^\/ls-anyway\/(.*)/, cel.ensureLoggedIn("/login"), function(req, res, next) {
         var cwd, id, params, username;
         cwd = req.params[0];

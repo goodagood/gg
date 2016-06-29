@@ -1,0 +1,44 @@
+/*
+ * up to 3 columns for file listing, no 'height' setting.
+ * 2016 06 29
+ */
+#file_list {
+  position: relative;
+  width: 98vw;
+  margin: 0 auto;
+  padding: 0; }
+  #file_list .file {
+    position: relative;
+    float: left;
+    width: 97.85vw;
+    display: inline-block;
+    overflow: visible;
+    margin: 0;
+    padding-right: 1em; }
+    #file_list .file .name {
+      float: left;
+      font-size: 1.2em; }
+    #file_list .file .meta {
+      float: right;
+      max-width: 40%;
+      overflow: hidden;
+      border-style: solid;
+      border-width: 1px;
+      border-color: black; }
+      #file_list .file .meta span {
+        padding-right: 1em; }
+
+/* For devices larger than 550px */
+@media (min-width: 550px) {
+  #file_list {
+    width: 85vw; }
+    #file_list .file {
+      width: 42.31vw; } }
+/* For devices larger than 750px */
+@media (min-width: 750px) {
+  #file_list {
+    width: 80vw; }
+    #file_list .file {
+      width: 26.48667vw; } }
+
+/*# sourceMappingURL=col3.css.map */

@@ -1,0 +1,93 @@
+
+/*
+ * up to 3 columns for file listing, no 'height' setting.
+ * 2016 06 29
+ */
+
+
+$widthOne: 98;
+$widthTwo: 85;
+$widthThree: 80;
+
+$blockWidthOne: $widthOne - 0.15;
+$blockWidthTwo: $widthTwo/2.0 - 0.19;
+$blockWidthThree: $widthThree/3.0 - 0.18;
+
+
+
+// mobile 1st, 1 column
+#file_list {
+    position: relative;
+    width:    $widthOne + 0vw;
+
+    margin:   0 auto; // put center
+    padding:  0;
+
+
+    // nested
+    .file {
+        position:relative;
+        float: left;
+
+        width: $blockWidthOne + 0vw;
+
+        display: inline-block;
+
+        //the default is visible
+        overflow: visible;
+        margin:0;
+        padding-right: 1em;
+
+        //border: 1px solid;
+        //background-color: #eee;
+
+        .name {
+            float: left;
+            font-size: 1.2em;
+        }
+
+        .meta {
+            float: right;
+            max-width: 40%;
+            overflow: hidden;
+
+            border-style: solid;
+            border-width:1px;
+            border-color:black;
+
+            span{
+                padding-right: 1em;
+            }
+        }
+
+    }
+
+}
+
+
+
+/* For devices larger than 550px */
+@media (min-width: 550px) {
+    #file_list {
+        width: $widthTwo + 0vw;
+
+        .file {
+            width: $blockWidthTwo + 0vw;
+        }
+    }
+
+}
+
+
+/* For devices larger than 750px */
+@media (min-width: 750px) {
+    #file_list {
+        width: $widthThree + 0vw; 
+    
+        .file {
+            width: $blockWidthThree + 0vw;
+        }
+    
+    }
+}
+

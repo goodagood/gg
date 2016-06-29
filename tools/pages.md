@@ -11,6 +11,13 @@
     "viewtext": "/viewtext/path/to/text-file.extension",
     "file.meta": "/file/meta/path/to/file.extension",
 
+    static introduction: Actually gg.intro.git, 2016 0617
+        /static/gg.intro/md.html
+
+    
+/folder/list/cwd
+
+
 ## upload, 2016 05
 
 After 2016 05, set up a router as /upload
@@ -23,7 +30,7 @@ root: /upload
 
 
 
-"before 2016 0425": "-----------------------------------------"
+# "before 2016 0425": "-----------------------------------------"
 
     "front": "/file/get/intro/public/test0215/y6.0216/i0212y6.html",
     "intro": "/file/md-with-local-files/intro/public/intro.md",

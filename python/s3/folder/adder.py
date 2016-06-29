@@ -18,7 +18,11 @@ def new_root(name):
     return folder
 
 
+
 def safe_new_root(name):
+    '''
+    new root when not exists
+    '''
     if not s3.asker.folder_exists(name):
         r = new_root(name)
     else:
@@ -37,6 +41,7 @@ def test_a(name='tmp'):
     #r.new_sub_folder('muji')
 
     pprint(r.get_meta())
+
 
 if __name__ == "__main__":
     print('adder.py __name__ == "__main__"')

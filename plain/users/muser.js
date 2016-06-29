@@ -70,7 +70,7 @@ function find_by_user_name(name, callback){
 
         var query = {};
         query[User_Name_Field] = name;
-        p('in find by user name, going to findOne:', query);
+        //p('in find by user name, going to findOne:', query);
 
         collection.findOne(query, callback);
     });

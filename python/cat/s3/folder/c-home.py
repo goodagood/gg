@@ -1,18 +1,24 @@
+#
 # Fixing user homes
+# other module changed, *redo* needed, 2016 0618
+
 
 from pprint import pprint
 
-import path_setting
+#import path_setting
 
-import users_a as users
-import adder
-import getter
+#import users_a as users
+
+import user.getter as users
+
+#import adder
+#import getter
 
 
 def restore():
     ''' Restore all homes deleted, 2016 0404
     '''
-    infos = users.get_id_names()
+    infos = users.list_users()
 
     owners = [o['owner'] for o in infos]
     owners = sorted(owners)
@@ -44,6 +50,7 @@ def add_name_attr():
     '''  add it. 'name' attribute for all roots were forgot, 2016 0404
     '''
     names = all_names()
+    print(names);
     for n in names:
         f = getter.folder(n)
         m = f.get_meta()

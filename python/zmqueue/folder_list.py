@@ -14,10 +14,10 @@ import s3.folder.repr
 
 
 def main(info):
-    folder_representation = s3.folder.repr.give_repr(info['who'], info['path'])
+    folder_representation = s3.folder.repr.give_user_folder_repr(info['who'], info['path'])
 
     info[info['ask-for']] = folder_representation
 
 
-    info['wait'] = 'got to do folder listing things'
+    #info['wait'] = 'got to do folder listing things'
     return info
