@@ -7,16 +7,19 @@ def read(info):
         return {'got no path for folder ul, in function reply': True}
 
     # file.text
-    asked  = info['ask-for']
+    asked  = info['ask4'] or info['ask-for']
 
     #...
     fi = s3.file.klass.File(info['path'])
 
     # we are not checking if it has text.
+    _text = fi.read()
     info[asked] = fi.read()
 
-    return info
+    #return info
+    return _text
 
+main = read
 
 if __name__ == "__main__":
     info = {

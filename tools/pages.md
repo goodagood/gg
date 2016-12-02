@@ -1,11 +1,29 @@
 
 # url of pages
 
-    "get": "/get/path/to/file-name.extension",
+## get
+
+    /get/path/to/file-name.extension
+
+It should give the file, as normal web request.
+
+
+## get by s3key
+
     "s3key": "/s3key/key/to/file-name.extension",
+
+## stream
+
     "ss": "/ss/key/to/file-name.extension, this is the old way, using res.attachment",
+
+## download
+
     "dl": "/dl/path/to/file-name.extension, using path ",
+
+## show tmp img
+
     "show-tmp-img": "/show-tmp-img/glob-of-file-name.extension, with glob pattern show img: /tmp/*.png ",
+
     "img/whp": "/img/whp/128/64/path/to/pic.jpg",
     "img/whk": "/img/whk/128/64/s3key/to/pic.jpg",
     "viewtext": "/viewtext/path/to/text-file.extension",
@@ -14,18 +32,21 @@
     static introduction: Actually gg.intro.git, 2016 0617
         /static/gg.intro/md.html
 
-    
-/folder/list/cwd
+        
+    /folder/list/cwd
 
 
-## upload, 2016 05
+## upload
+
+2016 05
 
 After 2016 05, set up a router as /upload
 But didn't finish or moving the old urls.
 
 root: /upload
 
-/bare-single
+    /bare-single
+
 ...
 
 
@@ -42,6 +63,17 @@ root: /upload
     "view_file": "/viewtxt/",
     "stream_file": "/ss/",
     "ucp": "/tec-doc/"
+
+
+# trying
+
+## /static/tmp/lst.html
+
+2016 07
+
+    try to make a page fetch file metas via ajax
+
+
 
 
 

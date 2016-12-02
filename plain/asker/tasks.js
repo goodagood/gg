@@ -11,26 +11,33 @@
 
 //var u = require("underscore");
 
-var localhost5555 = require("./lh5.js");
+//var localhost5555 = require("./lh5.js");
+var localhost5555 = require("./client.0707.y6.js");
 
 var p = console.log;
 
 function  folder_ul(who, fopath, callback){
     var info = JSON.stringify( {
         "who": who,
-        "ask-for": 'folder.ul',
+        //"ask-for": 'folder.ul',
+        "ask4": 'folder.ul',
         "path": fopath,
         "timeout": 3000
     });
 
     localhost5555.ask(info, function(err, reply){
         if(err) return callback(err);
-        var ul = get_ask_for(reply);
+
+        //var ul = get_ask_for(reply);
+        var ul = reply.output;
+
         callback(null, ul);
     });
 }
 module.exports.folder_ul = folder_ul;
 
+
+//d? 2016 0707
 function get_ask_for(info){
     if(info[info['ask-for']]) return info[info['ask-for']];
     return null;
@@ -41,7 +48,8 @@ module.exports.get_ask_for = get_ask_for;
 function file_text(who, fipath, callback){
     var info = JSON.stringify( {
         "who": who,
-        "ask-for": 'file.text',
+        //"ask-for": 'file.text',
+        "ask4": 'file.text',
         "path": fipath,
         "timeout": 3000
     });
@@ -49,7 +57,9 @@ function file_text(who, fipath, callback){
     localhost5555.ask(info, function(err, reply){
         if(err) return callback(err);
         //p('the reply: ', reply);
-        var text = get_ask_for(reply);
+
+        //var text = get_ask_for(reply);
+        var text = reply.output;
         callback(null, text);
     });
 }
@@ -59,14 +69,17 @@ module.exports.file_text = file_text;
 function  file_meta(who, fipath, callback){
     var info = JSON.stringify( {
         "who": who,
-        "ask-for": 'file.meta',
+        //"ask-for": 'file.meta',
+        "ask4": 'file.meta',
         "path": fipath,
         "timeout": 3000
     });
 
+    p('going to ask for file meta, ', who, fipath);
     localhost5555.ask(info, function(err, reply){
         if(err) return callback(err);
-        var answer = get_ask_for(reply);
+        //var answer = get_ask_for(reply);
+        var answer = reply.output;
         callback(null, answer);
     });
 }
@@ -77,7 +90,8 @@ module.exports.file_meta = file_meta;
 function tmp_thumb(who, fipath, w, h, callback){
     var info = JSON.stringify( {
         "who": who,
-        "ask-for": 'tmp.thumb',
+        //"ask-for": 'tmp.thumb',
+        "ask4": 'tmp.thumb',
         "path": fipath,
         "width": w,
         "height": h,
@@ -86,7 +100,8 @@ function tmp_thumb(who, fipath, w, h, callback){
 
     localhost5555.ask(info, function(err, reply){
         if(err) return callback(err);
-        var ul = get_ask_for(reply);
+        //var ul = get_ask_for(reply);
+        var ul = reply.output;
         callback(null, ul);
     });
 }
@@ -95,14 +110,16 @@ module.exports.tmp_thumb = tmp_thumb;
 
 function file_upload(file_info_json_stringified, callback){
     var info = JSON.stringify( {
-        "ask-for": 'file.upload',
+        //"ask-for": 'file.upload',
+        "ask4": 'file.upload',
         "file_info_jstr": file_info_json_stringified,
         "timeout": 3000
     });
 
     localhost5555.ask(info, function(err, reply){
         if(err) return callback(err);
-        var ul = get_ask_for(reply);
+        //var ul = get_ask_for(reply);
+        var ul = reply.output;
         callback(null, ul);
     });
 }
@@ -113,7 +130,8 @@ module.exports.file_upload = file_upload;
 function meta_list(who, fopath, callback){
     var info = JSON.stringify( {
         "who": who,
-        "ask-for": 'meta.list',
+        //"ask-for": 'meta.list',
+        "ask4": 'meta.list',
         "path": fopath,
         "patstr": '.+',
         "timeout": 3000
@@ -121,7 +139,8 @@ function meta_list(who, fopath, callback){
 
     localhost5555.ask(info, function(err, reply){
         if(err) return callback(err);
-        var ul = get_ask_for(reply);
+        //var ul = get_ask_for(reply);
+        var ul = reply.output;
         callback(null, ul);
     });
 }

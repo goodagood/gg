@@ -7,14 +7,20 @@ def file_metas_in_folder_cache(info):
         return {'got no path for folder ul, in function reply': True}
 
     #get folder ul
-    asked  = info['ask-for']
+    #asked  = info['ask-for']
+    asked  = info['ask4'] or info['ask-for']
+
     folder = getter.folder(info['path'])
     cache  = folder.get_cache()
     metas  = cache['files']
 
     info[asked] = metas
 
-    return info
+    #return info
+    return metas
+
+
+main = file_metas_in_folder_cache
 
 
 if __name__ == "__main__":

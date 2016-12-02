@@ -99,20 +99,23 @@ function folder_list_with_permission(name, folder_path, callback){
 module.exports.folder_list_with_permission = folder_list_with_permission;
 
 
-var lh5 = require("plain/asker/lh5.js");
+//var lh5 = require("plain/asker/lh5.js");
+var lh5 = require("plain/asker/client.0707.y6.js");
 function list_file_metas(username, folder_path, callback){
     if(!u.isString(username)) return callback('please give valid user name');
     if(!u.isString(folder_path)) return callback('please give valid folder path');
 
     lh5.ask({
             "who": username,
-            "ask-for": 'ls_meta',
+            //"ask-for": 'ls_meta',
+            "ask4": 'ls_meta',
             "path": folder_path,
             "timeout": 3000
         }, function(err, results){
             if(err) return callback(err);
 
-            return callback(null, results['ls_meta']);
+            // results.input will be the input: '{who:...}'
+            return callback(null, results.output);
         });
 
 }

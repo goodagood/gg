@@ -37,7 +37,7 @@ def loc_to_s3(info):
     'destination' got wrong format with leading '/'
     '''
     # file.text
-    asked  = info['ask-for']
+    asked  = info['ask4'] or info['ask-for']
 
     ufile = json.loads(info['file_info_jstr'])
     file_name = ufile['originalname']
@@ -62,9 +62,14 @@ def loc_to_s3(info):
     #upload, save meta, save to folder, render folder
 
     # we are not checking if it has text.
-    info[asked] = 'file uploaded: ' + file_path
+    reply = 'file uploaded: ' + file_path
+    info[asked] = reply #d
 
-    return info
+    #return info
+    return reply
+
+
+main = loc_to_s3
 
 
 if __name__ == "__main__":

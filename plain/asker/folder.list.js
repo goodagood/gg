@@ -5,7 +5,8 @@
  */
 
 
-var localhost5555 = require("./lh5.js");
+//var localhost5555 = require("./lh5.js");
+var localhost5555 = require("./client.0707.y6.js");
 
 var get_ask_for = require("./tasks.js").get_ask_for;
 
@@ -16,7 +17,8 @@ var p = console.log;
 function  folder_list(who, cwd, callback){
     var info = JSON.stringify( {
         "who": who,
-        "ask-for": 'folder_list', // this is underscore
+        //"ask-for": 'folder_list', // this is underscore
+        "ask4": 'folder_list', // this is underscore
         "path": cwd,
         "timeout": 3000
     });
@@ -24,7 +26,10 @@ function  folder_list(who, cwd, callback){
     localhost5555.ask(info, function(err, reply){
         if(err) return callback(err);
         p('folder list, 5555 reply: ', reply);
-        var rep = get_ask_for(reply);
+
+        //var rep = get_ask_for(reply);
+        var rep = reply.output;
+
         callback(null, rep);
     });
 }

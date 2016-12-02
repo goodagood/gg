@@ -10,16 +10,21 @@ def cached_reply(info):
         return {'got no path for folder ul, in function reply': True}
 
     #get folder ul
-    asked  = info['ask-for']
+    asked  = info['ask4'] or info['ask-for']
     folder = getter.folder(info['path'])
     cache  = folder.get_cache()
+
     if 'renders' in cache and 'ul' in cache['renders']:
-        info[asked] = cache['renders']['ul']
+        reply_ = cache['renders']['ul']
     else:
-        info[asked] = -1
+        reply_ = -1
 
-    return info
+    info[asked] = reply_
 
+    return reply_
+
+
+main = cached_reply
 
 if __name__ == "__main__":
     info = {

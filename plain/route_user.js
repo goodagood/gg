@@ -28,11 +28,21 @@ function route_user(app){
   });
 
 
-  app.get('/6D506D2215AE6C4AEC241F02C138D138.txt', function(req, res){
-    //MD5 = 6D506D2215AE6C4AEC241F02C138D138
-    //SHA-1 = 2D88131B183CB967B457E5EE5A5200C50F461E66 
-    //for csr certify, comod
-    res.send('2D88131B183CB967B457E5EE5A5200C50F461E66 \r\n comodoca.com ');
+  //before 2016 0902
+  //app.get('/6D506D2215AE6C4AEC241F02C138D138.txt', function(req, res){
+  //  //MD5 = 6D506D2215AE6C4AEC241F02C138D138
+  //  //SHA-1 = 2D88131B183CB967B457E5EE5A5200C50F461E66 
+  //  //for csr certify, comod
+  //  res.send('2D88131B183CB967B457E5EE5A5200C50F461E66 \r\n comodoca.com ');
+  //});
+
+  
+  app.get( "/FF188CE22684A92F17E719B4D2A520DF.txt"
+      , function(req, res){
+    //MD5 = FF188CE22684A92F17E719B4D2A520DF
+    //SHA-1 = 10ED0282A36CBBC4257338988E0FC12707E6507F
+    //for csr certify, comod, 2016 0902
+    res.end('10ED0282A36CBBC4257338988E0FC12707E6507F\r\ncomodoca.com ');
   });
 
   // test req.login(), req.logout()

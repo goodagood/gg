@@ -34,7 +34,8 @@ router.get(/^\/list\/(.*)/, function(req, res){
 });
 
 
-var local_port = require("plain/asker/lh5.js"); // local host:5555
+//var local_port = require("plain/asker/lh5.js"); // local host:5555
+var local_port = require("plain/asker/client.0707.y6.js"); // local host:5555
 router.post("/json_post_for_file_meta_list", function(req, res){
     p('post /json post for file m l: ', req.body);
 
@@ -47,18 +48,19 @@ router.post("/json_post_for_file_meta_list", function(req, res){
 
     var info = {
         'who':  username,
-        'ask-for': 'ls_meta',
+        //'ask-for': 'ls_meta',
+        'ask4': 'ls_meta',
         'path': cwd
     }
 
     local_port.ask(info, function(err, json_rep){
         if(err) return res.json( {error: err});
 
-        // eqs: json_rep[info['ask-for']]
-        if(!json_rep['ls_meta']) return res.json({error: 'not get what asked for'});
+        // json_rep.input will be the 'info'
+        if(!json_rep.output) return res.json({error: 'not get output, what asked for'});
 
         // it might cause trouble if return an array as json.
-        res.json({meta_list: json_rep['ls_meta']});
+        res.json({meta_list: json_rep.output});
     });
 
 });

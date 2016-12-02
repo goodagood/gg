@@ -5,10 +5,8 @@ def retrieve_or_calculate(info):
     if 'path' not in info:
         return {'got no path for folder ul, in function reply': True}
 
-    # file.text
-    asked  = info['ask-for']
+    asked  = info['ask4'] or info['ask-for']
 
-    #...
     fi = s3.file.getter.get_file(info['path'])
     if fi.is_meta_in_s3():
         fi.retrieve_meta()
@@ -18,9 +16,14 @@ def retrieve_or_calculate(info):
     fi.guess_type()
 
     # we are not checking if it has text.
-    info[asked] = fi.get_meta()
+    _reply = fi.meta
+    info[asked] = _reply
 
-    return info
+    #return info
+    return _reply
+
+
+main = retrieve_or_calculate
 
 
 if __name__ == "__main__":

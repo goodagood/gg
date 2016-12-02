@@ -44,6 +44,7 @@ def serve_zmq():
         except Exception as e:
             print(e)
             print('-- error handling is YOUR job, I keep running ...')
+            time.sleep(3.5)
 
 
 def parse_msg(msg):
@@ -100,7 +101,7 @@ def offer_service_list():
             "file.meta": file_meta.retrieve_or_calculate,
             "file.text": file_text.read,
             "file.upload": file_upload.loc_to_s3,
-            "tmp.thumb": tmp_thumb.put_tmp_thumb
+            "tmp.thumb": tmp_thumb.put_tmp_thumb #d
             }
 
 

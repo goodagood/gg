@@ -20,8 +20,10 @@ def main(info):
 
     file_metas_for_user = s3.folder.ls.ls_meta_in_cwd(info['who'], info['path'])
 
+    #d 2016 0707
     info[info['ask-for']] = file_metas_for_user
 
 
     #info['wait'] = 'got to do folder listing things'
-    return info
+    #return info
+    return file_metas_for_user
