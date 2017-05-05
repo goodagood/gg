@@ -16,11 +16,15 @@ var redis_pass = secrets.conf.redis.requirepass;
 
 var redis = require("redis");
 //var client = redis.createClient(redis_port, redis_host);
-var client = redis.createClient(redis_port, redis_host, {auth_pass: redis_pass});
+//var client = redis.createClient(redis_port, redis_host, {auth_pass: redis_pass});
+// 2017 0426 drop passwrod for long
+var client = redis.createClient(redis_port, redis_host);
 
 // the 'client' above used for subscribe 
 //var cmd_client = redis.createClient(redis_port, redis_host);
-var cmd_client = redis.createClient(redis_port, redis_host, {auth_pass: redis_pass});
+//var cmd_client = redis.createClient(redis_port, redis_host, {auth_pass: redis_pass});
+// 2017 0426 drop passwrod for long
+var cmd_client = redis.createClient(redis_port, redis_host);
 
 // hardwired:
 var channel         = 'tasks';

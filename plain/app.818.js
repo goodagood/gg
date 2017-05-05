@@ -182,6 +182,11 @@ var upload_y6 = require("./hrouters/up.y6.0516.js");
 app.use("/upload", upload_y6);
 
 
+// 2017 0505
+var sysvalue = require("./hrouters/sys.value.js");
+app.use("/sysvalue", sysvalue);
+
+
 
 app.listen(port);
 console.log("app listen on port: ", port);

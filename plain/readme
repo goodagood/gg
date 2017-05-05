@@ -1,3 +1,10 @@
+2017 0505
+
+    start to add value for system itself.
+    use the same mongodb, it should on 54.250.20.232
+    db: ggsys
+    collection: value
+
 2016-0408
     soft link from node_modules of js root, 
         node_modules/gg --> ../

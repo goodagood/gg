@@ -12,13 +12,36 @@ var User_Id_Field      = 'userid';
 var User_Name_Field    = 'username';
 
 
+//2017 0505 1259am
+const GG_Sys_Db         = 'mongodb://localhost:27017/ggsys';
+const Value_Collection  = 'value';
+
 
 var p = console.log;
 
 
 /*
+ * Get the mongodb, database supported by 'url'
+ * where it has collection of user information.
+ *
+ */
+function getdb(url, callback){
+
+    MongoClient.connect(url, function(err, db){
+        if(err) return callback(err);
+
+        callback(null, db);
+    });
+}
+module.exports.getdb = getdb;
+
+
+
+/*
  * Get the mongodb, database name 'gg',
  * where it has collection of user information.
+ *
+ * old
  */
 var GG;
 function getgg(callback){

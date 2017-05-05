@@ -15,7 +15,7 @@ var redis_pass = secrets.conf.redis.requirepass;
 var redis_store_instance = new RedisStore({
   port: redis_port,
   host: redis_host,
-  pass: redis_pass,
+  //pass: redis_pass, //2017 0426
   prefix: 'e.sess.rs'
 });
 
@@ -28,6 +28,8 @@ var my_redis_store = myRedisStore.config_redis_store({
 
 var prepared_session_middle_ware = session({ 
   store  : redis_store_instance,
+  // 2017 0426 comment out secret, err
+  // already using ssh port forward to local db for long.
   secret : 'kEy.b0ard#ca-t, th|s shou|d be $ecret',
   // this 2 defaults is going to change:
   saveUninitialized : true,
