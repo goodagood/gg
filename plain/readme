@@ -1,9 +1,30 @@
+2017 0902
+
+    for the front end, as thumbs and value system.
+    current using ui8/
+        bootstrap@4.0
+        font-awesome
+
+    install by npm , so make node_modules public accessible as express static
+
+    using:
+        mongodb: ggsys, collection: words
+    db access is moved into folder together with the route:
+        route:  
+            plain/thumbs.value/sysvalue.js
+        db api for the routes: 
+            plain/thumbs.value/db.mongo/*js
+    front end is static, but neet gulp/bable/sass:
+            plain/public/ui8/
+
+
 2017 0505
 
     start to add value for system itself.
     use the same mongodb, it should on 54.250.20.232
     db: ggsys
-    collection: value
+    //collection: value
+    collection: words
 
 2016-0408
     soft link from node_modules of js root, 

@@ -1,4 +1,10 @@
 
+# 2017 0505
+
+?
+    ack-grep   --ignore-dir=node_modules  --print0  -irl 'node-uuid' | xargs -0 -L1 sed -i 's/node-uuid/uuid/g'
+
+
 # 2016 0305
 
 Finally, after a lot trouble in designs, it looks better to do:

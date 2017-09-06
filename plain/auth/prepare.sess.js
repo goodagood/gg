@@ -10,7 +10,7 @@ var myRedisStore = require("./redis.store.js");
 var secrets = require("plain/config/secret-dir.js");
 var redis_host = secrets.conf.redis.redis_host;
 var redis_port = secrets.conf.redis.redis_port;
-var redis_pass = secrets.conf.redis.requirepass;
+//var redis_pass = secrets.conf.redis.requirepass;
 
 var redis_store_instance = new RedisStore({
   port: redis_port,

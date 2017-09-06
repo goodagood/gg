@@ -20,6 +20,17 @@ const Value_Collection  = 'value';
 var p = console.log;
 
 
+const dbs_colls = {
+    //dbs:
+    gg : null,
+    ggsys: null,
+
+    // collections:
+    value: null,
+    user: null
+};
+
+
 /*
  * Get the mongodb, database supported by 'url'
  * where it has collection of user information.
@@ -35,6 +46,23 @@ function getdb(url, callback){
 }
 module.exports.getdb = getdb;
 
+
+function get_value_coll(callback){
+    if(dbs_colls.ggsys === null){
+        getdb(GG_Sys_Db, function(err, db){
+            if(err) return callback(err);
+            dbs_colls.ggsys = db;
+
+            value_collection = db.collection(Value_Collection);
+            callback(null, value_collection);
+        });
+    }else{
+        value_collection = dbs_colls.ggsys.collection(Value_Collection);
+        callback(null, value_collection);
+    }
+
+}
+module.exports.get_value_coll = get_value_coll;
 
 
 /*

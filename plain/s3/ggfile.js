@@ -9,7 +9,7 @@
  */
 
 var path = require("path");
-var uuid = require("node-uuid");
+var uuid = require("uuid");
 var u    = require("underscore");
 
 var bucket = require('../aws/bucket.js');

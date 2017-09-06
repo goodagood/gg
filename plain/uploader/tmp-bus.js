@@ -2,7 +2,7 @@
 var path = require("path");
 var fs   = require("fs");
 
-var uuid   = require("node-uuid");
+var uuid   = require("uuid");
 var Busboy = require("busboy");
 var u      = require("underscore");
 var sm     = require("stream-meter");

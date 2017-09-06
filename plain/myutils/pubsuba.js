@@ -12,12 +12,13 @@ var client = redis_basic.client;
 
 var redis_host = secrets.conf.redis.redis_host;
 var redis_port = secrets.conf.redis.redis_port;
-var redis_pass = secrets.conf.redis.requirepass;
+//var redis_pass = secrets.conf.redis.requirepass;
 
 var redis = require("redis");
 
 //var client2 = redis.createClient(redis_port, redis_host);
-var client2 = redis.createClient(redis_port, redis_host, {auth_pass: redis_pass});
+//var client2 = redis.createClient(redis_port, redis_host, {auth_pass: redis_pass});
+var client2 = redis.createClient(redis_port, redis_host);
 
 client.on("subscribe", function (channel, count) {
   console.log(' --- subscribe message --- ');

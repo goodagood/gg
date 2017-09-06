@@ -4,7 +4,7 @@
  */
 
 var u    = require("underscore");
-var uuid = require("node-uuid");
+var uuid = require("uuid");
 var path = require("path");
 
 

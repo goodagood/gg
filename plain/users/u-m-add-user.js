@@ -6,7 +6,7 @@ var adder = require("./m-add-user.js");
 //var muser = require("./muser.js");
 var name_password = require("../config/sample-password.js");
 
-var uuid   = require("node-uuid");
+var uuid   = require("uuid");
 var assert = require("assert");
 
 var p = console.log;

@@ -3,7 +3,7 @@
 var s3keys = require("./s3keys.js");
 var jconfig  = require("gg/myutils/json-cfg.js");
 
-var uuid = require("node-uuid");
+var uuid = require("uuid");
 var path = require("path");
 
 var u = require('underscore');

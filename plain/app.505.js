@@ -1,5 +1,5 @@
 
-//var util = require('util');
+// reload 2017 0505
 
 var express  = require('express');
 
@@ -42,6 +42,8 @@ app.set('view cache', false); // easy in developing.
 
 
 app.use('/static', express.static(__dirname + '/static'));
+app.use(express.static(__dirname + '/node_modules')); //indev
+app.use(express.static(__dirname + '/public')); //indev
 
 
 //c
@@ -182,9 +184,9 @@ var upload_y6 = require("./hrouters/up.y6.0516.js");
 app.use("/upload", upload_y6);
 
 
-// 2017 0505
-var sysvalue = require("./sysvalue/value.route.js");
-app.use("/sysvalue", sysvalue);
+// 2017 0505 // 0902 mapping to ui.vv's thumbs.value routes
+var tvalue = require("./thumbs.value/sysvalue.js");
+app.use("/sysvalue", tvalue);
 
 
 

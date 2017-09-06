@@ -8,7 +8,7 @@
 var path = require("path");
 var fs   = require("fs");
 var u    = require("underscore");
-var uuid = require("node-uuid");
+var uuid = require("uuid");
 
 
 //var s3prefix = require("../myutils/json-cfg.js").s3_prefix_configure();
