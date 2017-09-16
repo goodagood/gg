@@ -16,7 +16,7 @@ var u    = require("underscore");
 var path = require("path");
 var assert  = require("assert");
 var async   = require("async");
-//var Promise = require("bluebird");
+var Promise = require("bluebird");
 
 var folder_module = require("../aws/folder-v5.js");
 //var myconfig =   require("../config/config.js");
@@ -50,6 +50,11 @@ function take_in_user_info(user_info, callback){
 }
 
 
+/*
+ * At least we need 'username' and 'password' as string.
+ *
+ * moved to ../users/info-checker.js  2016 0309
+ */
 function enough_user_info(ui){
     if(ui.username && u.isString(ui.username)){
         if(ui.password && u.isString(ui.password)){
@@ -175,7 +180,12 @@ function add_sub_folders(home){
     return home.add_folder('public').then(function(){
         p('to add muji');
         return home.add_folder('muji');
-    }).then(function() {
+    }).then(function(muji) {
+        var set_muji_listor = Promise.promisify(function(callback){
+            muji.set_attr('listor', {'default': 'img-value'}, callback);
+        });
+        return set_muji_listor();
+    }).then(function(){
         p('to add goodagood');
         return home.add_folder('goodagood');
     }).then(function(g) {

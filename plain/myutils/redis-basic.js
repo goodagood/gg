@@ -18,10 +18,11 @@ var mylog = require("./mylog.js")
 var secrets = require("../config/secret-dir.js");
 var redis_host = secrets.conf.redis.redis_host;
 var redis_port = secrets.conf.redis.redis_port;
-var redis_pass = secrets.conf.redis.requirepass;
+//var redis_pass = secrets.conf.redis.requirepass;
 
 var redis = require("redis");
-var client = redis.createClient(redis_port, redis_host, {auth_pass: redis_pass});
+//var client = redis.createClient(redis_port, redis_host, {auth_pass: redis_pass});
+var client = redis.createClient(redis_port, redis_host);
 
 // if you'd like to select database 3, instead of 0 (default), call
 // client.select(3, function() { /* ... */ });

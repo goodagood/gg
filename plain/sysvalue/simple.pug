@@ -1,0 +1,18 @@
+
+extends layout
+
+block content
+  h1= title
+  p Welcome to -- #{title}
+
+
+  p
+
+
+    | <form action="" method="post" enctype="application/x-www-form-urlencoded">
+    |   <p>title<input type="text" name="title" value="title default">
+    |   <p>value<input type="text" name="value" value="1">
+    |   <p>content<input type="text" name="content" value="content text">
+    |   <p><button type="submit">Submit</button>
+    | </form>
+

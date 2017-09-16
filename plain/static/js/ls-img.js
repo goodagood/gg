@@ -1,5 +1,7 @@
 
 $(function(){
+    if(!Backbone) return console.log('got no Backbone');
+
     var p = console.log;
 
     // Generate four random hex digits.
@@ -40,6 +42,11 @@ $(function(){
                 milli        : 0, // epoch milli-seconds
                 size         : -1,
                 filetype     : 'unknown?',
+
+                //video, maybe it's good to make post of video same as thumb above.
+                post_thumb_key    : 'unknown?',
+                post_thumb_width  : 1,
+                post_thumb_height : 1,
             };
         },
 
@@ -573,6 +580,7 @@ $(function(){
     window.myFiles = Files;
     window.myfiles = files;
     window.myFileView = FileView;
+    window.myMainView = MainView;
     window.mymain   = main;
 
 
@@ -598,5 +606,21 @@ $(function(){
 });
 
 
+// during debugging
+var ww = {};
+function keep(name, ref, more){
+    if(ww) ww.name = ref;
 
+    if(more){
+        if($){
+            $.each(more, function(key, value){
+                ww[key] = value;
+            });
+        }else{
+            for(var key in more) {ww[key] = more[key];}
+        }
+    }
+
+    return ww;
+}
 

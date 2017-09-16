@@ -1,0 +1,18 @@
+
+When the file is local, we prepare meta for it.
+
+*Base prefix* is where all metas exists.  It is a folder prefix on local
+machine. Let's call it: `base_prefix`, where we can use `~` as $HOME,
+os.path.expanduser() will expand it.
+
+Meta prefix: `base_prefix/meta`
+Name space: `base_prefix/ns`
+
+File's meta is a file: `base_prefix/meta/target-online-path/file-name.extension.json`
+File's name space is a folder: `base_prefix/ns/file-name.extension-ns`
+
+
+
+<!--
+    vim: set ft=markdown tw=78:
+-->

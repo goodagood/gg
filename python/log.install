@@ -1,0 +1,2 @@
+dominate # for html generate
+pip install requests-toolbelt

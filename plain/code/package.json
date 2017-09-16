@@ -1,0 +1,13 @@
+{
+  "name": "code",
+  "description": "run user codes, try to create the enviroment for it",
+  "version": "0.0.1",
+  "author": "andrew",
+  "license": "GPL",
+  "private": false,
+  "repository": "git@github.com:goodagood/gg-tmp.git",
+  "dependencies": {
+    "vm2": "^1.0.1"
+  },
+  "devDependencies": {}
+}

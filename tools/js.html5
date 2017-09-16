@@ -1,0 +1,25 @@
+
+# editor
+
+[embedable md editor](http://epiceditor.com/)
+
+## json
+    
+    jsonedit
+    json-editor
+
+## client side event emitter
+
+    eventemitter3
+    es6-event-emitter
+    [implement in es6](http://www.datchley.name/es6-eventemitter/)
+
+
+# video player
+
+video.js
+
+
+<!--
+  vim: set ft=markdown tw=72:
+  -->

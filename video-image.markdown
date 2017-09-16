@@ -26,7 +26,8 @@ Now, let us see what all these different flags in the above command means.
         used image-%2d the names would have been image-01.jpeg, image-02.jpeg. You
         can use any format as per your choice.
 
-We can also define the image size of the extracted images using the -s flag. The default option is to use the image size same as the video resolution.
+We can also define the image size of the extracted images using the -s flag.
+The default option is to use the image size same as the video resolution.
 
     [shredder12]$ ffmpeg -i inputfile.avi -r 1 -s 4cif -f image2 image-%3d.jpeg
 

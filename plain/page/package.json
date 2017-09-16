@@ -1,0 +1,13 @@
+{
+  "name": "page",
+  "description": "to make html preparing a little bit easier",
+  "version": "0.0.1",
+  "author": "andrew",
+  "license": "GPL",
+  "private": true,
+  "repository": "git@github.com:goodagood/gg-r2s.git",
+  "dependencies": {
+    "cheerio": "^0.19.0"
+  },
+  "devDependencies": {}
+}

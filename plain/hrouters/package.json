@@ -1,0 +1,12 @@
+{
+  "name": "routers_sub_modules_y6_05",
+  "version": "0.0.1",
+  "author": "andrew",
+  "license": "GPL",
+  "private": false,
+  "repository": "github.com/goodagood/gg.git",
+  "dependencies": {
+    "busboy": "^0.2.13"
+  },
+  "devDependencies": {}
+}

@@ -12,15 +12,19 @@ var prepare    = require('../aws/prepare-home.js');
 var secrets    = require("../config/secret-dir.js");
 var redis_host = secrets.conf.redis.redis_host;
 var redis_port = secrets.conf.redis.redis_port;
-var redis_pass = secrets.conf.redis.requirepass;
+//var redis_pass = secrets.conf.redis.requirepass;
 
 var redis = require("redis");
 //var client = redis.createClient(redis_port, redis_host);
-var client = redis.createClient(redis_port, redis_host, {auth_pass: redis_pass});
+//var client = redis.createClient(redis_port, redis_host, {auth_pass: redis_pass});
+// 2017 0426 drop passwrod for long
+var client = redis.createClient(redis_port, redis_host);
 
 // the 'client' above used for subscribe 
 //var cmd_client = redis.createClient(redis_port, redis_host);
-var cmd_client = redis.createClient(redis_port, redis_host, {auth_pass: redis_pass});
+//var cmd_client = redis.createClient(redis_port, redis_host, {auth_pass: redis_pass});
+// 2017 0426 drop passwrod for long
+var cmd_client = redis.createClient(redis_port, redis_host);
 
 // hardwired:
 var channel         = 'tasks';
@@ -54,7 +58,7 @@ function pass_job(channel, message){
     });
   }
   catch(e){
-    console.log("\n -- !! --\n", e);
+    console.log("\n -- !!!!!!!!  !!   !! --\n", e);
   }
 }
 
@@ -62,6 +66,17 @@ function job_switch(job_json, callback){
   switch(job_json.name){
     case "new-file-meta" :
       collector.check_new_file_meta(job_json, function(err, checked){
+        if(err) return callback(err);
+        p('check  new file meta return : ', err, checked)
+        collector.do_s3_jobs(job_json.owner, callback);
+      });
+      break;
+    // here, to do some testing, 2016 0205
+    case "test-new-file-meta" :
+      p('test new file meta');
+      collector.check_new_file_meta(job_json, function(err, checked){
+        p('check  new file meta return : ', err, checked)
+        if(err) return callback(err);
         collector.do_s3_jobs(job_json.owner, callback);
       });
       break;
@@ -103,15 +118,20 @@ function add_task_lock(task_id, callback){
 
   cmd_client.hincrby(task_id, 'lock', 1, function(err, reply){
     //console.log(err, reply)
-    if(err)       return callback(false);
+    if(err){
+      console.log(`lock err, in cmd client hincrby ${task_id}, err `, err);
+      return callback(false);
+    }
     // reply > 1 means other has do the lock
-    if(reply > 1) return callback(false);
+    if(reply > 1){
+      console.log(`lock fail, in cmd client hincrby ${task_id}, already locked `, reply);
+      return callback(false);
+    }
 
     // here we got flag, set a timestamp for it:
     cmd_client.hset(task_id, 'lock', Date.now(), function(err, reply){
-      //console.log('lock 2', err, reply);
+      console.log('lock 2', err, reply);
       if(err) return callback(false);
-      //console.log('flag name: ', flag_name, ' setted');
 
       return callback(true, _unlock);
     });

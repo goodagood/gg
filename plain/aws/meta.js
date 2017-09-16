@@ -2,7 +2,7 @@ var fs = require('fs'),
     u  = require('underscore');
 
 var path = require('path');
-var uuid = require('node-uuid');
+var uuid = require('uuid');
 var myconfig =   require("../config/config.js");
 
 var bucket = require('./bucket.js');

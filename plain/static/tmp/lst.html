@@ -1,0 +1,424 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<!--
+     try to set up ls folder from as client.
+     client will 'ajax' for meta listing in the folder.
+     It will render the data (meta list), with 'jade'
+     2016 0623
+-->
+
+<head>
+<meta http-equiv="content-type" content="text/html" />
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="description" content="index, goodagood testing" />
+<meta name="keywords" content="goodagood, filesystem, sharing" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Andrew">
+
+<title> 
+  ls {{folder_path}}
+</title>
+
+<!--
+<link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap-glyphicons.css">
+<link rel="stylesheet" href="/static/css/ls-anyway.css">
+-->
+
+<link rel="stylesheet" href="/static/node_modules/mdi/css/materialdesignicons.css">
+
+<link rel="stylesheet" href="/static/css/normalize.css">
+<link rel="stylesheet" href="/static/css/skeleton.css">
+
+
+<link rel="stylesheet" href="./css/col3.css">
+
+<style type="text/css">
+
+  html, body, .container {
+      height: 100%;
+  }
+  body{
+    margin:0;
+    text-align:center;
+  }
+
+  body{
+    border-top: 5px solid #566d7e;
+  }
+
+  div.container { 
+    text-align:left;
+    padding-top:0.5rem;
+    max-width: 960px;
+  }
+
+  div#body-content{
+    min-height: 80%;
+    min-height: 80%;
+  }
+
+
+  div#vid_list {
+    position:relative;
+    padding-top: 0.5rem;
+    padding-left: 0.5rem;
+    min-height: 200px; /* how to set percentage? */
+
+
+    background-color: #e5e4e3;
+    border-radius: 4px;
+  }
+
+  div.cwd {
+    padding-left:1rem;
+    display:inline;
+  }
+
+  footer {
+    color: #665;
+    font-size: 1.1em;
+    text-align: center;
+    background-color: #eee;
+  }
+
+
+
+  .logo{
+    display: inline-block;
+    height: 38px;
+    background-color: #566d7e;
+    padding: 0 30px;
+    color: #eee;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 38px;
+    letter-spacing: .1rem;
+    text-decoration: none;
+    white-space: nowrap;
+    border-radius: 8px;
+    cursor: pointer;
+    box-sizing: border-box;
+  }
+
+  header {
+    background-color: #eee;
+    padding: 10px;
+  }
+  header .button{
+    float:right;
+  }
+
+  div#tools_buttons {
+    text-align: center;
+  }
+  nav {
+    text-align: center;
+  }
+  nav ul li {
+    display: inline-block;
+    float:left;
+  }
+
+  li.file span.filename {
+    display: inline-block;
+  }
+  li.file span.filesize {
+    padding-left: 2em;
+  }
+
+  span.filename,
+  span.filesize, span.filetype {
+    display: inline-block;
+    min-width: 50px;}
+  span.filename {min-width: 7em;}
+ 
+
+</style>
+
+</head>
+
+
+
+<body>
+
+<div class="container">
+  <div id="header_div">
+    <header>
+      <span class="goodogood logo">goodogood</span>
+      <a href="#primary_nav" class="button"><i class="fa fa-bars"></i> Tool</a>
+      <a href="#tools_buttons" class="button"><i class="fa fa-bars"></i> Menu</a>
+    </header>
+  </div>
+
+  <div class="row" id="body-content">
+
+
+    <!-- cwd -->
+    <div id="cwd"> <span class="prompt">CWD=&gt;</span>
+        <div class="cwd">
+        
+            <a href="/ls/tmp" class="root-dir listor-href">
+                tmp <i class="fa fa-home"></i>
+            </a>
+            <span class="folder-sperator">/</span>
+
+
+            <a href="/ls/tmp/public" class="ls-folder listor-href">
+                public
+            </a>
+            <span class="folder-sperator">/</span>
+
+
+        </div>
+    </div>
+
+    <div id="file_list">
+    </div>
+
+    <!-- page tools -->
+    <br class="u-cf">
+
+    <!-- page tools -->
+    <!-- for buttons, float to left for wider screen, to top for extra small screen -->
+    <div id="tools_buttons" class="translate-this clr show-right-border">
+
+
+          <a  class="button btn-default" href="/upfile/abc/test/tindex">
+              <span class="glyphicon glyphicon-cloud-upload"> </span>
+              <span data-i18n="nav.upload">Upload</span></a> 
+
+          <a  class="button btn-default"  href="/add-folder/abc/test/tindex"> 
+              <span class="glyphicon glyphicon-plus"> </span>
+              <span data-i18n="nav.add_folder">Add-folder</span></a> 
+
+          <a  class="button btn-default" href="/msgto/">
+              <span class="glyphicon glyphicon-comment"> </span>
+              <span data-i18n="nav.message">Message</span></a> 
+
+          <a  class="button btn-default"  href="/write-notes/abc/test/tindex"> 
+              <i class="fa fa-pencil"></i>
+              <span data-i18n="nav.tools">Notes</span></a> 
+
+          <a  class="button btn-default"  href="/link/a?cwd=abc%2Ftest%2Ftindex"> 
+              <i class="fa fa-link"></i>
+              <span data-i18n="nav.mark-link">MarkLink</span></a> 
+
+          <a  class="button btn-default"  href="/folder-tools/abc/test/tindex"> 
+              <span class="glyphicon glyphicon-cog"> </span>
+              <span data-i18n="nav.tools">Tools</span></a> 
+
+    </div>
+
+    <nav id="primary_nav">
+        <a href="/people" class="button button-primary">
+          <i class="fa fa-user"> </i>
+          <span data-i18n="nav.people">People</span></a>
+
+        <a href="/ls/" class="button button-primary">
+          <i class="fa fa-folder-o"> </i>
+          <span data-i18n="nav.file">Files</span></a>
+
+        <a href="/msgto/" class="button button-primary">
+          <i class="fa fa-comment-o"> </i>
+          <span data-i18n="nav.message">Message</span>
+        </a>
+
+        <a href="#header_div" class="button button-primary">
+          <i class="fa fa-arrow-up"></i>
+          Go Top </a>
+    </nav>
+
+  </div> <!-- end of body content -->
+
+
+  <footer>
+      <div class="row-fluid goodagood-footer">
+          <p class="text-center"> goodogood.me, goodagood, Andrew &reg; &copy;  <p>
+      </div>
+  </footer>
+
+
+</div> <!-- end of container -->
+
+<!--
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="http://code.jquery.com/jquery.min.js"></script>
+<script src="/static/js/jquery.inspect.js"></script>
+
+min version:
+<script src="/static/bower_components/jquery/jquery.min.js"></script>
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/static/bower_components/underscore/underscore-min.js"></script>
+<script src="/static/backbone/backbone-min.js"></script>
+
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="/static/Gallery/js/blueimp-gallery.min.js"></script>
+<script src="/static/js/i18next-1.7.3.js"></script>
+-->
+
+
+
+<script src="/static/bower_components/jquery/jquery.js"></script>
+
+<!-- put underscore.js before backbone!!
+
+<script src="/static/bower_components/underscore/underscore.js"></script>
+<script src="/static/bower_components/backbone/backbone.js"></script>
+-->
+
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+-->
+
+<!--[if lt IE 9]>
+<script src="/static/bower_components/html5shiv/dist/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+<![endif]-->
+
+
+
+
+
+
+<script src="rf.bro.js"></script>
+
+
+
+<script type="text/template" id="file-template">
+    <span class="thumb">
+      <!-- <a href="image viewer"> ... </a> -->
+      <img src="/ss/<%= thumb_key %>" width="<%= thumb_width %>" height="<%= thumb_height %>"
+      alt="<%= name %>"  />
+    </span>
+    <div class="selector"><label class="file-selector">
+      <input type="checkbox" name="filepath[]" value="<%= path_uuid %>" />
+      <span class="filename"><%= name %></span>
+    </div>
+    <div class="download">
+      <a href="/ss/<%= file_key %>"> <i class="fa fa-cloud-download"></i> Download</a>
+    </div>
+    <div class="del">
+      <span class="delete">
+          <a href="/del/<%= path_uuid %>">
+              <span class="glyphicon glyphicon-remove"></span>Delete
+          </a>
+      </span>
+    </div>
+    <div class="value">
+      <span class="value"><%= value %> 
+          <i class="fa fa-cog"></i>
+      </span>
+    </div>
+</script>
+
+
+<script type="text/template" id="file-li-template-0827">
+  <li class="file">
+      <span class="filename"> 
+        <a class="fileinfo-link" href="/fileinfo-pathuuid/<%=path_uuid%>">
+            <%= filename %>
+        </a>
+      </span>
+
+      <span class="filesize"> <%= filesize %> </span>
+      <span class="filetype"> <%= filetype %> </span>
+  </li>
+</script>
+
+
+<script type="text/template" id="item-template-old">
+  <div class="view">
+    <input class="toggle" type="checkbox" <%= done ? 'checked="checked"' : '' %> />
+    <label><%- title %></label>
+    <a class="destroy">
+      <span class="glyphicon glyphicon-remove-circle"></span>
+    </a>
+  </div>
+  <input class="edit" type="text" value="<%- title %>" />
+</script>
+
+
+
+
+<!-- end of template -->
+
+
+
+
+<script>
+var CWD = "tmp/public";
+var USERNAME = "tmp";
+const p = console.log.bind(console);
+
+function mk_ul($, list){
+  var htags = _.map(list, function(file_meta){
+      return render($, file_meta);
+  });
+
+  var ul = '<ul id="file-list-ul">';
+  ul += htags.join("\n");
+  ul += '</ul>';
+
+  console.log('mk ul: ', ul);
+
+  return ul;
+}
+
+var basic_template_obj = get_basic_template();
+
+var post_for_meta_list = ($, url, cwd) =>{
+  //url =  '/client/a';
+  url = url || '/folder/json_post_for_file_meta_list';
+  cwd = cwd || CWD;
+
+  var info = {
+    cwd:  CWD
+  }
+
+  var ajax_opt = {
+          url : url,
+          type: 'POST',
+          method: 'POST',
+
+          contentType: 'application/json; charset=utf-8',
+          data: JSON.stringify(info),
+
+          // data from server:
+          dataType: 'json'
+  };
+
+  $.ajax(ajax_opt).done(function(json_rep){
+      // json_rep changed to be file metas, if it contains no 'error'
+
+      //p(json_rep);
+      //p('in a done ', typeof json_rep);
+      p('in a done ', json_rep);
+
+      if(json_rep.error) return false;
+      var meta_list = json_rep.meta_list;
+      console.log('we have ls meta'); window.ml = meta_list;
+
+      meta_list.forEach(function(one_file){
+        $('#file_list').append(basic_template_obj.render(one_file));
+      });
+      return true;
+  });
+}
+
+
+$( document ).ready(function() {
+    post_for_meta_list($);
+    console.log('ready? 623');
+});
+
+</script>
+</body>
+<!-- vim: et ts=2 sw=2 tw=150
+-->
+</html>

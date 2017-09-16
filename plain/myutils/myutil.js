@@ -2,7 +2,7 @@
 
 var path = require('path');
 var fs = require('fs');
-var uuid = require('node-uuid');
+var uuid = require('uuid');
 
 // Set up logger
 var npmlog = require('npmlog');

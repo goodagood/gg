@@ -1,3 +1,18 @@
+2016 02
+    zeromq, ipython and aws-sdk ...
+    pyzmq: zmq binding for python
+    subprocess32
+
+    sudo pip install Wand
+    #, 2016 0418, it depend on:
+    sudo apt-get install libmagickwand-dev libmagickcore5-extra
+
+2016 0131
+    cd ./plain/code; npm install
+
+2016 0116
+    Changed to use node.js v4, bcrypt get broken, re-install it then ok.
+
 2015 0928
     # graphicsmagick, i already have imagemagick, but it need one more line
     #     in 'node.js gm package':  imagemagick = gm.subClass({imageMagick:true});

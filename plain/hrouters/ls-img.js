@@ -11,8 +11,8 @@ var
     deliver, htool,
     ls_for_owner, ls_for_public, 
     mytemplate, myuser, myutil,
-    path, path_chain, people, social, test_clone_default_folder_file,
-    test_make_cwd_chain, tv, u, util;
+    path_chain, people, social, test_clone_default_folder_file,
+    test_make_cwd_chain, tv;
 
 var util  = require("util");
 var path  = require("path");
@@ -390,7 +390,7 @@ function list_img (params, callback){
     //p('username folder path: ', username, folder_path);
 
     var template_path = path.join(path.dirname(__dirname), "handlebars-views/ls-img.html");
-    p('temp path: ', template_path);
+    p('list img, temp path: ', template_path);
     var temp_text = fs.readFile(template_path, {encoding:'utf-8'}, function(err, tpl_text){
         if(err) return callback(err, null);
 

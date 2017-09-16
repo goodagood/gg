@@ -177,7 +177,7 @@ function folder_exists(fpath){
         }
         if(yes){
             p('return, we got ', yes)
-        return;
+            return process.exit();
         }
         p('the folder "',  '" exists: ', yes);
         if(err && !yes){
@@ -217,14 +217,14 @@ function drop_home(name){
 
 if(require.main === module){
     //test_get_user_info_for_intro();
-    //get_user();
+    get_user();
 
     //build('jobs');
     //c_add_gg();
 
     //add_one_user();
     //
-    folder_exists('cat-03');
+    //folder_exists('cat-03');
     //process.exit(p('ok?, 0836am'));
 }
 

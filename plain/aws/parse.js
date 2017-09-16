@@ -229,7 +229,10 @@ function pass_file(file, username, cwd, callback){
   var job  = { 
     task_id:         tkey,
     new_meta_s3key : meta.new_meta_s3key,
-    name:            'new-file-meta', 
+    //name:            'new-file-meta',  // name of task
+    //for testing, 2016 0205
+    name:            'test-new-file-meta',
+
     username:        username, 
     folder:          cwd,
     filepath:        meta.path,
@@ -239,10 +242,10 @@ function pass_file(file, username, cwd, callback){
   // in the new meta, we should have a point to redis job
   meta.redis_task_id = job.task_id;
 
-  //p('bucket.put_one_file',  meta.local_file, meta.storage.key);
+  p('2016 bucket.put_one_file: ',  meta.local_file, meta.storage.key);
   bucket.put_one_file(meta.local_file, meta.storage.key, function(err,data){
     if(err){
-      p('0926, put file to s3, key and file:', meta.storage.key, file);
+      p('2015 0926, put file to s3, key and file:', meta.storage.key, file);
       return callback(err, null);
     }
     fs.unlink(meta.local_file); delete meta.local_file;
@@ -268,6 +271,7 @@ function pass_file(file, username, cwd, callback){
           p('2015 0926 pub task in parse :', err);
           return callback(err, pub_reply);
         }
+        p('2016, task should be past out, ', pub_reply);
         callback(null, meta);
       });
 
@@ -278,6 +282,8 @@ function pass_file(file, username, cwd, callback){
 
 /*
  * Using uploaded file info to prepare meta data.
+ *
+ * move away into to ../meta/file.js, 2016 0205.
  */
 function prepare_meta(file, username, cwd){
   var meta  = u.pick(file, 'originalname', 'size', 'mimetype', 'encoding' );

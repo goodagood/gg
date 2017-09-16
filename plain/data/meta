@@ -1,0 +1,41 @@
+
+# folder meta
+{
+    name, path, uuid, timestamp, permission,
+    owner: user name
+    type:  'folder'
+    meta_s3key, name_space_prefix,
+    li: self render, used by parent folder
+
+    cache: {
+        files: {
+            file-name: {file-infos}
+            ...
+        }
+        renders: {
+            ul: list of files and sub-folders
+            index: optional index page of the folder
+        }
+    }
+}
+
+
+# file meta
+# can be optional if file content is only interested.
+# ... 2016 0414
+{
+    name, path, size, timestamp, uuid, permission,
+    owner: user name
+    type:  'file type'
+    s3key, meta_s3key, name_space_prefix,
+
+    li: self render, used by parent folder
+    url: the href when file name been clicked in html
+
+    cache: {
+        renders: {
+            li: self render, used by parent folder
+            html: renderred as a web page
+        }
+    }
+}

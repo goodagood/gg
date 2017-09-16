@@ -130,18 +130,19 @@ function file_1st_walk_through(folder, worker, callback){
     var uuid_list = u.keys(meta.files);
 
     // Make a list of functions, those deal with file will be put ahead.
-    var fun_lst   = [];
+    var function_list   = [];
     u.each(uuid_list, function(uuid){
         var info = meta.files[uuid];
         if(info.what === myconfig.IamFile){
-            // put to head of the list:
-            fun_lst.unshift(function(callback){
+            // put to head of the list, 'unshift':
+            function_list.unshift(function(callback){
                 worker(folder, uuid, callback);
             });
-        }else{
+        }else{  
+            // suppose to be folder:
             // put to the end of the list, the function deal with the
             // sub-folder, will recursively walk into the sub folder.
-            fun_lst.push(function(callback){
+            function_list.push(function(callback){
                 worker(folder, uuid, function(err, result){
                     folder_module.retrieve_folder(info.path).then(function(sub_folder){
                         file_1st_walk_through(sub_folder, worker, callback);
@@ -153,7 +154,7 @@ function file_1st_walk_through(folder, worker, callback){
         }
     });
 
-    async.series(fun_lst, callback);
+    async.series(function_list, callback);
 }
 
 module.exports.walk_through = walk_through;

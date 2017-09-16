@@ -40,17 +40,21 @@ function init_people_file(username){
   });
 }
 
-function add_people(username, another_user){
-  // user add another user to list of people.
 
-  var config_folder_path = path.join(username, config_folder_location);
+/*
+ * Refit to use ../user/people.coffee(js)
+ */
+function add_people(me, who){
+  // I (me) add another user (who)
+
+  var config_folder_path = path.join(me, config_folder_location);
 
   s3folder.retrieve_folder(config_folder_path, function(folder){
     folder.get_file_obj(people_file_name, function(pfile){
       pfile.get_json(function(j){
         //console.log(j);
-        if( j.all.indexOf(another_user) < 0 ) j.all.push(another_user);
-        if( j.current.indexOf(another_user) < 0 ) j.current.push(another_user);
+        if( j.all.indexOf(who) < 0 ) j.all.push(who);
+        if( j.current.indexOf(who) < 0 ) j.current.push(who);
         //console.log(j);
         //console.log(pfile.get_meta());
         pfile.write_json(j);

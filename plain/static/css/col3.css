@@ -1,0 +1,145 @@
+/* For card design, 2016 0203 */
+/*
+$red-1:  #FA5B66;
+$red-2:  #FA2F3D;
+$red-3:  #F90012;
+$red-4:  #C7000F;
+$red-5:  #9C000B;
+
+$color-primary-0: #CEC1C2; // Main Primary color 
+$color-primary-1: #F3D0D2;
+$color-primary-2: #BEA9AB;
+$color-primary-3: #AB8F91;
+$color-primary-4: #9C7A7C;
+
+$color-secondary-1-0: #D3CCC6; // Main Secondary color (1) 
+$color-secondary-1-1: #F9E5D5;
+$color-secondary-1-2: #C3B7AE;
+$color-secondary-1-3: #AF9F93;
+$color-secondary-1-4: #A08C7D;
+
+$color-secondary-2-0: #A59BA1; // Main Secondary color (2) 
+$color-secondary-2-1: #C3A6B8;
+$color-secondary-2-2: #988892;
+$color-secondary-2-3: #897381;
+$color-secondary-2-4: #7D6173;
+
+$color-complement-0: #A6AFA4; // Main Complement color 
+$color-complement-1: #B4CEB0;
+$color-complement-2: #92A190;
+$color-complement-3: #7D917A;
+$color-complement-4: #6B8567;
+*/
+.aaa {
+  fontfamily: 98, 85, 80, 97.85, 42.3, 26.48667;
+  padding: 26.48667, 14.89875; }
+
+body {
+  background-color: #5C5E5B;
+  color: #fff; }
+
+.wrapper {
+  position: relative;
+  width: 98vw;
+  margin: 0 auto;
+  padding: 0; }
+
+.wrapper .block {
+  float: left;
+  width: 97.85vw;
+  padding-bottom: 55.04063vw;
+  display: inline-block;
+  overflow: hidden;
+  margin: 0;
+  position: relative;
+  background-color: #eee;
+  -webkit-border-radius: 1rem;
+  -moz-border-radius: 1rem;
+  -ms-border-radius: 1rem;
+  border-radius: 1rem; }
+
+.wrapper .block .inblock {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  height: 80%;
+  overflow: hidden; }
+
+/* For devices larger than 550px */
+@media only screen and (min-width: 450px) {
+  .wrapper {
+    width: 85vw; }
+
+  .wrapper .block {
+    width: 42.3vw;
+    padding-bottom: 23.79375vw; } }
+
+/* For devices larger than 750px */
+@media only screen and (min-width: 800px) {
+  .wrapper {
+    width: 80vw; }
+
+  .wrapper .block {
+    width: 26.48667vw;
+    padding-bottom: 14.89875vw; } }
+/* block background */
+/*
+#BNo1,#BNo2,#BNo3,#BNo4,#BNo5,#BNo6      { 
+    background-color: #000000;
+    background-image: url(img/blue-a.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+*/
+.block {
+  background: #5C5E5B;
+  /* #9c000b For browsers that do not support gradients */
+  background: -webkit-radial-gradient(circle, #5C5E5B, #6C6968, #5C5E5B);
+  /* Safari */
+  background: -moz-radial-gradient(circle, #5C5E5B, #6C6968, #5C5E5B);
+  /* Firefox 3.6 to 15 */
+  background: -o-radial-gradient(circle, #5C5E5B, #6C6968, #5C5E5B);
+  /* Opera 11.6 to 12.0 */
+  background: radial-gradient(circle, #5C5E5B, #6C6968, #5C5E5B);
+  /* Standard syntax */
+  border-bottom-style: double;
+  /* none | hidden | dotted | dashed | solid | double | groove | ridge | inset | outset */
+  border-bottom-color: #6C6968; }
+
+/*
+#BNo1{
+    background-color: grey;
+    background: -webkit-linear-gradient(grey, #eee);
+    background: -o-linear-gradient(grey, #eee);
+    background: -moz-linear-gradient(grey, #eee);
+    background: linear-gradient(grey, #eee);
+
+    background-image: url(img/christmas-tree-decoration.svg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 80% 80%;
+}
+
+.inblock{
+    background-color: #000000;
+    background-image: url(img/bear-white.svg);
+    //background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 80% 80%;
+}
+*/
+/* tools */
+.cf:before, .cf:after {
+  content: "";
+  display: table; }
+
+.cf:after {
+  clear: both; }
+
+.cf {
+  zoom: 1; }
+
+/*# sourceMappingURL=col3.css.map */

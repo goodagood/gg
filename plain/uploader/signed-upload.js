@@ -1,5 +1,5 @@
 /*
- * Uploading without log in, easy to be used with command line.
+ * Uploading without web ui log in, easy to be used with command line.
  *
  * 'multer' is used to deal the file field.
  *
@@ -48,9 +48,13 @@ function receive_file(req, callback){
         ////indev
         //return rm_tmp_file(req, function(err, what){ callback(null, {testing: true}); });
 
-        if(ok){ //must return
+        if(ok){
+            p('ok, run to parser, ', req.file, req.body.username, req.body.cwd);
+            //must return
             return myparse.pass_file(req.file, req.body.username, req.body.cwd,
                 function(err, prepared_file_meta){
+                    if(err) return callback({err:err}, {err:err});
+
                     var reply_json = {
                         testing:true,
                         confirm_url:'uuurrrlll',

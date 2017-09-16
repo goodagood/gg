@@ -1,54 +1,42 @@
 {
-  "name": "blueimp-file-upload",
-  "version": "9.5.4",
-  "title": "jQuery File Upload",
-  "description": "File Upload widget with multiple file selection, drag&amp;drop support, progress bar, validation and preview images, audio and video for jQuery. Supports cross-domain, chunked and resumable file uploads. Works with any server-side platform (Google App Engine, PHP, Python, Ruby on Rails, Java, etc.) that supports standard HTML form file uploads.",
+  "name": "static_or_front_end",
+  "version": "0.0.4",
+  "title": "static or front end of goodogood.me/goodagood.com",
+  "description": "static or front end of goodogood.me/goodagood.com ",
   "keywords": [
-    "jquery",
-    "file",
-    "upload",
-    "widget",
-    "multiple",
-    "selection",
-    "drag",
-    "drop",
-    "progress",
-    "preview",
-    "cross-domain",
-    "cross-site",
-    "chunk",
-    "resume",
-    "gae",
-    "go",
-    "python",
-    "php",
-    "bootstrap"
+    "goodogood",
+    "front.end",
+    "static"
   ],
-  "homepage": "https://github.com/blueimp/jQuery-File-Upload",
+  "homepage": "https://github.com/goodagood/gg/plain/static",
   "author": {
-    "name": "Sebastian Tschan",
-    "url": "https://blueimp.net"
+    "name": "andrew",
+    "url": "http://goodogood.me"
   },
   "maintainers": [
     {
-      "name": "Sebastian Tschan",
-      "url": "https://blueimp.net"
+      "name": "andrew",
+      "url": "http://goodogood.me"
     }
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/blueimp/jQuery-File-Upload.git"
+    "url": "git://github.com/goodagood/gg/plain/static"
   },
-  "bugs": "https://github.com/blueimp/jQuery-File-Upload/issues",
   "licenses": [
     {
-      "type": "MIT",
-      "url": "http://www.opensource.org/licenses/MIT"
+      "type": "GPL",
+      "url": "http://www.opensource.org/licenses/GPL"
     }
   ],
   "devDependencies": {
+    "browserify": "^13.0.1",
     "grunt": "~0.4.2",
     "grunt-bump-build-git": "~1.1.1",
     "grunt-contrib-jshint": "~0.8.0"
+  },
+  "dependencies": {
+    "marked": "^0.3.5",
+    "mdi": "^1.6.50"
   }
 }

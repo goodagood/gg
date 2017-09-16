@@ -1,6 +1,32 @@
 
-{   'image-file' : 'the next two are meta for image file, before and after 
-                    processes' 
+
+## meta for video file 
+
+{
+    "attribute for normal file": "...",
+    "posters":{
+        "seconds":{
+            "key": "key for the poster image, it's will has file name space prefix",
+            "seconds": "seconds by which posters is extracted",
+            "width": "optional width in pixels",
+            "height": "optional width in pixels",
+            "thumbnails":{
+                "w..h..":{
+                    "key": 'common case will be: name-space-prefix/s..w..h..ext',
+                    "width": 
+                    "height":
+                }
+            }
+        }
+        ...
+    }
+}
+
+
+
+# before 2016 0422
+
+{   "image-file" : "the next two are meta for image file, before and after processes"
 }
 
 {

@@ -1,0 +1,324 @@
+
+body {
+    background-color: #becae3;
+    font: 16px/1em 'PT Sans', sans-serif;
+    color: #333333;
+
+    text-align: center;
+}
+
+
+.container { max-width: 800px; }
+
+div#wrapper {
+  position: relative;
+  margin: 0.5rem auto;
+  width: 90%;
+  text-align: left;
+}
+
+p, ul { margin: 0 0 1em; }
+
+
+
+.clr { clear:both; }
+
+
+form { margin: 1em 0.5em 1em; padding: 0 1em; }
+
+form div.igroup {
+  display:block;
+  /*width: 90%;*/
+  font-family: "Lucida Sans Typewriter", "Courier New", "Sans Serif";
+  font-size: 1em;
+  font-weight: bold;
+
+}
+
+form div.igroup:before,
+form div.igroup:after {
+  /* */
+    content: "";
+    display: table;
+    clear:both;
+}
+
+
+
+/* easy in hand hold */
+form div.igroup input{
+  font-size: 1.4em;
+  line-height: 1.6em;
+  max-width: 85%;
+}
+
+/* in small media, use text input for password */
+form div#text-password-div {
+  display:block;
+}
+/*
+form div#normal-password-div {
+  display:none;
+}
+*/
+
+/* confine lable ? */
+form label{
+    display: inline-block;
+    clear: left;
+    float: left;
+    overflow: hidden;
+    width: 33.3%;
+    min-width: 180px;
+    padding: 0.5em;
+    text-align: right;
+}
+form input{
+    display: inline-block;
+    float:left;
+    min-width:260px;
+}
+
+/* other login methods */
+
+div#other-id {
+    width: 90%
+    margin: 1em auto;
+    padding: 1em 1em;
+}
+
+#other-id .btn {
+
+    background: grey; /* #3498db;*/
+    background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+    background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+    background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+    background-image: -o-linear-gradient(top, #3498db, #2980b9);
+    background-image: linear-gradient(to bottom, #3498db, #2980b9);
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 0.9em;
+    margin: 1px;
+    padding: 5px 10px 5px 10px;
+    text-decoration: none;
+}
+
+#other-id .btn:hover {
+    background: #3cb0fd;
+    background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+    text-decoration: none;
+}
+
+ 
+/*header*/
+ 
+header {
+    background: #dcdee3;
+    font-weight: bold;
+    padding: 0 0.5em;
+    text-decoration: none;
+}
+header a, header a:visited{ text-decoration: none; }
+header div#register {
+    display: inline-block;
+    float:   right;
+}
+ 
+        /*shorter clearfix http://nicolasgallagher.com/micro-clearfix-hack/*/
+        header:before,
+        header:after {
+            content:" ";
+            display:table;
+        }
+         
+        header:after {
+            clear:both;
+        }
+         
+        /* For IE 6/7 (trigger hasLayout) */
+        header {
+            zoom:1;
+        }
+
+header h1 {
+    width: 50%;
+    display: inline-block;
+}
+ 
+header h1 a {
+    text-decoration: none;
+    color: #000f29;
+    font-family: "Courier New", "Arial Rounded MT Bold", Serif, monospace;
+}
+
+header h1 a:hover  {
+    color : #9fc;
+    /*
+    #000f29;
+    font-size: 1.2em;
+    line-height: 1.5em;
+
+    */
+    font-family: Helvetica, "Sans Serif", "Times New Roman", monospace;
+
+    background-color: #6e798c;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+header h2 {
+    float: right;
+    text-decoration: none;
+}
+
+/*footer*/
+ 
+footer {
+    color: #000;
+    font-family: 'PT Serif', serif;
+    font-style: italic;
+    text-align: center;
+    font-size: 14px;
+    background-color: #dcdee3;
+
+    padding-top: 10px;
+
+    border-radius: 5px;
+}
+
+
+@media only screen and (min-width: 768px) {
+
+
+  /* easy in hand hold */
+  form div.igroup input{
+      font-size: 1em;
+      line-height: 1.2em;
+      max-width: 85%;
+  }
+
+
+  /* show normal passwd input, hide the other */
+  /*
+  form div#normal-password-div  {
+      display:block;
+  }
+  form div#text-password-div {
+      display:none;
+  }
+
+  form div#pass-wd label#show-pass {
+    display:none;
+  }
+  form div#pass-wd label#normal-pass {
+    display:block;
+  }
+  */
+
+  span#hed-show,
+  span#let-show { 
+    display:none;
+  }
+
+  header {
+    padding: 1em 1em;
+  }
+
+  a.to_nav {
+    display: none;
+  }
+
+  .wrapper {
+    position: relative;
+    /*- width: 768px; -*/
+    width: 960px;
+    margin: auto;
+  }
+
+  #primary_nav {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    background: none;
+  }
+
+  #primary_nav li {
+    display: inline;
+  }
+
+  #primary_nav li a {
+    float: left;
+    border: none;
+    padding: 0 10px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+  }
+
+  #primary_nav li.top {
+    display: none;
+  }
+
+  div#try-before-register{
+      margin: 0.5em auto;
+      min-width: 90%;
+      text-align: center;
+  }
+  div#try-before-register p{
+      margin: 0.5em auto;
+      max-width: 60%;
+      font-family: Serif, "Times New Roman", Times;
+      text-align: left;
+  }
+
+}
+
+
+@media only screen and (max-width: 480px) {
+  
+    header span.logo  {
+        color : #d8d8d8;
+        font-size: 1.1em;
+        line-height: 1.1em;
+    }
+
+    /* line by line for small screen */
+    form label{
+        display: block;
+        clear: left;
+        float: left;
+
+        overflow: hidden;
+        padding: 0.5em;
+        text-align: left;
+    }
+    form input{
+        display: block;
+        float:left;
+    }
+
+}
+
+
+/*tools*/
+
+/*shorter clearfix http://nicolasgallagher.com/micro-clearfix-hack/*/
+.cf:before,
+.cf:after {
+    content:" ";
+    display:table;
+}
+ 
+.cf:after {
+    clear:both;
+}
+ 
+/* For IE 6/7 (trigger hasLayout) */
+.cf {
+    zoom:1;
+}

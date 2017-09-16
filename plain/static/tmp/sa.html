@@ -1,0 +1,164 @@
+<!DOCTYPE HTML>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="description" content="slow home add user, goodogood, goodagood">
+<meta name="author" content="Andrew">
+<meta http-equiv="expires" content="Fri, 21 Jun 2018 20:24:32 GMT" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="user register goodogood goodagood" />
+
+<link rel="shortcut icon" href="/static/favicon.ico" />
+
+<link rel="stylesheet" href="/static/css/fa/css/font-awesome.min.css">
+<link rel="stylesheet" href="/static/css/bootstrap-glyphicons.css">
+
+<link rel="stylesheet" href="/static/css/skeleton.css">
+<link rel="stylesheet" href="/static/css/slow-home.css">
+
+
+<title> {{{title}}} user register, slow home </title>
+<!--
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="http://code.jquery.com/jquery.min.js"></script>
+
+<script src="/static/js/jquery.inspect.js"></script>
+
+<link href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="/static/bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
+-->
+
+
+<style type="text/css">
+  .margin10px {margin:10px;}
+  .max768 {max-width: 768px;}
+  .max640 {max-width: 640px;}
+</style>
+</head>
+
+<body class="max768">
+
+
+
+<header>
+  <h1> <span class="logo"> <a href="http://goodogood.me/">goodogood</a> <span></h1>
+</header>
+
+<div class="mycontainer margin10px max640">
+  <form action="/user/slow-home" method="post" id="add-user-form"
+    enctype="multipart/x-www-form-urlencoded" >
+    <div class="igroup">
+    <label for="username" data-i18n="en2zh:username">Username:</label>
+    <input class="form-control" type="text" name="username" id="username" />
+    </div>
+
+    <div class="igroup">
+    <label data-i18n="en2zh:nameok">Name ok:</label>
+      <a href="/user/check-name-can-be-use"
+        id="check-name-can-be-use"
+        class="btn">Check names</a>
+    </div>
+
+    <div class="igroup">
+    <label data-i18n="en2zh:password">Password:</label>
+    <input class="form-control" type="password" name="password"/>
+    </div>
+
+    <div class="igroup">
+    <label data-i18n="en2zh:repeat-password">Repeat password:</label>
+    <input class="form-control" type="password" name="repeat_password"/>
+    </div>
+
+    <div class="igroup">
+    <label data-i18n="en2zh:op-referrer">Referrer (optional):</label>
+    <input type="text" class="form-control" name="referrer" title="who told your about this application"/><br/>
+    </div>
+
+    <div class="igroup">
+      <label></label>
+      <input class="btn btn-primary" type="submit" value="OK"/>
+    </div>
+  </form>
+</div>
+
+<p id="comments"> {{{comments}}} </p>
+
+<br />
+<footer style="clear:both">
+  <p>
+    goodogood/goodagood, Andrew, &copy; <span id='showlang'> </span>
+  </p>
+</footer>
+
+
+</body>
+
+<script src="/static/bower_components/jquery/jquery.min.js"></script>
+<!--
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+-->
+<script src="/static/bower_components/i18next/i18next.min.js"></script>
+
+<script>
+    $( document ).ready(function() {
+        //console.log( (this == $ ? 'yes' : 'no'); );
+        //$.inspect(this, 'window');
+
+        /* language translation, english chinese */
+        var transkv = {
+          zh:{
+            en2zh:{
+              password: "密码*",
+              "username": "用户名*",  
+              "op-referrer": "介绍人",
+              "repeat-password":"重复密码*"
+            }
+          }
+        };
+        i18n.init({resStore:transkv}, function(){
+          $("form#add-user-form").i18n();
+          console.log('lang ok?');
+        });
+
+        $("span#showlang").html(i18n.lng());
+
+        /* name avalable checkings */
+        function check_name(name){
+          name = name || null;
+
+          var url = '/is-name-occupied';
+          var ajax_data = {username:'give-me-user-name',  };
+          var param = {url:url, type:'POST', data: ajax_data, dataType:'json'};
+
+          $.ajax(param)
+          .done(function(a,b, c){
+            //$("div#file_list input:checkbox").attr("checked", false);
+            console.log('ajax done: ', a,'b:', b, 'c', c);
+            })
+          .fail(function(a,b,c){
+            console.log('ajax fail: ', a,b,c);
+          });
+        }
+
+
+        // get the name
+        $("input#username").keyup(function(){
+            var username = $(this).val();
+            if(username.length > 3) check_name(username);
+            console.log(username.length);
+            return true;
+        });
+
+
+
+        console.log('end  reached');
+
+    });
+</script>
+
+<!-- vim: et ts=2 sw=2
+-->
+</html>

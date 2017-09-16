@@ -43,9 +43,13 @@
   </div>
 
   <div class="container">
+      <p>
+      <span> the word: username </span> Trans to : <span class="trans" data-i18n="en2zh.username"> username </span>
+      </p>
+  </div>
 
-    <br />
-    <hr />
+  <div class="container">
+
     <div id="testsending" class="row">
       <p>
         <form id="form-test-sending">
@@ -98,46 +102,31 @@
 <![endif]-->
 
 <script>
-    $( document ).ready(function() {
-      i18n.init(function(t){
-        $("#totrans1").i18n();
+$( document ).ready(function() {
+
+    //var transkv = {
+    //  zh:{
+    //    en2zh:{
+    //      password: "密码*",
+    //      "username": "用户名*",  
+    //      "op-referrer": "介绍人",
+    //      "repeat-password":"重复密码*",
+    //      "nameok":"名字能用"
+    //    }
+    //  }
+    //};
+    //i18n.init({resStore:transkv}, function(){
+    //  $("form#add-user-form").i18n();
+    //  //console.log('lang ok?');
+    //});
+
+
+    i18n.init(function(t){
+      $("#totrans1").i18n();
       });
 
-      var src_list = [];
-      //console.log( 'ready' );
-      $("input:checkbox").change(function(e){
-        //$.inspect(e);
-        if($(this).is(':checked')){
-          //alert('val: ' + $(this).val() + ' name: ' + $(this).attr('name'));
-          src_list.push($(this).val());
-          //alert(src_list);
-        }
-      });
-      $("form#form-test-sending").submit(function(e){
-        var target_user = $("#target-select").val();
 
-        //alert(src_list.toString() + '   \n' + target_user);
-        src_list.forEach(function(src){
-          var query = 'src=' + encodeURIComponent(src) + '&targetuser=' +  encodeURIComponent(target_user);
-          var url = 'http://54.178.88.149:9090/testsend?' + query;
-          //var url = 'http://54.178.88.149/testsend/';
-          alert(url);
-          var result = $.ajax({url:url, type:'GET'});
-          $.inspect(result);
-        });
-      });
-
-      //$.inspect(this);
-
-      function remove(arr, item) {
-        for(var i = arr.length; i--;) {
-          if(arr[i] === item) {
-            arr.splice(i, 1);
-          }
-        }
-      }
-
-    });
+});
 </script>
 </body>
 <!-- vim: et ts=2 sw=2 tw=150

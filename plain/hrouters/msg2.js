@@ -29,7 +29,7 @@ function get_msg2(req, res, next, callback){
         if(! u.isArray(name_list)) name_list = [];
         name_list.push(towhom);
         names = u.uniq(name_list);
-        check_boxs= names_to_checkbox(names);
+        check_boxs = names_to_checkbox(names);
 
         var body_context = { 
             messageList : msg_list,

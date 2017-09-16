@@ -50,20 +50,21 @@ var s3a = require("../s3/s3-a.js");
 var s3 = s3a.get_s3_obj();
 
 
-// After more testing, should change s3 to s3only:
-// var aws = require('./aws-s3-conf.js');
-// var s3only = aws.get_s3_obj();
-//
-
-
-var default_user_home_tree = require('./user-home-structure.js');
-var image = require('./image.js');
-
-var s3folder = require('./folder.js');
 
 
 var p = console.log;
 
+
+// 2015, 0519; 1031; 2016 0424
+function s3_object_read_stream(key){
+    if (!key) throw new Exception('can you give an s3 key to "s3 object read stream" in bucket.js?');
+
+    //var s3 = new AWS.S3();
+    //var s3 = s3a.get_s3_obj();
+    var params = {Bucket: root_bucket, Key: key};
+
+    return s3.getObject(params).createReadStream();
+}
 
 
 /* 
@@ -204,21 +205,6 @@ function s3list(prefix, callback){
  */
 function list(prefix, callback){
 
-  //var params = {
-  //    Bucket : root_bucket,
-  //    //Prefix : 'tmp',
-  //    Prefix : prefix,
-  //};
-
-  ////var s3 = new AWS.S3();
-  //var s3 = s3a.get_s3_obj();
-  //s3.listObjects(params, function(err, data) {
-  //    //console.log('---');
-  //    //console.log(data);
-  //    callback(err, data['Contents']);
-  //});
-
-
   // modified to use s3list
   s3list(prefix, function(err, data) {
     if(err) return callback(err);
@@ -331,102 +317,6 @@ var write_json = write_s3_json_file;
 
 
 
-////d
-//function init_user_home(username, callback){ //d
-//    /* found that buckets get limit number
-//     * STOP using the function, it create many buckets for each user.
-//     */
-//    if (!username){
-//        callback(new Error("who's user"), null);
-//        return;
-//    }
-//
-//    var s3 = new AWS.S3();
-//    // note the '/', for s3,  abc is different to abc/
-//    var params = {Bucket: path.join(root_bucket, username, '/')};
-//    s3.headBucket(params, function(err, data){
-//        if (err){
-//            //console.log(err.stack);
-//            s3.createBucket(params, function(err, data){
-//                console.log("create bucket: " + params.Bucket); if(err) console.log("failed")
-//                callback(null, null);
-//            });
-//        } else{
-//            console.log('no err');
-//            console.log(data);
-//            callback(new Error("user exists"), null);
-//        }
-//    });
-//}
-
-
-//// not used now, the number of buckets is limited to 100, 0601
-//function create_folder_0530(new_folder, callback){ //d
-//    // make a folder, some think it's a `bucket` in s3 storage.  not sure.
-//
-//    if (!new_folder){
-//        callback(new Error("which folder?"), null);
-//        return;
-//    }
-//
-//    var s3 = new AWS.S3();
-//    // note the '/', for s3,  abc is different to abc/
-//    var params = {Bucket: path.join(root_bucket, new_folder, '/')};
-//    console.log('params');
-//    console.log(params);
-//    s3.headBucket(params, function(err, data){
-//        if (err){
-//            //console.log(err.stack);
-//            s3.createBucket(params, function(err, data){
-//                console.log("create bucket: " + params.Bucket); if(err) console.log("failed")
-//                callback(null, null);
-//            });
-//        } else{
-//            console.log('no err when headBucket');
-//            console.log(data);
-//            callback(new Error("path exists"), null);
-//        }
-//    });
-//}
-//
-
-
-
-////d
-///*
-// * list files and folders
-// */
-//function list2(username, cwd, callback){ //d
-//  list(cwd, function(err, s3list_obj_contents){
-//    if(err){ 
-//      callback(err, null);
-//    } else {
-//      var hash_file_links = link_hashs(s3list_obj_contents);
-//      //console.log("hash_file_links"); console.log(hash_file_links);
-//      read_home_structure(username, function(err, tree){
-//        if(err){
-//          callback(err, null);
-//        }else{
-//          var checkout = myutil.check_out_cwd_tree(cwd, tree);
-//          var sub_tree = checkout.tree;
-//          //console.log("sub_tree"); console.log(sub_tree);
-//
-//          var hash_folder_links = {}; // will be modified as parameter:
-//          obj_to_path_hash(sub_tree, checkout.cwd, hash_folder_links);
-//          //console.log("hash_folder_links"); console.log(hash_folder_links);
-//
-//          var all_hash = merge_hashes(hash_folder_links, hash_file_links);
-//          //console.log("all_hash"); console.log(all_hash);
-//          callback(null, sort_to_ul(all_hash));
-//        }
-//      });
-//    }
-//  });
-//}
-
-
-
-
 
 
 
@@ -499,41 +389,6 @@ function link_hashs(contents){
 }
 
 
-////d
-///*
-// * list only s3 files, make it show with selector in HTML template
-// * 0613
-// * this is testing 0613, to let user select and send files
-// */
-//function list3(username, cwd, callback){
-//  list(cwd, function(err, s3list_obj_contents){
-//    if(err){ 
-//      callback(err, null);
-//    } else {
-//      //var hash_file_links = link_hashs(s3list_obj_contents);
-//      //var hash_file_links = keep_one_level_s3list(s3list_obj_contents, cwd);
-//      var file_list_in_dir = shrink_s3list_to_cwd(s3list_obj_contents, cwd);
-//      //filter_out_hidden_name_keys(hash_file_links);
-//      filter_out_hidden_name_keys(file_list_in_dir);
-//      prepare_file_info(file_list_in_dir, function(err, in_dir){
-//              //console.log('get called');
-//              //console.log(in_dir);
-//              var html = '<ul class="list-unstyled list-group file-list">';
-//              u.each(in_dir, function(finfo, k){
-//                html += finfo['li-element'];
-//              });
-//              html += '</ul>';
-//              //console.log(html);
-//
-//              callback(null, html);
-//
-//      });
-//      //console.log("hash_file_links"); console.log(hash_file_links);
-//      //callback(null, sort_and_mk_form(hash_file_links));
-//    }
-//  });
-//}
-
 
 /*
  * list folder contain messages
@@ -584,6 +439,8 @@ function filter_out_hidden_name_keys(obj, hidden_pattern){
 
 
 /*
+ * deprecated? 2013 0317
+ *
  * help function.
  * Make an object from 'Contents' of AWS S3 getObjects data:
  *
@@ -663,53 +520,7 @@ function count_appearance(string,  substr){
 
 
 
-//d
-/// helper function
-function sort_to_ul_form(hash){
-  //console.log(hash);
-  var keys = (Object.keys(hash)).sort();
-  var ul = '<form><ul>';
-  // "for in" kills me many times. js array can not :  for in
-  keys.forEach(function(key){
-    ul += '<li>' + '<input type="checkbox" name="filepath[]" value="' + key + '" />' + hash[key] + '</li>';
-  });
-  ul += '</ul></form>';
-  return ul;
-}
 
-
-
-
-//d
-/*
- * help function.
- * Make an object from 'Contents' of AWS S3 listObjects data:
- *
- * The returned hash:  { 's3key': {infos...}, ... }
- * This will not add HTML to data.
- */
-function shrink_s3list_to_cwd(contents, cwd){
-    var h = {};
-
-    var level = count_folder_level(cwd);
-    if(contents){
-        for (var i = 0; i < contents.length; i++){
-            var fi = contents[i];  // file info
-            var key = fi['Key'];   // s3 key
-            if (count_folder_level(key) > level + 1) { 
-              var cutted = cut_extra_subs(key, level);
-              var beheaded = cutted.replace(path.join(cwd,'/'), '');
-              h[cutted] = { type : 'folder', 'short-name': beheaded};
-            }else{
-              var beheaded = key.replace(path.join(cwd,'/'), '');
-              h[key] = { type : 'file', 'short-name': beheaded };
-            }
-        }
-        //console.log(h);
-
-    }
-   return h;
-}
 
 
 
@@ -757,33 +568,6 @@ function prepare_file_info(file_in_dir, callback){
 
 
 
-///*
-// * deprecated? 2015 1022
-// *
-// * @file : file object made by node 'formidable'
-// *         file.name : the name
-// *         file.path : the abs path of the local file.
-// */
-//function put_file(file, prefix){
-//    var s3key = path.join(prefix, file.name);
-//    file.s3key = s3key;
-//
-//    //var s3 = new AWS.S3();
-//    var s3 = s3a.get_s3_obj();
-//
-//    var params = {
-//        Bucket: root_bucket,
-//        Key: s3key,
-//        Body: fs.createReadStream(file.path)
-//    };
-//
-//    s3.putObject(params, function(err, data) {
-//        if (err) console.log(err, err.stack); // an error occurred
-//        else     console.log(data);           // successful response
-//    });
-//}
-//
-
 
 /*
  * testing for new s3 object, 2015 1022
@@ -812,72 +596,7 @@ function put_one_file(local_file_path, s3key, callback){
 }
 
 
-// moved out?
-/*
- * 0608
- * first try, make the thumbnail 100x100, put it under current dir:
- * ./.thumbnails/....100x100.ext
- */
-function process_image_by_ext(file, callback){
-  console.log('\nprocess image by ext, file\n');
-  //console.log(file);
-  if (file.name){
-    var ext = path.extname(file.name).toLowerCase();
-    // remove first '.'
-    ext = ext.replace(/^\./, '');
-    console.log('ext'); console.log(ext);
-    if (['jpg', 'jpeg', 'tiff', 'png', 'gif'].indexOf(ext) >= 0){
-      // do image file
-      var outfile = {
-        path : file.path + ".100x100." + ext,
-        name :  file.name + '.100x100.' + ext
-      };
-      console.log('outfile'); console.log(outfile);
-      image.make_thumbnail(100, 100, file.path, 100, outfile.path, function(err, another){
-        console.log('process image: make thumb: before callback, :err, outfile\n');
-        console.log(err, outfile);
-        callback(err, outfile);
-      });
 
-    }
-  }
-}
-
-
-//d
-function make_thumbnail(file, width, height, callback){
-  //console.log(file);
-  if (!file.name){
-    callback(new Error('file name?'), null); return;
-  }
-
-  var ext = path.extname(file.name).toLowerCase();
-  // remove first '.'
-  ext = ext.replace(/^\./, '');
-  console.log('ext'); console.log(ext);
-
-  if (['jpg', 'jpeg', 'tiff', 'png', 'gif'].indexOf(ext) < 0){
-    callback(new Error('not image file?'), null);  return;
-  }
-
-  var opts = {
-    ext     : ext,
-    infile  : file.path,
-    outfile : file.path + '.thumbnail',
-  };
-  if (width) opts.width   = width;
-  if (height) opts.height = height;
-
-  image.do_thumbnail(opts, function(err, thumbnail_filename){
-    //console.log('process image: mk-thumbnail: before callback, :err, outfile\n');
-    //callback(err, outfile);
-    var s3key = image.make_thumb_key(opts);
-    opts.s3key = s3key;
-    put_one_file(thumbnail_filename, s3key);
-    callback(null, opts);
-    //console.log('outfile'); console.log(outfile);
-  });
-}
 
 
 //d
@@ -893,72 +612,6 @@ function test_make_thumbnail(){
 }
 
 
-//d
-function make_thumbnail_a(file, width, height, meta, callback){
-  //
-  // based on make_thumbnail, fit to new requirements of s3 file object. 0712
-  //
-  //console.log(file);
-  if (!file.name){
-    callback(new Error('file name?'), null); return;
-  }
-
-  var ext = path.extname(file.name).toLowerCase();
-  // remove first '.'
-  ext = ext.replace(/^\./, '');
-  console.log('ext'); console.log(ext);
-
-  var opts = {
-    ext     : ext,
-    infile  : file.path,
-    outfile : file.path + '.thumbnail',
-  };
-  if (width) opts.width   = width;
-  if (height) opts.height = height;
-
-  var s3key = image.make_thumb_key(opts);
-  if( typeof meta['thumbnail-s3key'] !== 'undefined'){
-    s3key = meta['thumbnail-s3key'];
-  }
-  opts.s3key = s3key;
-
-
-  image.do_thumbnail(opts, function(err, thumbnail_filename){
-    //console.log('process image: mk-thumbnail: before callback, :err, outfile\n');
-    //callback(err, outfile);
-    put_one_file(thumbnail_filename, s3key);
-    callback(null, opts);
-    //console.log('outfile'); console.log(outfile);
-  });
-}
-
-
-//d
-// going to be deprecated, to use new folder/file data structure. 0626
-function init_home_structure_file(username, callback){
-    // load the default user home folder structure
-    //
-    //console.log(default_user_home_tree);
-
-    // The file will be put to: username/goodagood/etc/home-structure.json
-    var s3key = path.join(username, 'goodagood/etc', 'home-structure.json');
-
-    var s3 = new AWS.S3();
-    var s3 = s3a.get_s3_obj();
-
-    var tree = {}; tree[username] = default_user_home_tree;
-    var params = {
-        Bucket: root_bucket,
-        Key: s3key,
-        // 4 means tab-width
-        Body: JSON.stringify(tree, null, 4),
-    };
-
-    s3.putObject(params, function(err, data) {
-        if (err) {callback(err, null);}
-        else     {callback(null, data);}
-    });
-}
 
 
 
@@ -1329,7 +982,6 @@ function test_copy_file(){
 function write_meta(meta_info){
     // load the default user home folder structure
     //
-    //console.log(default_user_home_tree);
 
     // The file will be put to: username/goodagood/etc/home-structure.json
     var s3key = meta_info.s3key;
@@ -1407,165 +1059,17 @@ function test_update_json(){
 }
 
 
-////d
-//function init_folder_meta(folder_path, dir_opt, callback){
-//  // This will create more 'folders' than expected, for example:
-//  // a/b/c/d/e/f/g  -> a/b, a/b/c/, ...
-//  //var s3key = path.join(folder_path, myconfig.folder_option_file_name);
-//
-//  var meta_file_key = path.join(myconfig.meta_file_prefix, folder_path);
-//
-//  var defaults = {};
-//  defaults['what'] = myconfig.iamfolder;
-//  defaults['path'] = folder_path;
-//  defaults['owner'] = folder_path.split('/')[0];
-//  defaults['name'] = path.basename(folder_path);
-//  defaults['parent'] = path.dirname(folder_path);
-//  defaults['permission'] = {};
-//  defaults['permission']['owner'] = 'rwx';
-//  defaults['create-date'] = Date.now();
-//
-//  u.defaults(dir_opt, defaults); // make sure there are defaults.
-//  write_json(meta_file_key, dir_opt, function(err, reply){
-//    if(callback) callback(err, reply); // reply would be s3 putObject 'reply'
-//  });
-//}
-//
-//
-//function is_s3_pseudo_folder(fpath, callback){
-//  read_file_meta(fpath, function(err, meta_obj){
-//    if(!err){
-//      if(typeof meta_obj.what !== 'undefined' && 
-//        meta_obj.what === myconfig.iamfolder){
-//          callback(true);
-//          return;
-//      }
-//    }
-//    callback(false);
-//  });
-//}
-//
-//
-//function test_make_s3_pseudo_folder(){
-//
-//  var folder = 'abc/tmp/tsp-folder';
-//  var folder_opt = {
-//    what : myconfig.iamfolder,
-//    create_miliseconds: Date.now(),
-//    creator: 'abc',
-//    owner:   'abc',
-//    permission : {
-//      owner : 'rwx',
-//      group : '',
-//      other : ''
-//    },
-//  };
-//
-//  init_folder_meta(folder, folder_opt);
-//
-//  function _test_folder(){
-//    is_s3_pseudo_folder(folder, function(yes){
-//      if(yes) console.log(folder, ' is folder');
-//    });
-//  }
-//  setTimeout(_test_folder, 3000);
-//}
-//
-//
-//function build_gallery_list(cwd, callback){
-//  list(cwd, function(err, s3list_obj_contents){
-//    console.log(s3list_obj_contents);
-//    
-//    var finished = 0, length = s3list_obj_contents.length;
-//    var links = "";
-//    s3list_obj_contents.forEach(function(element){
-//      read_file_meta(element.Key, function(err, meta_obj){
-//        links += '<a href="/ss/' + element.Key + '"' +' title="" ' + ' data-description="" >\n';
-//        if(!err && meta_obj) links += '<img src="/ss/' + meta_obj['thumbnails'][0].s3key + '" alt="?" > </a>\n';
-//        else links += '<img src="/ss/muji/one/tn-d52.jpg" alt="dft"></a>\n';
-//        finished += 1; 
-//        if (finished == length) callback(null, links);
-//      });
-//    });
-//  });
-//}
-//
-//
-//function test_build_gallery_list(){
-//  var full_path  = 'muji/goodagood/public/';
-//  build_gallery_list(full_path, function(err, links){
-//    console.log(links);
-//  });
-//}
-//
-//
-////d
-//function read_file_meta(file_s3key, callback){
-//  if(!file_s3key){
-//    callback(new Error('give a key'), null);
-//    return;
-//  }
-//  s3key = path.join(myconfig.meta_file_prefix, file_s3key);
-//  read_file(s3key, function(err,data){
-//    if (err){
-//      callback(err, null);
-//      return;
-//    }
-//
-//    var obj = JSON.parse(data);
-//    callback(null, obj);
-//  });
-//}
-//
-//
-////d
-//function test_read_file_meta(){
-//  var filekey = 'muji/goodagood/public/14110247507.jpg';
-//  read_file_meta(filekey, function(err, obj){
-//    if(err) console.log(err);
-//    console.log(obj);
-//  });
-//}
-//
-//
-//function guess_to_be_folder(key, callback){
-//  // This might not be a good guess
-//  var params = {
-//      Bucket : root_bucket,
-//      Key:key
-//  };
-//  s3.headObject(params, function(err,data){
-//    if(err) callback(true);
-//    else callback(false);
-//  });
-//}
-//
-//
-//function test_guess_to_be_folder(){
-//  var key = 'muji/aa';
-//  guess_to_be_folder(key, function(yes){
-//    if(yes) console.log(key, ' is folder');
-//    else console.log(key, ' is not folder');
-//  });
-//}
 
-
-// 2015, 0519; 1031;
-function s3_object_read_stream(key){
-    if (!key) throw new Exception('can you give an s3 key to "s3 object read stream" in bucket.js?');
-
-    //var s3 = new AWS.S3();
-    var s3 = s3a.get_s3_obj();
-    var params = {Bucket: root_bucket, Key: key};
-
-    return s3.getObject(params).createReadStream();
-}
 
 
 //module.exports.init_user_home = init_user_home; //d
 
 // 2015 1022
 module.exports.version        = '3, back from gg-credentials';
+
+//2015, 0516
+module.exports.s3_object_read_stream = s3_object_read_stream;
+
 module.exports.put_file_to_s3 = put_file_to_s3;
 module.exports.read_obj       = read_obj;
 module.exports.read_file      = read_file;
@@ -1584,8 +1088,6 @@ module.exports.write_s3_json_file = write_s3_json_file;
 module.exports.write_json = write_json;
 
 // before 1022
-//module.exports.list2 = list2;
-//module.exports.list3 = list3; //d
 module.exports.list_messages = list_messages;
 //module.exports.put_file = put_file;
 module.exports.put_one_file = put_one_file;
@@ -1606,7 +1108,6 @@ module.exports.delete_with_prefix = delete_with_prefix;
 //module.exports.process_image_by_ext = process_image_by_ext;
 //module.exports.make_thumbnail_folder = make_thumbnail_folder;
 //module.exports.make_thumbnail= make_thumbnail;
-//module.exports.folder_exists = folder_exists;
 //module.exports.add_meta_file = add_meta_file;
 
 //module.exports.write_file_meta = write_file_meta;
@@ -1618,21 +1119,17 @@ module.exports.delete_with_prefix = delete_with_prefix;
 
 
 module.exports.update_json = update_json;
-//module.exports.build_gallery_list = build_gallery_list;
 module.exports.copy_file = copy_file;
 module.exports.copy_object = copy_object;
 module.exports.move_object = move_object;
 
 //module.exports.make_s3_pseudo_folder = init_folder_meta;
 //module.exports.init_folder_meta = init_folder_meta;
-//module.exports.shrink_s3list_to_cwd = shrink_s3list_to_cwd;
 //module.exports.guess_to_be_folder = guess_to_be_folder;
 
 module.exports.s3_object_exists = s3_object_exists;
 module.exports.put_object = put_object;
 
-//2015, 0516
-module.exports.s3_object_read_stream = s3_object_read_stream;
 
 
 // -- checkings -- //
@@ -1659,12 +1156,9 @@ if (require.main === module){
   //stream_down_so();
   //test_headBucket();
   //test_createFolder();
-  //test_list();
   //test_init_home_structure_file();
   //test_read_file();
 
-  //test_list2();
-  //test_list3();
   //test_obj_to_path_hash();
   
   // be careful:
@@ -1672,16 +1166,13 @@ if (require.main === module){
 
   //test_create_folder();
   //test_folder_exists();
-  //test_add_meta_file();
   //test_read_file_meta();
   //test_make_thumbnail();
   //test_copy_file();
-  //test_build_gallery_list();
   //test_read_file_meta();
   //test_write_s3_json_file();
   //
 
-  //test_list_message();
   //test_guess_to_be_folder();
   //test_make_s3_pseudo_folder();
   //test_update_file_meta();

@@ -251,9 +251,9 @@ simple_s3_file_obj = (meta_src, callback) ->
 
     # Make <ul> from meta.
     convert_meta_to_ul = () ->
-        attr_names = ['name', 'path', 'owner', 'timestamp',
-            'size', 'permission' ]
-        exclude = ['uuid', 'html', 'storage', 'storages']
+        attr_names = ['name', 'path', 'owner', 'type', 'timestamp',
+            'size', 'permission', 'value' ]
+        exclude = ['html', 'storage', 'storages']
         # download/delete/view href?
 
         _show_meta = _keep(Meta, attr_names)
@@ -302,7 +302,10 @@ simple_s3_file_obj = (meta_src, callback) ->
 
     increase_value = (amount) ->
         amount = 1    unless amount
-        Meta.value.amount += amount
+        if(Meta.value.amount >= 0)
+            Meta.value.amount += amount
+        else
+            Meta.value.amount -= amount
 
 
     clear_past_meta_store = (callback)->
@@ -879,13 +882,17 @@ fix_file_meta = (_meta) ->
 
 
 pass_meta_to_task = (meta, callback) ->
+    tkey = task.task_rec_prefix + meta.uuid
     job = {
-        name : 'new-file-meta'
+        name :      'new-file-meta'
         task_name : 'new-file-meta'
 
-        username : meta.owner
-        folder   : meta.dir
+        username :  meta.owner
+        folder   :  meta.dir
         new_meta_s3key : meta.new_meta_s3key
+
+        filepath:   meta.path
+        task_id:    tkey
     }
     #p "meta: ", meta
     #p "job json: ", job
@@ -908,6 +915,10 @@ pass_meta_to_task = (meta, callback) ->
 #
 write_text_file = (owner, dir, filename, text)->
     # promise get reply of passing out the job, it's useless?
+
+    #meta = prepare_meta(file, username, cwd)
+
+    #tkey = task.task_rec_prefix + meta.uuid
 
     file_meta = {
         name : filename

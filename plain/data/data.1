@@ -1,7 +1,79 @@
 
+# 2016 0225
+
+`meta` is json string, saved as s3 object, see file: ./meta
+
+This is for aws s3 storage, which is key value object.
+
+## folder, s3key, name space and meta data
+
+S3 key of folder meta is equal to folder's path: 
+    
+    .gg.folder.meta/username/folder/path
+    .gg.folder.name.space/username/folder-uuid
 
 
-0926
+## file, s3 key for file data, meta and name space.
+
+File data is saved with s3 key:
+
+    .gg.file/username/file/full/path/name.extension
+
+S3 key of file meta *get* path info, it's    
+
+    .gg.file.meta/username/file/full/path/name.extension
+    .gg.file.name.space/username/file-uuid
+
+File meta get full path, so if there is file meta, we can get it by full path.
+Representation of file, such as render as html page, web page for file info
+would be in meta, or name space.
+
+We can get cases when a file or folder get owner different from root(home)'s
+owner.  So a function `get_root` will be need.
+
+## Logics
+
+Files have logic relations with folder, adding/deleting of file can be
+performed without locking the folder containing the file.
+
+Folder is a container of it's meta and representation, job can be carried out
+or redone if fails happen.  For example:
+    Adding a new file is adding a json obj to folder name space:
+        folder name space/files/new-file-name (this is key of json)
+    Deleting a file can be logged by writing a json obj to folder name space:
+        folder name space/event/delete/file-name (this is key of json)
+
+
+
+## Changes from the old way
+
+- changed to use full path with file data and meta, add name space
+  for both file and folder, when needed.
+
+- start use user id for a few month, it's plan to let user choose any name ok
+  on web, duplicated name will be ok.
+
+- set up name space for each folder, and do it for file in need.
+
+  > name space is a prefix: username/uuid
+  > uuid is rare to conflict
+  > data can be put into the name space as: event, action, log, comment
+
+In name space, we can put things without locking file or folder, if we use
+different name for each action or data.  This reduce need to do locking, for
+folders and files.
+
+There are cons for this data design:
+
+    X-  Each file get full path in their key make:
+        x-  folder moving need take care each file moving
+
+    X-  File name conflicts happens more often
+
+
+
+# 2015 0926
+
   `meta` is json string, saved as s3 object.
   S3 key of folder meta is equal to folder's path: 
     
@@ -298,4 +370,7 @@ User information
         //...
     }
 
-// vim: set et sw=4 ts=4 tw=78
+
+<!--
+    // vim: set et sw=4 ts=4 tw=78 ft=markdown:
+-->

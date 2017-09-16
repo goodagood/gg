@@ -1,0 +1,6 @@
+
+2016 0312
+
+The redis server seperate out,
+redis-server got 3.0.7, and restart by hand:
+    ~/softwares/redis/redis..../src/redis-server &

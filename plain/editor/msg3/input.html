@@ -1,0 +1,31 @@
+
+<div class="container">
+
+  <div class="row-fluid" id="input-well">
+    <form action="/msgto/{{{towhom}}}" method="post" enctype="multipare/x-www-form-urlencoded" id="edit">
+
+      <fieldset data-role="controlgroup" data-type="horizontal" id="name-list" >
+
+        <legend id="message-to-info">Message to: </legend>
+        {{ to_whom_checkbox }} 
+        {{ people_list }}
+      </fieldset>
+
+      <fieldset id="enter-msg-f" >
+          <legend>Edit message:</legend>
+          <textarea name="tamsg2"  id="tamsg2" data-autogrow="true"></textarea>
+      </fieldset>
+
+      <input type="submit" value="Send" id="msgto_send" class="btn ui-btn">
+    </form>
+  </div> <!-- row-fluid -->
+
+  <!--
+  <div class="row-fluid">
+    {{{message_list}}}
+  </div>
+  -->
+</div> <!-- container -->
+
+<!-- vim: et ts=2 sw=2 tw=150
+-->

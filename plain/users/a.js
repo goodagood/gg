@@ -250,30 +250,6 @@ function test_delete_user(){
 }
 
 
-////d
-//function add_file(username, file){
-//  // add a record (key-value) to user data
-//  rclient.exists(username, function(err, name_exists){
-//    console.log("add_file hit redis, for ", username);
-//    if(err){
-//      throw new Error(err);
-//    }
-//    if(name_exists){
-//      var file_info = JSON.stringify(file);
-//      process.nextTick(function(){
-//        rclient.hset(username, file.name, file_info, function(err, reply){
-//          if (err) {
-//            throw new Error(
-//              err.toString() + " When add user: " + user.username);
-//          }
-//        });
-//      });
-//      //
-//    }else{
-//      return "username not exists";
-//    }
-//  });
-//}
 
 
 

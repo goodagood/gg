@@ -29,6 +29,9 @@ function get_old_config(){
 }
 
 
+locations.google_id_file = path.join(locations.credential_dir, 'google.id.js');
+
+
 module.exports.locations = locations;
 module.exports.conf      = conf;
 

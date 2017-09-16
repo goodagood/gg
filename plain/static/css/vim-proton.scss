@@ -1,0 +1,44 @@
+// vim colorscheme, 
+// https://github.com/vim-scripts/proton/blob/master/colors/proton.vim 
+
+.vc-Normal {         background-color: #f0f0f0 ; color: #404040 ;  }
+.vc-Comment {        background-color: #f0f0f0 ; color: #9098a0 ;  }
+.vc-ToDo {           background-color: #f0f0f0 ; color: #9098a0 ;  }
+.vc-Cursor {         background-color: #404040 ; color: #a0a0a0 ; }
+.vc-CursorColumn {   background-color: #e0e0e0 ; color: #202020 ; }
+.vc-CursorLine {     background-color: #e0e0e0 ; color: #202020 ; }
+.vc-NonText {        background-color: #d0d0d0 ; color: #606060 ;  }
+.vc-Visual {         background-color: #d0d0d0 ; color: #606060 ;  }
+.vc-Folded {         background-color: #d0d0d0 ; color: #606060 ;  }
+.vc-TabLineFill {    background-color: #d0d0d0 ; color: #606060 ;  }
+.vc-SpecialKey {     background-color: #e8e8e8 ; color: #a0a0a0 ;  }
+.vc-Search {         background-color: #808080 ; color: #ffffff ;  }
+.vc-ModeMsg {        background-color: #f0f0f0 ; color: #304050 ;  }
+.vc-MoreMsg {        background-color: #f0f0f0 ; color: #304050 ;  }
+.vc-StatusLine {     background-color: #808080 ; color: #f0f0f0 ;  }
+.vc-StatusLineNC {   background-color: #707070 ; color: #d0d0d0 ;  }
+.vc-VertSplit {      background-color: #707070 ; color: #909090 ;  }
+.vc-LineNr {         background-color: #d0d0d0 ; color: #606060 ;  }
+.vc-Statement {      background-color: #e0e0e0 ; color: #606060 ;  }
+.vc-Label {          background-color: #e0e0e0 ; color: #606060 ;  }
+.vc-Title {          background-color: #f0f0f0 ; color: #202020 ;  }
+.vc-Conditional {    background-color: #e0e8f0 ; color: #5080b0 ;  }
+.vc-Repeat {         background-color: #e0e8d8 ; color: #509030 ;  }
+.vc-Exception {      background-color: #f0f0f0 ; color: #a03020 ;  }
+.vc-Underlined {     background-color: #f0f0f0 ; color: #202020 ; }
+.vc-Operator {       background-color: #f0f0f0 ; color: #a77039 ; }
+.vc-Define {         background-color: #ece8f0 ; color: #605080 ; }
+.vc-Include {        background-color: #dcd8e0 ; color: #605080 ; }
+.vc-Function {       background-color: #f0e8c0 ; color: #b08020 ; }
+.vc-Type {           background-color: #f0f0f0 ; color: #607080 ; }
+.vc-PreProc {        background-color: #dcd8e0 ; color: #605080 ; }
+.vc-Identifier {     background-color: #c0e0c0 ; color: #608050 ; }
+.vc-Constant {       background-color: #f0f0f0 ; color: #508040 ; }
+.vc-Number {         background-color: #f0f0f0 ; color: #508040 ; }
+.vc-String {         background-color: #f0ece8 ; color: #a07060 ; }
+.vc-Special {        background-color: #f0ece8 ; color: #603020 ; }
+.vc-DiffAdd {        background-color: #a67429 ; color: #ffcc7f ; }
+.vc-DiffDelete {     background-color: #a62910 ; color: #ff7f50 ; }
+.vc-DiffChange {     background-color: #425c78 ; color: #7fbdff ; }
+.vc-DiffText {       background-color: #4e9a06 ; color: #8ae234 ; }
+.vc-SpellBad {       background-color: #f02020 ; color: #603020 ; }

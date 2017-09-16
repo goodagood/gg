@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="description" content="webpage show video file, goodogood, goodagood">
+<meta name="author" content="Andrew">
+<meta http-equiv="expires" content="Fri, 21 Jun 2019 20:24:32 GMT" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="goodogood goodagood video file" />
+
+<link rel="shortcut icon" href="/static/favicon.ico" />
+
+<!--
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+-->
+<link rel="stylesheet" href="/static/css/fa/css/font-awesome.min.css">
+<link rel="stylesheet" href="/static/css/skeleton.css">
+
+<link rel="stylesheet" href="/static/bower_components/plyr/dist/plyr.css"> 
+
+<title> {{{file_name}}} video file </title>
+<!--
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="./jquery.inspect.js"></script>
+-->
+
+<style>
+
+video {
+  max-width: 95%;
+}
+@media (min-width: 800px){
+  video {
+    max-width: 80%;
+  }
+}
+</style>
+
+</head>
+<body>
+
+<h1> Video file path: {{{file_path}}} </h1>
+<p> poster is wrong, tmp solution </p>
+<div class="plyr">
+  {{{video_tag}}}
+    <video poster="/img/whp/512/-1/tmp/public/t1.png" controls>
+        <!-- Video files -->
+        <source src="/get/tmp/public/tt1.mp4" type="video/mp4">
+        <source src="/get/tmp/public/tt1.webm" type="video/webm">
+        <!--
+        <source src="/tmp/cat-dog.webm" type="video/webm">
+        -->
+
+        <!-- Text track file
+        <track kind="captions" label="English captions" src="/path/to/captions.vtt" srclang="en" default>
+        -->
+
+        <!-- Fallback for browsers that don't support the <video> element -->
+        <a href="/dl/tmp/public/tt1.mp4">Download</a>
+    </video>
+</div>
+
+<!--
+<script src="http://code.jquery.com/jquery.min.js"></script>
+<script src="http//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+<script src="http//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
+-->
+<script src="/static/bower_components/plyr/dist/plyr.js"></script>
+<script src="/static/bower_components/jquery/jquery.min.js"></script>
+
+
+
+
+<script>
+    $( document ).ready(function() {
+        //console.log( (this == $ ? 'yes' : 'no'); );
+        plyr.setup();
+        //$.inspect(this, 'window');
+    });
+</script>
+</body>
+<!-- vim: et ts=2 sw=2
+-->
+</html>

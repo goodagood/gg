@@ -242,9 +242,9 @@ module.exports = {
 // -- checkings -- //
 
 
-function check_get_1st_msg(){
+function check_get_1st_msg(user_name){
     //var user_name = _user_name;
-    var user_name = 'tmp';
+    user_name = user_name || 'tmp';
     msg_module.get_first_msg(user_name, function(err, first){
         //p ('got first msg:\n', err, first);
         var keys_of_methods = u.keys(first).sort();
@@ -324,13 +324,13 @@ function check_re_render(){
 
 
 if(require.main === module){
-    //check_get_1st_msg();
+    check_get_1st_msg('abc');
     //check_compose_msg();
     //check_write_msg();
 
     //check_to_multiple_receiver();
 
-    check_re_render();
+    //check_re_render();
 }
 
 
@@ -398,11 +398,11 @@ function drop_1st_msg_into_repl(o, dir){
     });
 
 }
-var o = {}; drop_1st_msg_into_repl(o);
+//var o = {}; drop_1st_msg_into_repl(o);
 
 
 // a signal to 'expect'
-console.log("ok start interact:");
-u.keys(o);
+//console.log("ok start interact:");
+//u.keys(o);
 
 

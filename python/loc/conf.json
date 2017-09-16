@@ -1,0 +1,7 @@
+
+{
+    "old-base_prefix" : "~/.gg.loc",
+    "base_prefix" : "/tmp",
+    "meta_dir_name": "meta",
+    "ns_dir_name": "ns"
+}

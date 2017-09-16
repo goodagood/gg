@@ -27,6 +27,24 @@ function route_user(app){
     res.end("<html><body><h1> ping.html </h1></body></html>");
   });
 
+
+  //before 2016 0902
+  //app.get('/6D506D2215AE6C4AEC241F02C138D138.txt', function(req, res){
+  //  //MD5 = 6D506D2215AE6C4AEC241F02C138D138
+  //  //SHA-1 = 2D88131B183CB967B457E5EE5A5200C50F461E66 
+  //  //for csr certify, comod
+  //  res.send('2D88131B183CB967B457E5EE5A5200C50F461E66 \r\n comodoca.com ');
+  //});
+
+  
+  app.get( "/FF188CE22684A92F17E719B4D2A520DF.txt"
+      , function(req, res){
+    //MD5 = FF188CE22684A92F17E719B4D2A520DF
+    //SHA-1 = 10ED0282A36CBBC4257338988E0FC12707E6507F
+    //for csr certify, comod, 2016 0902
+    res.end('10ED0282A36CBBC4257338988E0FC12707E6507F\r\ncomodoca.com ');
+  });
+
   // test req.login(), req.logout()
   app.get('/i-am-superman', function(req, res, next){
     req.logout();
@@ -73,7 +91,7 @@ function route_user(app){
     //res.json({username:username, peoplename:people_name});
   });
 
-  app.get('/people', 
+  app.get('/people-old-20160128', 
       cel.ensureLoggedIn('/login'),
       function(req, res){
 
@@ -125,7 +143,59 @@ function route_user(app){
       });
     });
 
+
+  /*
+   * refit to use people-tool, 2016 0128
+   *    get /addpeople/:name
+   *    get /lsman
+   *         lsman suppose to replace /people
+   *   post /add-one-people
+   */
+  var pt = require("./users/people-tool.js");
+  app.get('/people', function(req, res){
+
+    var username = req.user.username;
+    if(!username) return res.send('username ? ');
+
+    pt.render_people_list(username, function(err, html){
+      //p('HTML: ', html.length);
+      if(err) return res.send('you got err: ' + err);
+      if(!html) return res.send('no html');
+      res.send(html);
+    });
+  });
+
   app.get('/addpeople/:name', function(req, res){
+
+    var username = req.user.username;
+    var people_name = req.params['name'];
+    console.log(username, ' add ', people_name);
+
+    pt.add_people(username, people_name, function(err, pmanager){
+      if(err) return res.json({err:err});
+
+      res.json({username:username, peoplename:people_name});
+    });
+  });
+
+  app.post('/add-one-people', function(req, res){
+
+    var username = req.user.username;
+    var people_name = req.body.whos_name;
+
+    console.log(username, ' add ', people_name);
+
+    pt.add_people(username, people_name, function(err, pmanager){
+      if(err) return res.end('err, ' + err);
+
+      //res.json({username:username, peoplename:people_name});
+      res.redirect("/lsman");
+    });
+  });
+
+
+  // changed to old, 2016 0128
+  app.get('/addpeople-old/:name', function(req, res){
 
     var username = req.user.username;
     var people_name = req.params['name'];
@@ -181,7 +251,7 @@ function route_user(app){
     // all name length <= 3 been occupied:
     if(username.length <= 3) return res.json({err: false, 'is-name-occupied':true});
 
-    myuser.is_name_occupied(user_info.username, function(err, name_exists){
+    myuser.is_name_occupied(username, function(err, name_exists){
       if(err){
         return res.json({err: err, 'is-name-occupied':'unknown'});
       }
@@ -200,7 +270,7 @@ function route_user(app){
         res.redirect('/ls/');
       });
     });
-  })
+  });
 
 }
 

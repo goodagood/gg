@@ -1,0 +1,29 @@
+
+{
+        "owner":  {
+            "read":    true,
+            "write":   true,
+            "execute": true
+        },
+        "root":   {
+            "read":    true,
+            "write":   true,
+            "execute": true
+        },
+        "member": {
+            "read":    true,
+            "write":   true,
+            "execute": true
+        },
+        "viewer": {
+            "read":    true,
+            "write":   false,
+            "execute": false
+        },
+        "public": {
+            "read":    false,
+            "write":   false,
+            "execute": false
+        },
+        "inherit": true
+}

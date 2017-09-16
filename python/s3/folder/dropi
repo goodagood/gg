@@ -1,0 +1,19 @@
+#!/usr/bin/expect
+# vim: set ft=expect
+
+# easy tool by 'expect' to jump to points.
+
+spawn ipython
+expect "]:"
+send "a_start_interact = 'ok-start-interact:)'\r"
+expect "]:"
+
+send "%run  ./c-fix.py\r"
+#send "%run  ./c-folder.py\r"
+#send "%run  ./c-cache.py\r"
+#send "%run  ./klass.py\r"
+#send "%run  ./c-redo-subs.py\r"
+
+send "print a_start_interact\r"
+expect "ok-start-interact:)"
+interact

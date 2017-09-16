@@ -1,0 +1,14 @@
+
+Python's way of import can be trouble and clumsy.
+When name conflict happen, it make me not sure if my module get import first.
+
+So, this folder is here, 
+because it's parent folder set to be $PYTHONPATH,
+currently it is with the structure:
+    .../gg/python          # parent and $PYTHONPATH
+    .../gg/python/ggroot   # this directory
+
+In short, ggroot, this directory is used to save import conflict,
+and save the brain twisting.
+
+2016 0601

@@ -1,0 +1,9 @@
+
+from . import gg_rsa
+
+
+milli = '1463722049763'
+hexed = '485f22ab8dfcd2ca79ec90c21959876528aee038009f645f669e9b93b6aecfa467653a4fde219d6c4ca6e9305ecbeee2c3ebdf5f2ac73e23a60a7468d3e7647c93a06107dd62a8c025e00f9ca8507f490957c271625b440e760501ac9bbf364997f1966d0db53b4081c1643cc32eaa6d4d7cbde3cc1218848fc4c59d3415ab3d'
+
+v = gg_rsa.verify_milli_for_user('tmp', milli, hexed)
+print(v)

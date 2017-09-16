@@ -1,0 +1,27 @@
+
+/*
+ *
+ *
+ */
+
+$small-width: 400px
+$mid-width: 550px;
+$table-width: 750px;
+$big-width: 960px;
+$large-width: 1200px;
+
+.file_list {
+    width: 250px;
+
+    .file{
+        float: left;
+    }
+
+    @media screen and (max-width: $break-small) {
+        width: 100px;
+        float: none;
+    }
+    @media screen and (min-width: $break-large) {
+        float: right;
+    }
+}

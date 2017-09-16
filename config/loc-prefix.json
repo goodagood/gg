@@ -1,0 +1,13 @@
+
+{
+    "old-base_prefix" : "~/.gg.loc",
+    "base_prefix" : "/tmp",
+    "The.above.is.old,by0505.2016": "yes",
+
+    "default_base_path" : "/tmp",
+
+    "file_dir_name": "gg",
+
+    "meta_dir_name": "meta",
+    "ns_dir_name": "ns"
+}

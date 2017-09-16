@@ -1,27 +1,38 @@
 
+# link to /usr/local/bin/node
+
+After move ~/softwares/node../bin/node to /usr/local/bin/
+and removed /usr/bin/node
+it gives error no such file /usr/bin/node
+So, 
+    cd /usr/bin
+    sudo ln -s /usr/local/bin/node
+
+
+#
 
 Work as a web file system, using aws s3 as storage.  It will be better to add
 other web storage as backend.
 
+File meta information get into json type.
 
-# Reason
+All file can get a value attribute, so we can value file.
 
-There must be a lot web file system, why bother to build another?  
+Currently, node.js and express.js for server side scripts.
 
-The first reason is I am stupid, and try to make myself happy by hacking
-and engineering.
+[more](http://goodogood.me/file/md-with-local-files/intro/public/intro.md)
 
-Among existing web file systems, some are good but they are cut off by my
-ISPs.  The rest is too awkward to be use by me, a stupid.
+# Some stupid reasons why I am doing this project
 
-So I am build a web file system to satisfy myself, 
+    Actually, this folder (intro/public) can show markdown
+    with local referrences, such images, css, js.
 
-1, File should be easy to change presentations, same as folder.
+[A markdown file, about my stupid 
+reasons doing this project](http://goodogood.me/file/md-with-local-files/intro/public/reason.md)
 
-2, Files should be able to get value, because we work on them.  
+[How we value codes](http://goodogood.me/file/md-with-local-files/intro/public/byte-value.md)
 
-3, it's better to be able to work from command line.
-
+[How we value generally](http://goodogood.me/file/md-with-local-files/intro/public/value.md)
 
 
 ## end

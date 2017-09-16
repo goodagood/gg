@@ -8,6 +8,8 @@ var formidable = require('formidable');
 var mup = require("multer")({dest: "/tmp/"});
 
 var util = require('util');
+var path = require('path');
+var fs = require('fs');
 
 var u = require('underscore');
 
@@ -17,13 +19,10 @@ var bucket = require('../aws/bucket.js');
 
 var myutil = require('../myutils/myutil.js');
 
-var fs = require('fs');
 
 var myconfig =  require("../config/config.js");
 var upload_dir = myconfig.formidable_upload_dir;
 
-var path = require('path');
-var mv = require('mv');
 
 var cel = require('connect-ensure-login');
 
@@ -33,8 +32,8 @@ var folder_module     = require('../aws/folder-v5.js');
 
 var myparse = require('../aws/parse.js');
 
-var log28 = require('../myutils/mylogb.js').double_log('/tmp/log28');
 
+var passer = require("plain/uploader/pass-up.js");
 
 var p     = console.log;
 
@@ -97,14 +96,19 @@ function myupload(app){
           }
 
           // in dev:
-          p('req.files.length'); p(req.files.length);
+          //p('req.files.length'); p(req.files.length);
           //p('util.inspect(req.files)');
           //p(util.inspect(req.files));
           //fs.writeFile('/tmp/uptest', util.inspect(req.files), 'utf-8');
 
-          myparse.process_req_files(req.files, username, cwd, function(err, what){
+          passer.pass_upload_infos(req.files, username, cwd, function(err, results){
+              if(err) return next(err);
+
               res.redirect('/upfile/' + cwd);  // to self
           });
+          //myparse.process_req_files(req.files, username, cwd, function(err, what){
+          //    res.redirect('/upfile/' + cwd);  // to self
+          //});
   });
 
   /*
@@ -123,12 +127,14 @@ function myupload(app){
    * If get more time, try to use https
    * 2015 1023
    */
-  var supload = require("../uploader/signed-upload.js");
+  //var supload = require("../uploader/signed-upload.js");
+  var dupload = require("../uploader/dupload.js");
   app.post("/signed-upload/", 
       mup.single("file_to_upload"),
       function(req, res){
+          p('-- in signed-upload');
 
-          supload.receive_file(req, function(err, reply_json){
+          dupload.work_request(req, function(err, reply_json){
               if(err) return res.json({err:err});
               res.json(reply_json);
           });
@@ -257,58 +263,6 @@ function myupload(app){
     });
 }
 
-//function parse_upload(req){
-//  // parse a file upload
-//  var form = new formidable.IncomingForm();
-//
-//  form.on('fileBegin', function (name, file) {
-//    //mylog.info("on fileBegin : " + name );
-//    //mylog.info("name : " + util.inspect(name));
-//    //mylog.info("file : " + util.inspect(file));
-//  }).on('field', function (name, value) {
-//    //mylog.info("on field"); // test
-//    //mylog.info("name : " + util.inspect(name));
-//    //mylog.info("value : " + util.inspect(value));
-//    //if (name === 'redirect') {
-//    //    redirect = value;
-//    //}
-//  }).on('file', function (name, file) {
-//    //mylog.info("on file"); // test
-//    //mylog.info("name : " + util.inspect(name));
-//    //mylog.info(" -- file : " + util.inspect(file));
-//  }).on('aborted', function () {
-//    //mylog.info("on aborted");
-//  }).on('error', function (e) {
-//    mylog.info("on error");
-//    mylog.info(e);
-//  }).on('progress', function (bytesReceived, bytesExpected) {
-//    //mylog.info("on progress");
-//    //mylog.info( " [ " + bytesReceived + "/" + bytesExpected + " ]");
-//  }).on('end', function(){
-//    //console.log(" event: end ");
-//  });
-//
-//  form.parse(req, function(err, fields, files) {
-//    //mylog.info("\nform parse begin, show the form: \n");
-//    //mylog.info( Date() );
-//    //mylog.warn(util.inspect(form));
-//
-//    //console.log(files);
-//    for (var f in files){
-//      //console.log(files[f].name);
-//      //console.log(files[f].path);
-//      //
-//
-//      user_path.check_path_move_home(req.user.username, files[f]);
-//      //console.log("myuser add file key,  -- parse file");
-//     
-//      //myuser.add_file_key(req.user.username, files[f]);
-//
-//      //console.log(" files[f]: ");  // use the square parenthe..
-//      //console.log(files[f]);
-//    }
-//  });
-//}
 
 
 function parse_and_s3stream(req, cwd){
@@ -613,28 +567,6 @@ FileInfo.prototype.safeName = function () {
     //    this.name = this.name.replace(nameCountRegexp, nameCountFunc);
     //}
 };
-
-// no need
-//FileInfo.prototype.initUrls = function (req) {
-//    if (!this.error) {
-//        var that = this;
-//        var baseUrl =  'http:' + '//' ;
-//        if (req.headers) {
-//          baseUrl += req.headers.host + options.uploadUrl;
-//        }else{
-//          baseUrl += 'localhost:' + myport.toString() + options.uploadUrl;
-//        }
-//        this.url = this.deleteUrl = baseUrl + encodeURIComponent(this.name);
-//        Object.keys(options.imageVersions).forEach(function (version) {
-//            //if (_existsSync(
-//            if (fs.existsSync( options.uploadDir + '/' + version + '/' + that.name)) {
-//                that[version + 'Url'] = baseUrl + version + '/' + encodeURIComponent(that.name);
-//            }
-//        });
-//    }
-//};
-
-
 
 
 

@@ -52,6 +52,7 @@ function check_upload_request(req, callback){
     p('in dev, 1024, 0723pm');
     return callback(null, true); //in dev
 }
+module.exports.check_upload_request = check_upload_request;
 
 
 function username_cwd_exists(req){
@@ -97,6 +98,5 @@ function check_file_hash(file){
 }
 
 
-module.exports.check_upload_request = check_upload_request;
 
 //module.exports.get_body_field = get_body_field; //moved to req-body.js

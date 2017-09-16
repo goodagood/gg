@@ -1,89 +1,100 @@
 <!DOCTYPE HTML>
 <html lang="en">
-<!-- as temperory testing for ui styling and login page. 0203, 2015  -->
+<!-- As temperory testing for ui styling and login page. 0203, 2015
+     Finally, each page got more and more re-writing.    0201, 2016
+-->
 <head>
 <meta http-equiv="content-type" content="text/html" />
 <meta charset="utf-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="description" content="index, goodagood testing" />
-<meta name="keywords" content="goodagood, filesystem, sharing" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="author" content="Andrew">
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="description" content="login, goodogood/goodagood" />
+<meta name="keywords" content="goodogood, goodagood, filesystem, sharing" />
+<meta name="author"   content="Andrew">
 
 <title> 
 
   {{#if title }}
-  <p>{{ title }}</p>
+    {{ title }}
+  {{else}}
+    login goodogood
   {{/if}}
-  pass testing, 0202
 
 </title>
-  <!--% if(typeof title !== 'undefined' && title){ print(title);}else{ print('test a style from goodagood frame c');} %-->
 
+<!--
+<link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap-glyphicons.css">
+-->
+
+<link rel="stylesheet" href="/static/bower_components/skeleton/css/normalize.css">
+<link rel="stylesheet" href="/static/bower_components/skeleton/css/skeleton.css">
 
 <link rel="stylesheet" href="/static/css/fa/css/font-awesome.min.css">
-<link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap-glyphicons.css">
 
-<link rel="stylesheet" href="/static/css/begin.css">
-
-<!--% if(typeof css !== 'undefined' && css) print(css); %-->
+<link rel="stylesheet" href="/static/css/login.css">
 
 
 <style type="text/css">
-
+  {{{ in_file_css }}}
 </style>
 
 </head>
 <body>
 
-<div id="wrapper">
+<div id="wrapper" class="container">
 
 
   <header>
-    <h1> <span class="logo"> <a href="http://www.goodagood.com/">goodagood</a> <span></h1>
+    <div> <span class="logo"> <a href="http://goodogood.me/">goodogood</a> <span></div>
 
-    <h2> <a id="register-a" href="/adduser"> <i class="fa fa-user"></i> Register </a> </h2>
+    <div id="register"> <a id="register-a" href="/user/slow-home"> <i class="fa fa-user"></i> Register </a> </div>
   </header>
 
+  <!--
   {{#if user }}
-  <p>{{ user }}</p>
+  <p>{{{ user }}}</p>
   {{/if}}
-  {{#if message }}
-  <p>{{ message }}</p>
-  {{/if}}
+  -->
 
-  <form action="/login" method="post">
+  <form action="/login" method="post" accept-charset="UTF-8">
     <div class="igroup">
       <label for="username"> 
-        <span class="label-text">User name:</span>
+        <span class="label-text ggtt" data-ggtt="username">User name:</span>
       </label>
       <input type="text" id="username" name="username" />
     </div>
 
     <div class="igroup" id="normal-password-div">
       <label for="password" id="normal-pass"> 
-        <span class="password-label"> Passw0rd:</span>
+        <span class="password-label ggtt" data-ggtt="password"> PassWord:</span>
         <span id="normal-show" class="hint"></span>
       </label>
       <input type="password" id="password" name="password" />
     </div>
 
+    <!--
     <div class="igroup" id="text-password-div">
       <label for="text-password" class="clr" id="show-pass">
         <span class="text-password-label"> Password:</span>
       </label>
       <input type="text" id="text-password" name="text-password" />
     </div>
+    -->
 
     <div class="igroup">
-      <label for="submit"></label>
+      <label for="submit" class="ggtt" data-ggtt="login">Login:</label>
       <input id="submit" name="submit" type="submit" value="Login"/>
     </div>
   </form>
 
+  {{#if message }}
+  <p class="message">{{{ message }}}</p>
+  {{/if}}
+
   <div id='try-before-register'>
     <p>
-      <a class="btn" href="/try-before-register"> <i class="fa fa-beer"> </i> Try an open account</a>
+      <a class="button" href="/try-before-register"> <i class="fa fa-beer"> </i> Try an public test account</a>
       : You will be login as an random user,  to play
       in the system, and get the feel whether it can help.
     </p>
@@ -99,7 +110,29 @@
 
   <footer>
     <p>
-      goodagood, Andrew, &copy;
+      goodogood, goodagood, Andrew, &copy;
+    </p>
+    <p>
+      <!--
+      <p data-i18n="testi18n" id="ptesti18n">
+        test i18n
+      </p>
+      <a href="/file/get/intro/public/test0215/y6.0216/i0212y6.html" class="button"> Basic info.</a>
+      <a href="/file/md-with-local-files/intro/public/intro.md" class="button"> Background info.</a>
+
+      !!2017 0603
+
+      <a href="https://github.com/chimpsland/story/blob/master/10m/01.txt"
+        class="button" target="_blank"> 
+        137亿年 </a>
+      <a href="https://github.com/goodagood/chimp.land/blob/master/001.txt"  
+        class="button" target="_blank"> 
+        Chimp's Land 猩猩国度 </a>
+      -->
+      <a href="https://github.com/goodagood/gg"
+        class="button" target="_blank"> 
+        Codes </a>
+      <a href="/static/gg.intro/md.html" class="button"> Introductions </a>
     </p>
   </footer>
 
@@ -114,6 +147,8 @@
 
 
 <script src="/static/bower_components/jquery/jquery.min.js"></script>
+<script src="/static/bower_components/i18next/i18next.min.js"></script>
+<script src="/static/js/text-trans.js"></script>
 <!--  <script src="/static/js/i18next-1.7.3.js"></script>  -->
 
 <script>
@@ -121,34 +156,88 @@
       //console.log( (this == $ ? 'yes' : 'no') );
       //$.inspect(this, 'window');
 
-      var width = $(window).width();
-      console.log('width', width);
+      //var width = $(window).width();
+      //console.log('width', width);
 
-      $("#password").keypress(function(e) {
-        $("form span.hint")
-        .html(String.fromCharCode(e.which))
-        .stop()
-        .fadeIn(100, function(){
-          $(this).fadeOut(2000);        
+      //$("#password").keypress(function(e) {
+      //  $("form span.hint")
+      //  .html(String.fromCharCode(e.which))
+      //  .stop()
+      //  .fadeIn(100, function(){
+      //    $(this).fadeOut(2000);        
+      //  });
+
+      //});
+
+      //$("#text-password").keypress(function(e) {
+      //  var value = $("#text-password").val();
+      //  // set the other password:
+      //  $("#password").val(value);
+
+      //  // testing:
+      //  //if( $("#password").val() !== $("#text-password") ) alert('not equal ' + value);
+      //});
+
+
+      //$("div#other-id a").click(function(e){
+      //  e.preventDefault();
+      //});
+
+
+      // do my translate 
+
+      var dictionary = {
+            en: {
+                "login":  "LOGIN",
+                "username":  "User Name",
+                "password":  "Password",
+                "i18key": "hello world",
+                "testi18n": "TEST I18N"
+            },
+
+            zh: {
+                "login":  "登录",
+                "username":  "用户名",
+                "password":  "密码",
+
+                "i18key": "hello world",
+                "testi18n": "测试 i18next "
+            }
+      };
+
+      function trans(key, lang){
+        if(!key) return null;
+        if(!lang) return null;
+
+        if(dictionary[lang]){
+          if(dictionary[lang][key]) return dictionary[lang][key];
+        }
+        return null;
+      }
+
+      //$("#ptesti18n").html(trans("testi18n", 'zh'));
+
+      var userLang = navigator.language || navigator.userLanguage;
+      //console.log('userLang');
+      //console.log(userLang);
+
+      if(/zh/.test(userLang)){
+        $(".ggtt").each(function(){
+            //console.log($(this).html());
+            //console.log($(this).data("ggtt"));
+            //console.log( trans($(this).data("ggtt"), "zh"));
+
+            var key = $(this).data("ggtt");
+            if(key){
+              var translated = trans(key, "zh");
+              if(translated) $(this).html(translated);
+            }
         });
+      }
 
-      });
+      //$(".ggtt").html(trans($(this).data("ggtt"), "zh"));
 
-      $("#text-password").keypress(function(e) {
-        var value = $("#text-password").val();
-        // set the other password:
-        $("#password").val(value);
-
-        // testing:
-        //if( $("#password").val() !== $("#text-password") ) alert('not equal ' + value);
-      });
-
-
-      $("div#other-id a").click(function(e){
-        e.preventDefault();
-      });
-
-      //alert('here');
+      //console.log('here, 0308');
 
     });
 </script>

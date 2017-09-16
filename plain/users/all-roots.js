@@ -64,7 +64,7 @@ function get_all(){
     get_all_root_ids(function(err, list){
         p('haha', "\n", err, typeof list);
         if(!err){
-            p(list.join(",\t "));
+            p(list.sort().join(",\t "));
         }
         process.exit();
     });
